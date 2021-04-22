@@ -24,3 +24,15 @@ export type ConnectionStatus =
   | "NETWORK_ERROR"
   | "CONNECTED"
   | "DISCONNECTED";
+
+/**
+ * state of a client connection to the host ndoe
+ */
+export interface IClientState {
+  address: string;
+  state: ConnectionStatus;
+}
+
+export interface IClientStateInConnection extends IClientState {
+  connection_id: string;
+}

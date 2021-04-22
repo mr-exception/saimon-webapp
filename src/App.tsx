@@ -29,6 +29,17 @@ function App() {
       console.log(message.toString());
     });
   }, [context.client]);
+  // request the address status
+  const ack = async () => {
+    if (!context.client) return;
+    const results = await context.client.getClientStates([client_public_key]);
+    console.log(results);
+  };
+  // subscribes the address status
+  const subscrribe = async () => {
+    if (!context.client) return;
+    await context.client.subscribeToClientState([client_public_key]);
+  };
 
   // creating to client based on local storage
   useEffect(() => {
@@ -81,6 +92,8 @@ function App() {
           placeholder="public key"
           onChange={(e) => set_client_public_key(e.target.value)}
         />
+        <button onClick={ack}>ack</button>
+        <button onClick={subscrribe}>sub</button>
       </div>
       <div
         style={{

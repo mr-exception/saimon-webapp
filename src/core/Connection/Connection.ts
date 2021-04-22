@@ -2,11 +2,16 @@ import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { io, Socket } from "socket.io-client";
 import Key from "../Key/Key";
-import { ConnectionStatus, IPacket, IPacketGot, IPacketTTD } from "./def";
+import {
+  ConnectionStatus,
+  IClientState,
+  IPacket,
+  IPacketGot,
+  IPacketTTD,
+} from "./def";
 
 export default class Connection {
   // props
-  public id = "not-defined";
   private _socket?: Socket;
   private _host_key?: Key;
   private _ttr_avg = 0;
@@ -17,6 +22,7 @@ export default class Connection {
   private _onPacket$ = new Subject<IPacket>();
   private _connectionStatus$ = new Subject<ConnectionStatus>();
   private _onPacketGot$ = new Subject<IPacketTTD>();
+  private _onClientStateChange$ = new Subject<IClientState>();
 
   constructor(
     private _address: string,
@@ -34,6 +40,9 @@ export default class Connection {
       .pipe(takeUntil(this._finished$))
       .subscribe((packet) => callback(packet));
   }
+  /**
+   * on packet got recievied
+   */
   public onPacketGot(callback: (packet_got: IPacketTTD) => void) {
     return this._onPacketGot$
       .pipe(takeUntil(this._finished$))
@@ -50,6 +59,14 @@ export default class Connection {
       .pipe(takeUntil(this._finished$))
       .subscribe(callback);
   }
+  /**
+   * listens to requested clients state change
+   */
+  public subscribeToClientStateChange(callback: (state: IClientState) => void) {
+    this._onClientStateChange$
+      .pipe(takeUntil(this._finished$))
+      .subscribe((state) => callback(state));
+  }
 
   /**
    * waits async untill the first event is received from host node
@@ -61,6 +78,9 @@ export default class Connection {
         reject("connection is dead");
       });
   }
+  /**
+   * start listening host node messages
+   */
   public startListeningToHost() {
     if (!this._socket) {
       throw new Error("connection is dead");
@@ -89,13 +109,19 @@ export default class Connection {
       }
       ackCallback("got");
     });
+    // listen to any client state changed through this connection
+    this._socket.on("status_update", (cipher: string, ackCallback) => {
+      const state = JSON.parse(
+        this._client_key.decryptPrivate(cipher).toString()
+      ) as IClientState;
+      this._onClientStateChange$.next(state);
+    });
   }
   /**
    * start the handshake progress with host node
    */
   public async connect(): Promise<void> {
     this._socket = io(this._address);
-    this.id = this._socket.id;
     // listen to socket on disconnecting
     this._socket.on("disconnect", () => {
       this._connectionStatus$.next("DISCONNECTED");
@@ -136,6 +162,9 @@ export default class Connection {
       this._connectionStatus$.next("VF");
     });
   }
+  /**
+   * listen to an event once and async
+   */
   public static async onAsyncStatic<T>(
     socket: Socket,
     event: string
@@ -246,15 +275,76 @@ export default class Connection {
     }
     this._finished$.next();
   }
+  /**
+   * get the TTD information of a packet
+   */
   public getPacketTTD(id: string, position: number): IPacketTTD | undefined {
     return this._pending_ttd_packets.find(
       (packet) => packet.id === id && packet.position === position
     );
   }
+  /**
+   * remove the information of a packet TTD
+   */
   public removePacketTTD(id: string, position: number) {
     this._pending_ttd_packets = this._pending_ttd_packets.filter((packet) =>
       packet.id === id && packet.position === position ? null : packet
     );
+  }
+  /**
+   * get client state
+   */
+  public async getClientsState(
+    client_addresses: string[]
+  ): Promise<IClientState[]> {
+    return new Promise<IClientState[]>((resolve, reject) => {
+      if (!this._socket) {
+        throw new Error("connection is dead");
+      }
+      if (!this._host_key) {
+        throw new Error("host key is not defined");
+      }
+      const address_string = client_addresses.join(",");
+      const address_encrypted = this._host_key.encryptPublic(address_string);
+      const timeout = setTimeout(() => {
+        reject("timeout");
+      }, 3000);
+      this._socket.emit(
+        "status_list",
+        address_encrypted,
+        (response: string) => {
+          const states = JSON.parse(
+            this._client_key.decryptPrivate(response).toString()
+          ) as IClientState[];
+          clearInterval(timeout);
+          resolve(states);
+        }
+      );
+    });
+  }
+  /**
+   * subscribes to clients states
+   */
+  public async subscribeToClientsState(
+    client_addresses: string[]
+  ): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      if (!this._socket) {
+        throw new Error("connection is dead");
+      }
+      if (!this._host_key) {
+        throw new Error("host key is not defined");
+      }
+      const address_string = client_addresses.join(",");
+      const address_encrypted = this._host_key.encryptPublic(address_string);
+      const timeout = setTimeout(() => {
+        reject("timeout");
+      }, 3000);
+      this._socket.emit("sub_status", address_encrypted, (response: string) => {
+        clearInterval(timeout);
+        resolve();
+      });
+    });
   }
   /**
    * get socket
@@ -327,5 +417,15 @@ export default class Connection {
    */
   public getTTRCount(): number {
     return this._ttr_count;
+  }
+  /**
+   * get connection id
+   */
+  public getId(): string {
+    if (this._socket) {
+      return this._socket.id;
+    } else {
+      return "not-defined";
+    }
   }
 }

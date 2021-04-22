@@ -1,6 +1,12 @@
 import { Subject } from "rxjs";
 import Connection from "../Connection/Connection";
-import { ConnectionStatus, IPacket, IPacketTTD } from "../Connection/def";
+import {
+  ConnectionStatus,
+  IClientState,
+  IClientStateInConnection,
+  IPacket,
+  IPacketTTD,
+} from "../Connection/def";
 import Key from "../Key/Key";
 
 export default class Client {
@@ -16,6 +22,7 @@ export default class Client {
   public async connect(server_url: string, packet_size: number) {
     const connection = new Connection(server_url, packet_size, this.key);
     connection.connect();
+    // subscribe to connection state
     connection.subscribeToConnectionStatus((state) =>
       this.handleConnectionStates(connection, state)
     );
@@ -27,6 +34,9 @@ export default class Client {
     // subscribe to ttd informations
     connection.onPacketGot((ttd: IPacketTTD) => {
       console.log(`packet delivered in ${ttd.time}ms`);
+    });
+    connection.subscribeToClientStateChange((state: IClientState) => {
+      console.log(state);
     });
   }
   /**
@@ -76,15 +86,45 @@ export default class Client {
       console.log("disconnected");
     }
   }
-
+  /**
+   * removes a connection from connection list
+   */
   private removeConnection(connection: Connection) {
     connection.close();
     this._connections = this._connections.filter((cnn) =>
-      cnn.id === connection.id ? null : cnn
+      cnn.getId() === connection.getId() ? null : cnn
     );
   }
-
-  // private getConnection(id: string): Connection {
-  //   this
-  // }
+  /**
+   * gets clients connection states from all connections
+   */
+  public async getClientStates(
+    client_addreses: string[]
+  ): Promise<IClientStateInConnection[]> {
+    const results = await Promise.all(
+      this._connections.map(async (connection) => {
+        try {
+          const result = await connection.getClientsState(client_addreses);
+          return result.map((res: IClientState) => ({
+            ...res,
+            connection_id: connection.getId(),
+          }));
+        } catch (error) {
+          return [];
+        }
+      })
+    );
+    const states: IClientStateInConnection[] = results.flat();
+    return states;
+  }
+  /**
+   * subscribes to a list of addresses
+   */
+  public async subscribeToClientState(client_addresses: string[]) {
+    await Promise.all(
+      this._connections.map((connection) =>
+        connection.subscribeToClientsState(client_addresses)
+      )
+    );
+  }
 }
