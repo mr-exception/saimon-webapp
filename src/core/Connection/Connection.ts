@@ -1,19 +1,22 @@
-import { rejects } from "node:assert";
-import { resolve } from "node:path";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { io, Socket } from "socket.io-client";
 import Key from "../Key/Key";
-import { ConnectionStatus, IPacket } from "./def";
+import { ConnectionStatus, IPacket, IPacketGot, IPacketTTD } from "./def";
 
 export default class Connection {
   // props
+  public id = "not-defined";
   private _socket?: Socket;
   private _host_key?: Key;
+  private _ttr_avg = 0;
+  private _ttr_count = 0;
+  private _pending_ttd_packets: IPacketTTD[] = [];
   // observables
   private _finished$ = new Subject<void>();
   private _onPacket$ = new Subject<IPacket>();
   private _connectionStatus$ = new Subject<ConnectionStatus>();
+  private _onPacketGot$ = new Subject<IPacketTTD>();
 
   constructor(
     private _address: string,
@@ -27,7 +30,14 @@ export default class Connection {
    * from this connection
    */
   public onPacketReceived(callback: (packet: IPacket) => void) {
-    return this._onPacket$.pipe(takeUntil(this._finished$)).subscribe(callback);
+    return this._onPacket$
+      .pipe(takeUntil(this._finished$))
+      .subscribe((packet) => callback(packet));
+  }
+  public onPacketGot(callback: (packet_got: IPacketTTD) => void) {
+    return this._onPacketGot$
+      .pipe(takeUntil(this._finished$))
+      .subscribe((packet_got) => callback(packet_got));
   }
   /**
    * this method subscribes to the handshake and connection
@@ -36,7 +46,7 @@ export default class Connection {
   public subscribeToConnectionStatus(
     callback: (status: ConnectionStatus) => void
   ) {
-    return this._connectionStatus$
+    this._connectionStatus$
       .pipe(takeUntil(this._finished$))
       .subscribe(callback);
   }
@@ -55,10 +65,29 @@ export default class Connection {
     if (!this._socket) {
       throw new Error("connection is dead");
     }
-    this._socket.on("pck", (packet_cipher: string) => {
+    // listen to packet event from host node
+    this._socket.on("pck_dct", (packet_cipher: string, ackCallback) => {
       const packet_buffer = this._client_key.decryptPrivate(packet_cipher);
       const packet = JSON.parse(packet_buffer.toString()) as IPacket;
       this._onPacket$.next(packet);
+      ackCallback("got");
+    });
+    // listen to packet got event from host node
+    this._socket.on("pck_got", (packet_got_chiper: string, ackCallback) => {
+      const packet_got_buffer = this._client_key.decryptPrivate(
+        packet_got_chiper
+      );
+      const packet_got: IPacketGot = JSON.parse(packet_got_buffer.toString());
+      const packet_tdd = this.getPacketTTD(packet_got.id, packet_got.position);
+      if (packet_tdd) {
+        this._onPacketGot$.next({
+          id: packet_got.id,
+          position: packet_got.position,
+          time: Date.now() - packet_tdd.time,
+        });
+        this.removePacketTTD(packet_got.id, packet_got.position);
+      }
+      ackCallback("got");
     });
   }
   /**
@@ -66,6 +95,11 @@ export default class Connection {
    */
   public async connect(): Promise<void> {
     this._socket = io(this._address);
+    this.id = this._socket.id;
+    // listen to socket on disconnecting
+    this._socket.on("disconnect", () => {
+      this._connectionStatus$.next("DISCONNECTED");
+    });
     this._connectionStatus$.next("CONNECTING");
     // HK: waits for host node to send its public key
     const host_public_key = await Connection.onAsyncStatic<string>(
@@ -154,6 +188,7 @@ export default class Connection {
         });
       })
     );
+
     parts_cipher.forEach((part, position) => {
       const packet: IPacket = {
         id: "some-random_id",
@@ -180,15 +215,46 @@ export default class Connection {
       const packet_encrypted = this._host_key.encryptPublic(
         Buffer.from(packet_string)
       );
-      this._socket.emit("pck", packet_encrypted);
-      resolve(true);
+
+      // add packet ttd object to list
+      this._pending_ttd_packets.push({
+        id: packet.id,
+        position: packet.position,
+        time: Date.now(),
+      });
+
+      const sending_time = Date.now();
+      this._socket.emit("pck_dct", packet_encrypted, (ack_data: string) => {
+        const ttr = Date.now() - sending_time;
+        this._ttr_avg =
+          (this._ttr_avg * this._ttr_count + ttr) / (this._ttr_count + 1);
+        this._ttr_count++;
+        resolve(true);
+      });
+      setTimeout(() => {
+        reject("timeout");
+      }, 3000);
     });
   }
   /**
    * closes all the events on this connection
    */
   public close() {
+    if (this._socket) {
+      this._socket.disconnect();
+      this._socket.close();
+    }
     this._finished$.next();
+  }
+  public getPacketTTD(id: string, position: number): IPacketTTD | undefined {
+    return this._pending_ttd_packets.find(
+      (packet) => packet.id === id && packet.position === position
+    );
+  }
+  public removePacketTTD(id: string, position: number) {
+    this._pending_ttd_packets = this._pending_ttd_packets.filter((packet) =>
+      packet.id === id && packet.position === position ? null : packet
+    );
   }
   /**
    * get socket
@@ -249,5 +315,17 @@ export default class Connection {
    */
   public setPacketLength(packet_length: number) {
     this._packet_length = packet_length;
+  }
+  /**
+   * returns the ttr score of connection
+   */
+  public getTTRAverage(): number {
+    return this._ttr_avg;
+  }
+  /**
+   * return the ttr count of connection
+   */
+  public getTTRCount(): number {
+    return this._ttr_count;
   }
 }

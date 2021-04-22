@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import Client from "./core/Client/Client";
 import Context from "./core/Context/Context";
 import { IContext } from "./core/Context/def";
 import Key from "./core/Key/Key";
@@ -7,24 +8,42 @@ function App() {
   // connection
   const [server_url, set_server_url] = useState("http://localhost:5000");
   const connect = async () => {
+    if (!context.client) return;
     try {
-      context.client.connect(server_url, 100);
+      context.client.connect(server_url, 1000);
     } catch (error) {}
   };
   // sending message to client node
   const [client_public_key, set_client_public_key] = useState("");
   const [client_message, set_client_message] = useState("");
   const sendMesssageToClient = () => {
+    if (!context.client) return;
     context.client.sendMessage(
       Buffer.from(client_message),
       Key.generateKeyByPublicKey(client_public_key)
     );
   };
   useEffect(() => {
+    if (!context.client) return;
     context.client.onMessage$.subscribe((message) => {
       console.log(message.toString());
     });
   }, [context.client]);
+
+  // creating to client based on local storage
+  useEffect(() => {
+    const public_key = localStorage.getItem("public_key");
+    const private_key = localStorage.getItem("private_key");
+    if (!public_key || !private_key) {
+      const key = Key.generateFreshKey();
+      localStorage.setItem("public_key", key.getPublicKey());
+      localStorage.setItem("private_key", key.getPrivateKey());
+      context.client = new Client(key);
+    } else {
+      const key = Key.generateKeyByPrivateKey(private_key);
+      context.client = new Client(key);
+    }
+  }, [context]);
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <div

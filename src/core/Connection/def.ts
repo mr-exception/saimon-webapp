@@ -6,6 +6,14 @@ export interface IPacket {
   dst?: string; // public key of destination node
 }
 
+export interface IPacketGot {
+  id: string; // id
+  position: number; // position
+}
+
+export interface IPacketTTD extends IPacketGot {
+  time: number;
+}
 export type ConnectionStatus =
   | "CONNECTING"
   | "HK"

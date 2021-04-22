@@ -1,10 +1,10 @@
 import { Subject } from "rxjs";
 import Connection from "../Connection/Connection";
-import { IPacket } from "../Connection/def";
+import { ConnectionStatus, IPacket, IPacketTTD } from "../Connection/def";
 import Key from "../Key/Key";
 
 export default class Client {
-  private connections: Connection[] = [];
+  private _connections: Connection[] = [];
   constructor(private key: Key) {
     console.log(key.getPublicKey());
   }
@@ -15,21 +15,25 @@ export default class Client {
    */
   public async connect(server_url: string, packet_size: number) {
     const connection = new Connection(server_url, packet_size, this.key);
-
-    await connection.connect();
-    this.connections.push(connection);
-    console.log("connected to " + server_url);
+    connection.connect();
+    connection.subscribeToConnectionStatus((state) =>
+      this.handleConnectionStates(connection, state)
+    );
     // subscribe to reciecing packets
     connection.onPacketReceived((packet: IPacket) => {
       this.pending_packets.push(packet);
       this.checkPackets(packet.id, packet.count);
+    });
+    // subscribe to ttd informations
+    connection.onPacketGot((ttd: IPacketTTD) => {
+      console.log(`packet delivered in ${ttd.time}ms`);
     });
   }
   /**
    * send message to a client node
    */
   public sendMessage(data: Buffer, address: Key) {
-    this.connections.forEach((connection) => {
+    this._connections.forEach((connection) => {
       connection.sendMessageToClient(data, address);
     });
   }
@@ -53,8 +57,34 @@ export default class Client {
       this.pending_packets = this.pending_packets.filter((packet) =>
         packet.id === id ? null : packet
       );
-
       this.onMessage$.next(message);
     }
   }
+  /**
+   * handle connection states
+   */
+  public handleConnectionStates(
+    connection: Connection,
+    state: ConnectionStatus
+  ) {
+    if (state === "CONNECTED") {
+      this._connections.push(connection);
+      console.log("connected to " + connection.getAddress());
+    }
+    if (state === "DISCONNECTED") {
+      this.removeConnection(connection);
+      console.log("disconnected");
+    }
+  }
+
+  private removeConnection(connection: Connection) {
+    connection.close();
+    this._connections = this._connections.filter((cnn) =>
+      cnn.id === connection.id ? null : cnn
+    );
+  }
+
+  // private getConnection(id: string): Connection {
+  //   this
+  // }
 }
