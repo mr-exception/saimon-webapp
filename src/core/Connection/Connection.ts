@@ -79,7 +79,7 @@ export default class Connection {
       });
   }
   /**
-   * start listening host node messages
+   * start listening host node events
    */
   public startListeningToHost() {
     if (!this._socket) {
