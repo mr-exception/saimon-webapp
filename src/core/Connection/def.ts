@@ -36,3 +36,5 @@ export interface IClientState {
 export interface IClientStateInConnection extends IClientState {
   connection_id: string;
 }
+
+export type SendStatus = "DELIVERED" | "RESERVED" | "FAILED";

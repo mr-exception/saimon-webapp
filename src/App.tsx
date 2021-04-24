@@ -6,11 +6,14 @@ import Key from "./core/Key/Key";
 function App() {
   const context = useContext<IContext>(Context);
   // connection
-  const [server_url, set_server_url] = useState("http://localhost:5000");
+  const [server_url, set_server_url] = useState("http://localhost:5051");
   const connect = async () => {
     if (!context.client) return;
     try {
       context.client.connect(server_url, 1000);
+      context.client.onMessage$.subscribe((message) => {
+        console.log(message.toString());
+      });
     } catch (error) {}
   };
   // sending message to client node
@@ -23,22 +26,21 @@ function App() {
       Key.generateKeyByPublicKey(client_public_key)
     );
   };
-  useEffect(() => {
-    if (!context.client) return;
-    context.client.onMessage$.subscribe((message) => {
-      console.log(message.toString());
-    });
-  }, [context.client]);
   // request the address status
   const ack = async () => {
     if (!context.client) return;
     const results = await context.client.getClientStates([client_public_key]);
     console.log(results);
   };
-  // subscribes the address status
-  const subscrribe = async () => {
+  // subscribe the address status
+  const subscribe = async () => {
     if (!context.client) return;
     await context.client.subscribeToClientState([client_public_key]);
+  };
+  // unsubscribe the address status
+  const unsubscribe = async () => {
+    if (!context.client) return;
+    await context.client.unsubscribeToClientState([client_public_key]);
   };
 
   // creating to client based on local storage
@@ -93,7 +95,8 @@ function App() {
           onChange={(e) => set_client_public_key(e.target.value)}
         />
         <button onClick={ack}>ack</button>
-        <button onClick={subscrribe}>sub</button>
+        <button onClick={subscribe}>sub</button>
+        <button onClick={unsubscribe}>unsub</button>
       </div>
       <div
         style={{

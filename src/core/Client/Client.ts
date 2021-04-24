@@ -11,6 +11,7 @@ import Key from "../Key/Key";
 
 export default class Client {
   private _connections: Connection[] = [];
+  private _clients_state: IClientStateInConnection[] = [];
   constructor(private key: Key) {
     console.log(key.getPublicKey());
   }
@@ -20,24 +21,20 @@ export default class Client {
    * connect to host node
    */
   public async connect(server_url: string, packet_size: number) {
-    const connection = new Connection(server_url, packet_size, this.key);
+    const connection = new Connection(server_url, packet_size, this.key, this);
     connection.connect();
     // subscribe to connection state
     connection.subscribeToConnectionStatus((state) =>
       this.handleConnectionStates(connection, state)
     );
-    // subscribe to reciecing packets
-    connection.onPacketReceived((packet: IPacket) => {
-      this.pending_packets.push(packet);
-      this.checkPackets(packet.id, packet.count);
-    });
     // subscribe to ttd informations
     connection.onPacketGot((ttd: IPacketTTD) => {
       console.log(`packet delivered in ${ttd.time}ms`);
     });
-    connection.subscribeToClientStateChange((state: IClientState) => {
-      console.log(state);
-    });
+  }
+  public packetReceived(packet: IPacket) {
+    this.pending_packets.push(packet);
+    this.checkPackets(packet.id, packet.count);
   }
   /**
    * send message to a client node
@@ -63,7 +60,6 @@ export default class Client {
           return this.key.decryptPrivate(packet.payload);
         })
         .reduce((prev, cur) => Buffer.concat([prev, cur]));
-
       this.pending_packets = this.pending_packets.filter((packet) =>
         packet.id === id ? null : packet
       );
@@ -126,5 +122,41 @@ export default class Client {
         connection.subscribeToClientsState(client_addresses)
       )
     );
+  }
+  /**
+   * unsubscribes to a list of addresses
+   */
+  public async unsubscribeToClientState(client_addresses: string[]) {
+    await Promise.all(
+      this._connections.map((connection) =>
+        connection.unsubscribeToClientsState(client_addresses)
+      )
+    );
+  }
+  public getClientState(
+    connection_id: string,
+    address: string
+  ): IClientStateInConnection | undefined {
+    return this._clients_state.find(
+      (client_state) =>
+        connection_id === client_state.connection_id &&
+        address === client_state.address
+    );
+  }
+  public updateClientState(state: IClientStateInConnection) {
+    const found = this.getClientState(state.connection_id, state.address);
+    if (!found) {
+      this._clients_state.push(state);
+      return;
+    }
+    this._clients_state = this._clients_state.map((client_state) => {
+      if (client_state.connection_id !== state.connection_id) {
+        return client_state;
+      }
+      if (client_state.address !== state.address) {
+        return client_state;
+      }
+      return state;
+    });
   }
 }
