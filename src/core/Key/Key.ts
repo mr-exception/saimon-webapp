@@ -9,7 +9,7 @@ export default class Key {
       return this.key.encryptPrivate(Buffer.from(data), "base64");
     else return this.key.encryptPrivate(data, "base64");
   }
-  public decryptPrivate(data: string | string): Buffer {
+  public decryptPrivate(data: string): Buffer {
     return this.key.decrypt(data, "buffer");
   }
 

@@ -163,29 +163,6 @@ export default class Connection {
     });
   }
   /**
-   * send a message to host node
-   */
-  public sendMessageToHost(data: Buffer, dst?: string) {
-    const length = data.length;
-    const packet_count = Math.ceil(length / this._packet_length);
-    const data_parts: Buffer[] = [];
-    for (let i = 0; i < packet_count; i++) {
-      data_parts.push(
-        data.slice(i * this._packet_length, (i + 1) * this._packet_length)
-      );
-    }
-    data_parts.forEach((data_part, position) => {
-      const packet: IPacket = {
-        id: "some-random_id",
-        payload: this._client_key.encryptPrivate(data_part),
-        position,
-        count: packet_count,
-        dst,
-      };
-      this.sendPacket(packet);
-    });
-  }
-  /**
    * send message to a client by address
    */
   public async sendMessageToClient(data: Buffer, dest_key: Key) {
@@ -200,7 +177,9 @@ export default class Connection {
     const parts_cipher = await Promise.all(
       data_parts.map((part) => {
         return new Promise<string>((resolve) => {
-          resolve(dest_key.encryptPublic(part));
+          resolve(
+            dest_key.encryptPublic(this._client_key.encryptPrivate(part))
+          );
         });
       })
     );
@@ -213,6 +192,7 @@ export default class Connection {
         position,
         count: packet_count,
         dst: dest_key.getPublicKey(),
+        src: this._client_key.getPublicKey(),
       };
       const result = await this.sendPacket(packet);
       console.log(result);

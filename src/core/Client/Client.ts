@@ -55,9 +55,12 @@ export default class Client {
       })
       .sort((pa, pb) => pa.position - pb.position);
     if (packets.length === count) {
+      const source_key = Key.generateKeyByPublicKey(packets[0].src);
       const message = packets
         .map((packet) => {
-          return this.key.decryptPrivate(packet.payload);
+          return source_key.decryptPublic(
+            this.key.decryptPrivate(packet.payload).toString()
+          );
         })
         .reduce((prev, cur) => Buffer.concat([prev, cur]));
       this.pending_packets = this.pending_packets.filter((packet) =>

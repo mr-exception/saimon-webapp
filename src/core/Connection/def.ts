@@ -3,7 +3,8 @@ export interface IPacket {
   payload: string; // payload
   position: number; // position of packet in sending message
   count: number; // count of packets in sending message
-  dst?: string; // public key of destination node
+  dst: string; // public key of destination node
+  src: string; // public key of source node
 }
 
 export interface IPacketGot {
