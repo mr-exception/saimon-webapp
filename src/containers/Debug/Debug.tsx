@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import Client from "./core/Client/Client";
-import Context from "./core/Context/Context";
-import { IContext } from "./core/Context/def";
-import Key from "./core/Key/Key";
-function App() {
+import Client from "core/Client/Client";
+import Context from "core/Context/Context";
+import { IContext } from "core/Context/def";
+import Key from "core/Key/Key";
+const Debug = () => {
   const context = useContext<IContext>(Context);
   // connection
   const [server_url, set_server_url] = useState("http://localhost:5051");
@@ -118,6 +118,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
-export default App;
+export default Debug;
