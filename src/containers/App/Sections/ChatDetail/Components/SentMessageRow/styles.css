@@ -15,7 +15,7 @@
   border-bottom-left-radius: 40px;
   border-bottom-right-radius: 40px;
 }
-.chat-detail-sent-message-row__date {
+.chat-detail-sent-message-row__send {
   flex: 1;
   font-size: 12px;
   padding: 10px;
