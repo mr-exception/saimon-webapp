@@ -1,4 +1,8 @@
 .chat-detail {
   flex: 1;
-  background-color: #eee;
+  display: flex;
+  flex-direction: column;
+}
+.chat-detail__message-list {
+  flex: 1;
 }
