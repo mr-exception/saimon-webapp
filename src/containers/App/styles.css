@@ -1,0 +1,24 @@
+.app {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background-image: url("img/background.svg");
+  background-size: cover;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
+.app__container {
+  max-width: 1500px;
+  max-height: 850px;
+  width: calc(100vw - 2px);
+  height: calc(100vh - 2px);
+  background-color: white;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #2f988a;
+  border-radius: 3px;
+
+  display: flex;
+  flex-direction: row;
+}

@@ -1,3 +1,4 @@
+import React from "react";
 import Debug from "containers/Debug/Debug";
 import App from "containers/App/App";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
