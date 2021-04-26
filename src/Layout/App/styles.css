@@ -25,6 +25,7 @@
   flex: 1;
   background-color: #2f988a;
   max-width: 5%;
+  min-width: 70px;
 
   display: flex;
   flex-direction: column;
