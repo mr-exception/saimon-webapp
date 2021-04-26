@@ -18,7 +18,20 @@
   border-style: solid;
   border-color: #2f988a;
   border-radius: 3px;
-
   display: flex;
   flex-direction: row;
+}
+.app__container__toolbar {
+  flex: 1;
+  background-color: #2f988a;
+  max-width: 5%;
+
+  display: flex;
+  flex-direction: column;
+
+  padding-top: 20px;
+}
+.app__container__children {
+  flex: 1;
+  max-width: 95%;
 }
