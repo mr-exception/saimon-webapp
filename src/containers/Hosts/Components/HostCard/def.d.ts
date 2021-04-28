@@ -3,10 +3,11 @@ interface IHostCardProps {
 }
 interface IHost {
   address: string;
-  port: number;
-  type: "RELAY" | "STORAGE" | "ADVERTISOR";
-  protocl: "LIVE" | "REST";
+  type: HostType;
+  protocl: HostProtocol;
   name: string;
   score: number;
   advertise_period: number;
 }
+type HostType = "RELAY" | "STORAGE" | "ADVERTISOR";
+type HostProtocol = "LIVE" | "REST";

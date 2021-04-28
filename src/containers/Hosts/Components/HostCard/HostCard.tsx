@@ -8,14 +8,12 @@ const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
       <div className="host-card__general_info">
         <p>name: {host.name}</p>
         <p>address: {host.address}</p>
-        <p>port: {host.port}</p>
         <p>type: {host.type}</p>
       </div>
       <div className="host-card__statics_info">
-        <p>name: {host.name}</p>
-        <p>address: {host.address}</p>
-        <p>port: {host.port}</p>
-        <p>type: {host.type}</p>
+        <p>protocl: {host.protocl}</p>
+        <p>score: {host.score}</p>
+        <p>advertise period: {host.advertise_period}B</p>
       </div>
       <div className="host-card__actions">
         <div className="host-card__actions__item">
