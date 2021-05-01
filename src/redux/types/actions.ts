@@ -5,6 +5,8 @@ export const SHOW_ADD_CONTACT_MODAL = "show_add_contact_modal";
 export const CLOSE_ADD_CONTACT_MODAL = "close_add_contact_modal";
 export const SHOW_ADD_HOST_MODAL = "show_add_host_modal";
 export const CLOSE_ADD_HOST_MODAL = "close_add_host_modal";
+export const SHOW_CONFIRMATION_MODAL = "show_confirmation_modal";
+export const CLOSE_CONFIRMATION_MODAL = "close_confirmation_modal";
 // contacts
 export const ADD_CONTACT = "add_contact";
 export const EDIT_CONTACT = "edit_contact";
@@ -20,5 +22,7 @@ export type ActionType = {
   type: string;
   contact?: IContact;
   host?: IHost;
+  message?: string;
+  callback?: (result: boolean) => void;
 };
 export type DispatchType = (args: ActionType) => ActionType;

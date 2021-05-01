@@ -23,6 +23,11 @@ export interface IInitialState {
     add_host: {
       show: boolean;
     };
+    confirmation: {
+      show: boolean;
+      message: string;
+      callback: (result: boolean) => void;
+    };
   };
   hosts: IHost[];
   contacts: IContact[];

@@ -5,7 +5,6 @@ const Modal: React.FC<IModalProps> = ({
   close,
   children,
 }: IModalProps) => {
-  console.log(show);
   if (!show) return null;
   return (
     <div className="overlay" onClick={close}>

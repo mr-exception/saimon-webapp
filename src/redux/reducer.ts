@@ -4,12 +4,14 @@ import {
   ADD_HOST,
   CLOSE_ADD_CONTACT_MODAL,
   CLOSE_ADD_HOST_MODAL,
+  CLOSE_CONFIRMATION_MODAL,
   EDIT_CONTACT,
   EDIT_HOST,
   REMOVE_CONTACT,
   REMOVE_HOST,
   SHOW_ADD_CONTACT_MODAL,
   SHOW_ADD_HOST_MODAL,
+  SHOW_CONFIRMATION_MODAL,
 } from "./types/actions";
 import { IInitialState } from "./types/states";
 
@@ -17,6 +19,7 @@ const initialState: IInitialState = {
   modals: {
     add_contact: { show: false },
     add_host: { show: false },
+    confirmation: { show: false, message: "", callback: (result) => {} },
   },
   contacts: [],
   hosts: [],
@@ -39,6 +42,20 @@ const reducer = (
       return state;
     case CLOSE_ADD_HOST_MODAL:
       state.modals.add_host.show = false;
+      return state;
+    case SHOW_CONFIRMATION_MODAL:
+      state.modals.confirmation = {
+        show: true,
+        message: action.message ? action.message : "",
+        callback: action.callback ? action.callback : () => {},
+      };
+      return state;
+    case CLOSE_CONFIRMATION_MODAL:
+      state.modals.confirmation = {
+        show: false,
+        message: "",
+        callback: action.callback ? action.callback : () => {},
+      };
       return state;
     // contacts
     case ADD_CONTACT:
