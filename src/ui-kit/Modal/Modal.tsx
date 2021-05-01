@@ -5,10 +5,18 @@ const Modal: React.FC<IModalProps> = ({
   close,
   children,
 }: IModalProps) => {
+  console.log(show);
   if (!show) return null;
   return (
-    <div className="overlay">
-      <div className="modal-container">{children}</div>
+    <div className="overlay" onClick={close}>
+      <div
+        className="modal-container"
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 };

@@ -1,22 +1,19 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { IInitialState } from "redux/types/states";
+import AddContact from "./Components/AddContact/AddContact";
 import Conversation from "./Components/Conversation/Conversation";
 import "./styles.css";
 const ChatList = () => {
-  const list: IConversationProps[] = [
-    { name: "john doe", last_message: "this is a test message" },
-    { name: "john doe", last_message: "this is a test message" },
-    { name: "john doe", last_message: "this is a test message" },
-    { name: "john doe", last_message: "this is a test message" },
-    { name: "john doe", last_message: "this is a test message" },
-    { name: "john doe", last_message: "this is a test message" },
-    { name: "john doe", last_message: "this is a test message" },
-  ];
+  const contacts = useSelector((state: IInitialState) => state.contacts);
   return (
     <div className="chat-list">
-      {list.map((conversation) => (
+      <AddContact />
+      {contacts.map((contact, index) => (
         <Conversation
-          name={conversation.name}
-          last_message={conversation.last_message}
+          key={index}
+          name={`${contact.first_name} ${contact.last_name}`}
+          last_message="no message"
         />
       ))}
     </div>

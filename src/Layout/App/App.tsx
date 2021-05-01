@@ -6,6 +6,7 @@ import ProfileIcon from "img/profile.svg";
 import SettingIcon from "img/setting.svg";
 import "./styles.css";
 import { useHistory } from "react-router";
+import Modals from "Modals/Modals";
 const App: React.FC<IAppProps> = ({ children }: IAppProps) => {
   const history = useHistory();
   return (
@@ -43,6 +44,7 @@ const App: React.FC<IAppProps> = ({ children }: IAppProps) => {
         </div>
         <div className="app__container__children">{children}</div>
       </div>
+      <Modals />
     </div>
   );
 };
