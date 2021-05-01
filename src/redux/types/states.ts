@@ -6,12 +6,24 @@ export interface IContact {
   last_name: string;
   public_key: string;
 }
+export interface IHost {
+  address: string;
+  type: HostType;
+  protocl: HostProtocol;
+  name: string;
+  score: number;
+  advertise_period: number;
+}
 
 export interface IInitialState {
   modals: {
     add_contact: {
       show: boolean;
     };
+    add_host: {
+      show: boolean;
+    };
   };
+  hosts: IHost[];
   contacts: IContact[];
 }
