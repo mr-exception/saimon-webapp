@@ -1,7 +1,9 @@
+import Storage from "storage/Storage";
 import {
   ActionType,
   ADD_CONTACT,
   ADD_HOST,
+  ADD_HOSTS,
   CLOSE_ADD_CONTACT_MODAL,
   CLOSE_ADD_HOST_MODAL,
   CLOSE_CONFIRMATION_MODAL,
@@ -16,6 +18,7 @@ import {
 import { IInitialState } from "./types/states";
 
 const initialState: IInitialState = {
+  storage: new Storage(),
   modals: {
     add_contact: { show: false },
     add_host: { show: false },
@@ -85,6 +88,9 @@ const reducer = (
       });
       return state;
     // hosts
+    case ADD_HOSTS:
+      state.hosts = [...state.hosts, ...(action.hosts ? action.hosts : [])];
+      return state;
     case ADD_HOST:
       if (!action.host) {
         return state;

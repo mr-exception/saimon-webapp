@@ -1,6 +1,10 @@
-import { ActionType, ADD_CONTACT } from "redux/types/actions";
-import { IContact } from "redux/types/states";
+import Contact from "Classes/Contact/Contact";
+import { ActionType, ADD_CONTACT, ADD_CONTACTS } from "redux/types/actions";
 
-export const addContact = (contact: IContact): ActionType => {
+export const addContact = (contact: Contact): ActionType => {
   return { type: ADD_CONTACT, contact };
+};
+
+export const addContacts = (contacts: Contact[]): ActionType => {
+  return { type: ADD_CONTACTS, contacts };
 };

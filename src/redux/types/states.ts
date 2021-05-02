@@ -1,21 +1,9 @@
-import Key from "core/Key/Key";
-
-export interface IContact {
-  key: Key;
-  first_name: string;
-  last_name: string;
-  public_key: string;
-}
-export interface IHost {
-  address: string;
-  type: HostType;
-  protocl: HostProtocol;
-  name: string;
-  score: number;
-  advertise_period: number;
-}
+import Contact from "Classes/Contact/Contact";
+import Host from "Classes/Host/Host";
+import Storage from "storage/Storage";
 
 export interface IInitialState {
+  storage: Storage;
   modals: {
     add_contact: {
       show: boolean;
@@ -29,6 +17,6 @@ export interface IInitialState {
       callback: (result: boolean) => void;
     };
   };
-  hosts: IHost[];
-  contacts: IContact[];
+  hosts: Host[];
+  contacts: Contact[];
 }
