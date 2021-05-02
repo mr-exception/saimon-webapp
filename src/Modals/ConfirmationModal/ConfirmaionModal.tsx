@@ -21,7 +21,6 @@ const ConfirmationModal = () => {
       <div className="confirmation__description">
         <button
           onClick={() => {
-            console.log("yes");
             callback(true);
             dispatch(closeConfirmationModal());
           }}

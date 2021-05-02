@@ -1,5 +1,5 @@
 import Contact from "Classes/Contact/Contact";
-import { IHost } from "Classes/Host/Host";
+import Host from "Classes/Host/Host";
 
 // modals
 export const SHOW_ADD_CONTACT_MODAL = "show_add_contact_modal";
@@ -27,8 +27,8 @@ export type ActionType = {
   contact?: Contact;
   contacts?: Contact[];
 
-  host?: IHost;
-  hosts?: IHost[];
+  host?: Host;
+  hosts?: Host[];
 
   message?: string;
   callback?: (result: boolean) => void;

@@ -2,6 +2,7 @@ import Storage from "storage/Storage";
 import {
   ActionType,
   ADD_CONTACT,
+  ADD_CONTACTS,
   ADD_HOST,
   ADD_HOSTS,
   CLOSE_ADD_CONTACT_MODAL,
@@ -61,6 +62,12 @@ const reducer = (
       };
       return state;
     // contacts
+    case ADD_CONTACTS:
+      state.contacts = [
+        ...state.contacts,
+        ...(action.contacts ? action.contacts : []),
+      ];
+      return state;
     case ADD_CONTACT:
       if (!action.contact) {
         return state;
@@ -100,7 +107,7 @@ const reducer = (
     case REMOVE_HOST:
       state.hosts = state.hosts.filter((host) => {
         if (action.host) {
-          if (host.name === action.host.name) return null;
+          if (host.isEqual(action.host)) return null;
           else return host;
         } else {
           return host;

@@ -4,9 +4,9 @@ import Modal from "ui-kit/Modal/Modal";
 import JSONReader from "ui-kit/JSONReader/JSONReader";
 import { IInitialState } from "redux/types/states";
 import { useDispatch, useSelector } from "react-redux";
-import { addHost } from "redux/actions/hosts";
 import { clsoeAddHostModal } from "redux/actions/modals";
 import Host, { IHost } from "Classes/Host/Host";
+import { addHosts } from "redux/actions/hosts";
 const AddHostModal = () => {
   const files_input = useRef<HTMLInputElement>(null);
   const show = useSelector(
@@ -29,10 +29,20 @@ const AddHostModal = () => {
         });
       });
     });
-    const hosts = await Promise.all(results.map(async (record) => {}));
-    // results.forEach(async (host) => {
-    //   dispatch(addHost(host));
-    // });
+    const hosts = results.map((record) => {
+      const host = new Host(
+        record.name,
+        record.address,
+        record.score,
+        record.type,
+        record.protocl,
+        record.advertise_period,
+        storage
+      );
+      host.store();
+      return host;
+    });
+    dispatch(addHosts(hosts));
     dispatch(clsoeAddHostModal());
   };
   return (

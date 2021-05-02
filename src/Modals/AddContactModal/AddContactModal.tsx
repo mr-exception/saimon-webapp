@@ -1,4 +1,4 @@
-import Key from "core/Key/Key";
+import Contact from "Classes/Contact/Contact";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addContact } from "redux/actions/contacts";
@@ -11,6 +11,7 @@ const AddContactModal: React.FC<IAddContactModalProps> = () => {
   const show = useSelector(
     (state: IInitialState) => state.modals.add_contact.show
   );
+  const storage = useSelector((state: IInitialState) => state.storage);
   const dispatch = useDispatch();
 
   const [first_name, set_first_name] = useState("");
@@ -18,8 +19,8 @@ const AddContactModal: React.FC<IAddContactModalProps> = () => {
   const [public_key, set_public_key] = useState("");
 
   const submit = () => {
-    const key = Key.generateKeyByPublicKey(public_key);
-    const contact = { first_name, last_name, public_key, key };
+    const contact = new Contact(first_name, last_name, public_key, storage);
+    contact.store();
     dispatch(addContact(contact));
     dispatch(closeAddContactModal());
   };
