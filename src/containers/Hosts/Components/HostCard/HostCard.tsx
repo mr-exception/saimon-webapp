@@ -18,7 +18,7 @@ const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
       <div className="host-card__statics_info">
         <p>protocl: {host.protocl}</p>
         <p>score: {host.score}</p>
-        <p>advertise period: {host.advertise_period}B</p>
+        <p>advertise period: {host.getAdvertisePeriod()}</p>
       </div>
       <div className="host-card__actions">
         <div

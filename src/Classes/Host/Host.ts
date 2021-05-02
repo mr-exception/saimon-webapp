@@ -26,6 +26,19 @@ export default class Host extends Entity<IHost> {
       advertise_period: this.advertise_period,
     };
   }
+
+  public getAdvertisePeriod(): string {
+    if (this.advertise_period > 1000000000) {
+      return `${(this.advertise_period / 1000000000).toFixed(2)}GB`;
+    }
+    if (this.advertise_period > 1000000) {
+      return `${(this.advertise_period / 1000000).toFixed(2)}MB`;
+    }
+    if (this.advertise_period > 1000) {
+      return `${(this.advertise_period / 1000).toFixed(2)}KB`;
+    }
+    return `${this.advertise_period}B`;
+  }
 }
 
 export interface IHost {
