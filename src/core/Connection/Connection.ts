@@ -14,6 +14,7 @@ import {
 
 export default class Connection {
   // props
+  private _id?: string;
   private _socket?: Socket;
   private _host_key?: Key;
   private _ttr_avg = 0;
@@ -107,46 +108,57 @@ export default class Connection {
   /**
    * start the handshake progress with host node
    */
-  public async connect(): Promise<void> {
-    this._socket = io(this._address);
-    // listen to socket on disconnecting
-    this._socket.on("disconnect", () => {
-      this._connectionStatus$.next("DISCONNECTED");
-    });
-    this._connectionStatus$.next("CONNECTING");
-    // HK: waits for host node to send its public key
-    const host_public_key = await Connection.onAsyncStatic<string>(
-      this._socket,
-      "HK"
-    );
-    this._connectionStatus$.next("HK");
-    // got HK, creates the host key
-    this._host_key = Key.generateKeyByPublicKey(host_public_key);
-    // CK: sends client node public key to host node
-    this._socket.emit("CK", this._client_key.getPublicKey());
-    this._connectionStatus$.next("CK");
-    // VQ: waits for host node to return a verfication question
-    // encrypted by client node public key
-    const vq_cipher = await Connection.onAsyncStatic<string>(
-      this._socket,
-      "VQ"
-    );
-    this._connectionStatus$.next("VQ");
-    // decrypts the verification question by client node private key
-    const va = this._client_key.decryptPrivate(vq_cipher);
-    // encrypts the verifiction answer by host node public key
-    const va_cipher = this._host_key.encryptPublic(va);
-    // VA: sends the verification answer
-    this._socket.emit("VA", va_cipher);
-    this._connectionStatus$.next("VA");
-    // VS: waits if host accepted the verifictaion
-    this._socket.once("VS", () => {
-      this._connectionStatus$.next("CONNECTED");
-      this.startListeningToHost();
-    });
-    // VF: waits if host refused the verification
-    this._socket.once("VF", () => {
-      this._connectionStatus$.next("VF");
+  public async connect(): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      this._socket = io(this._address);
+      // listen to socket on disconnecting
+      this._socket.on("disconnect", () => {
+        this._connectionStatus$.next("DISCONNECTED");
+      });
+      this._connectionStatus$.next("CONNECTING");
+      // HK: waits for host node to send its public key
+      const host_public_key = await Connection.onAsyncStatic<string>(
+        this._socket,
+        "HK"
+      );
+
+      // set time out for connection progrss
+      const timeout = setTimeout(() => {
+        reject("timeout");
+      }, 3000);
+
+      this._connectionStatus$.next("HK");
+      // got HK, creates the host key
+      this._host_key = Key.generateKeyByPublicKey(host_public_key);
+      // CK: sends client node public key to host node
+      this._socket.emit("CK", this._client_key.getPublicKey());
+      this._connectionStatus$.next("CK");
+      // VQ: waits for host node to return a verfication question
+      // encrypted by client node public key
+      const vq_cipher = await Connection.onAsyncStatic<string>(
+        this._socket,
+        "VQ"
+      );
+      this._connectionStatus$.next("VQ");
+      // decrypts the verification question by client node private key
+      const va = this._client_key.decryptPrivate(vq_cipher);
+      // encrypts the verifiction answer by host node public key
+      const va_cipher = this._host_key.encryptPublic(va);
+      // VA: sends the verification answer
+      this._socket.emit("VA", va_cipher);
+      this._connectionStatus$.next("VA");
+      // VS: waits if host accepted the verifictaion
+      this._socket.once("VS", () => {
+        if (this._socket) this._id = this._socket.id;
+        resolve(true);
+        this._connectionStatus$.next("CONNECTED");
+        this.startListeningToHost();
+        clearTimeout(timeout);
+      });
+      // VF: waits if host refused the verification
+      this._socket.once("VF", () => {
+        this._connectionStatus$.next("VF");
+      });
     });
   }
   /**
@@ -245,6 +257,12 @@ export default class Connection {
       this._socket.close();
     }
     this._finished$.next();
+  }
+  /**
+   * emits a disconnect event in connection
+   */
+  public emitDisconnect() {
+    if (this._socket) this._socket.disconnect();
   }
   /**
    * get the TTD information of a packet
@@ -421,8 +439,8 @@ export default class Connection {
    * get connection id
    */
   public getId(): string {
-    if (this._socket) {
-      return this._socket.id;
+    if (this._id) {
+      return this._id;
     } else {
       return "not-defined";
     }

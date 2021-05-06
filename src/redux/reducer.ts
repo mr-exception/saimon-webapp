@@ -1,22 +1,6 @@
 import Storage from "storage/Storage";
-import {
-  ActionType,
-  ADD_CONTACT,
-  ADD_CONTACTS,
-  ADD_HOST,
-  ADD_HOSTS,
-  CLOSE_ADD_CONTACT_MODAL,
-  CLOSE_ADD_HOST_MODAL,
-  CLOSE_CONFIRMATION_MODAL,
-  EDIT_CONTACT,
-  EDIT_HOST,
-  REMOVE_CONTACT,
-  REMOVE_HOST,
-  SHOW_ADD_CONTACT_MODAL,
-  SHOW_ADD_HOST_MODAL,
-  SHOW_CONFIRMATION_MODAL,
-} from "./types/actions";
-import { IInitialState } from "./types/states";
+import * as Actions from "./types/actions";
+import { IInitialState, ILogedState } from "./types/states";
 
 const initialState: IInitialState = {
   storage: new Storage(),
@@ -27,34 +11,37 @@ const initialState: IInitialState = {
   },
   contacts: [],
   hosts: [],
+
+  host_connections: [],
+  contact_connections: [],
 };
 
 const reducer = (
   state: IInitialState = initialState,
-  action: ActionType
+  action: Actions.ActionType
 ): IInitialState => {
   switch (action.type) {
     // modals
-    case SHOW_ADD_CONTACT_MODAL:
+    case Actions.SHOW_ADD_CONTACT_MODAL:
       state.modals.add_contact.show = true;
       return state;
-    case CLOSE_ADD_CONTACT_MODAL:
+    case Actions.CLOSE_ADD_CONTACT_MODAL:
       state.modals.add_contact.show = false;
       return state;
-    case SHOW_ADD_HOST_MODAL:
+    case Actions.SHOW_ADD_HOST_MODAL:
       state.modals.add_host.show = true;
       return state;
-    case CLOSE_ADD_HOST_MODAL:
+    case Actions.CLOSE_ADD_HOST_MODAL:
       state.modals.add_host.show = false;
       return state;
-    case SHOW_CONFIRMATION_MODAL:
+    case Actions.SHOW_CONFIRMATION_MODAL:
       state.modals.confirmation = {
         show: true,
         message: action.message ? action.message : "",
         callback: action.callback ? action.callback : () => {},
       };
       return state;
-    case CLOSE_CONFIRMATION_MODAL:
+    case Actions.CLOSE_CONFIRMATION_MODAL:
       state.modals.confirmation = {
         show: false,
         message: "",
@@ -62,19 +49,19 @@ const reducer = (
       };
       return state;
     // contacts
-    case ADD_CONTACTS:
+    case Actions.ADD_CONTACTS:
       state.contacts = [
         ...state.contacts,
         ...(action.contacts ? action.contacts : []),
       ];
       return state;
-    case ADD_CONTACT:
-      if (!action.contact) {
-        return state;
-      }
-      state.contacts = [...state.contacts, action.contact];
+    case Actions.ADD_CONTACT:
+      state.contacts = [
+        ...state.contacts,
+        ...(action.contact ? [action.contact] : []),
+      ];
       return state;
-    case REMOVE_CONTACT:
+    case Actions.REMOVE_CONTACT:
       state.contacts = state.contacts.filter((contact) => {
         if (action.contact) {
           if (contact.public_key === action.contact.public_key) return null;
@@ -84,7 +71,7 @@ const reducer = (
         }
       });
       return state;
-    case EDIT_CONTACT:
+    case Actions.EDIT_CONTACT:
       state.contacts = state.contacts.map((contact) => {
         if (action.contact) {
           if (contact.public_key === action.contact.public_key) return contact;
@@ -95,16 +82,16 @@ const reducer = (
       });
       return state;
     // hosts
-    case ADD_HOSTS:
+    case Actions.ADD_HOSTS:
       state.hosts = [...state.hosts, ...(action.hosts ? action.hosts : [])];
       return state;
-    case ADD_HOST:
+    case Actions.ADD_HOST:
       if (!action.host) {
         return state;
       }
       state.hosts = [...state.hosts, action.host];
       return state;
-    case REMOVE_HOST:
+    case Actions.REMOVE_HOST:
       state.hosts = state.hosts.filter((host) => {
         if (action.host) {
           if (host.isEqual(action.host)) return null;
@@ -114,7 +101,7 @@ const reducer = (
         }
       });
       return state;
-    case EDIT_HOST:
+    case Actions.EDIT_HOST:
       state.hosts = state.hosts.map((host) => {
         if (action.host) {
           if (host.name === action.host.name) return host;
@@ -123,6 +110,27 @@ const reducer = (
           return host;
         }
       });
+      return state;
+    // client
+    case Actions.STORE_CLIENT:
+      if (!action.client) return state;
+      const loged_state = state as ILogedState;
+      loged_state.client = action.client;
+      return state;
+    case Actions.STORE_CONNECTION_STATE:
+      if (!action.host_connection_state) return state;
+      const host_connection_state = action.host_connection_state;
+      let found = false;
+      state.host_connections = state.host_connections.map((hc) => {
+        if (hc.connection_id === host_connection_state.connection_id) {
+          hc.state = host_connection_state.state;
+          found = true;
+        }
+        return hc;
+      });
+      if (!found) {
+        state.host_connections.push(host_connection_state);
+      }
       return state;
     default:
       return state;

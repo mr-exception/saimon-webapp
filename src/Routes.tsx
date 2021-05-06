@@ -10,6 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { IInitialState } from "redux/types/states";
 import { addHosts } from "redux/actions/hosts";
 import { addContacts } from "redux/actions/contacts";
+import Key from "core/Key/Key";
+import Client from "core/Client/Client";
+import { storeClient, storeConnectionState } from "redux/actions/client";
+import { filter } from "rxjs/operators";
 
 const Routes = () => {
   const storage = useSelector((state: IInitialState) => state.storage);
@@ -19,8 +23,36 @@ const Routes = () => {
 
   useEffect(() => {
     const loadDateFromStorage = async () => {
+      // load client
+      const private_key = localStorage.getItem("private_key");
+      if (private_key) {
+        const key = Key.generateKeyByPrivateKey(private_key);
+        const client = new Client(key);
+        // subscribe to host connections state
+        client.onConnectionStates$
+          .pipe(
+            filter((connection_state) => {
+              return (
+                connection_state.state === "CONNECTED" ||
+                connection_state.state === "DISCONNECTED" ||
+                connection_state.state === "CONNECTING" ||
+                connection_state.state === "NETWORK_ERROR"
+              );
+            })
+          )
+          .subscribe(({ connection_id, state }) =>
+            dispatch(storeConnectionState(connection_id, state))
+          );
+        dispatch(storeClient(client));
+      } else {
+        const key = Key.generateFreshKey();
+        const client = new Client(key);
+        dispatch(storeClient(client));
+      }
+      // load hosts
       const hosts = await storage.getHosts();
       dispatch(addHosts(hosts));
+      // load contacts
       const contacts = await storage.getContacts();
       dispatch(addContacts(contacts));
       set_initialized(true);

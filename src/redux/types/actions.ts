@@ -1,5 +1,7 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
+import Client from "core/Client/Client";
+import { ConnectionStatus } from "core/Connection/def";
 
 // modals
 export const SHOW_ADD_CONTACT_MODAL = "show_add_contact_modal";
@@ -10,7 +12,7 @@ export const SHOW_CONFIRMATION_MODAL = "show_confirmation_modal";
 export const CLOSE_CONFIRMATION_MODAL = "close_confirmation_modal";
 // contacts
 export const ADD_CONTACT = "add_contact";
-export const ADD_CONTACTS = "add_contact";
+export const ADD_CONTACTS = "add_contacts";
 export const EDIT_CONTACT = "edit_contact";
 export const REMOVE_CONTACT = "rmeove_contact";
 // hosts
@@ -20,6 +22,9 @@ export const REMOVE_HOST = "remove_host";
 export const EDIT_HOST = "edit_host";
 export const CONNECT_HOST = "connect_host";
 export const DISCONNECT_HOST = "disconnect_host";
+// client
+export const STORE_CLIENT = "store_client";
+export const STORE_CONNECTION_STATE = "store_connection_state";
 
 export type ActionType = {
   type: string;
@@ -32,5 +37,12 @@ export type ActionType = {
 
   message?: string;
   callback?: (result: boolean) => void;
+
+  client?: Client;
+
+  host_connection_state?: {
+    connection_id: string;
+    state: ConnectionStatus;
+  };
 };
 export type DispatchType = (args: ActionType) => ActionType;

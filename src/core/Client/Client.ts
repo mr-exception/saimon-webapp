@@ -11,6 +11,10 @@ import Key from "../Key/Key";
 
 export default class Client {
   private _connections: Connection[] = [];
+  public onConnectionStates$ = new Subject<{
+    connection_id: string;
+    state: ConnectionStatus;
+  }>();
   private _clients_state: IClientStateInConnection[] = [];
   constructor(private key: Key) {
     console.log(key.getPublicKey());
@@ -22,14 +26,23 @@ export default class Client {
    */
   public async connect(server_url: string, packet_size: number) {
     const connection = new Connection(server_url, packet_size, this.key, this);
-    connection.connect();
+    await connection.connect();
+    this.handleConnectionStates(connection, "CONNECTED");
     // subscribe to connection state
-    connection.subscribeToConnectionStatus((state) =>
-      this.handleConnectionStates(connection, state)
-    );
+    connection.subscribeToConnectionStatus((state) => {
+      this.handleConnectionStates(connection, state);
+    });
     // subscribe to ttd informations
     connection.onPacketGot((ttd: IPacketTTD) => {
       console.log(`packet delivered in ${ttd.time}ms`);
+    });
+    return connection;
+  }
+  public async disconnectByConnectionId(connection_id: string) {
+    this._connections.forEach((cnn) => {
+      if (cnn.getId() === connection_id) {
+        cnn.emitDisconnect();
+      }
     });
   }
   public packetReceived(packet: IPacket) {
@@ -84,6 +97,7 @@ export default class Client {
       this.removeConnection(connection);
       console.log("disconnected");
     }
+    this.onConnectionStates$.next({ connection_id: connection.getId(), state });
   }
   /**
    * removes a connection from connection list

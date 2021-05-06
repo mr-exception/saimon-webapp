@@ -55,4 +55,7 @@ export default class Key {
     nodeKey.importKey(public_key, "pkcs8-public");
     return new Key(nodeKey);
   }
+  public static isPublicKey(key: string): boolean {
+    return /^-----BEGIN PUBLIC KEY-----.+-----END PUBLIC KEY-----/.test(key);
+  }
 }

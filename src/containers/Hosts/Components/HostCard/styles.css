@@ -8,10 +8,20 @@
   padding: 15px;
 
   display: flex;
+  flex-direction: column;
+}
+.status-bar {
+  display: flex;
   flex-direction: row;
+  flex: 1;
+}
+.host-card__info {
+  display: flex;
+  flex-direction: row;
+  flex: 4;
 }
 .host-card__general_info {
-  flex: 2;
+  flex: 4;
   border-right: 1px solid #999;
 }
 .host-card__statics_info {
