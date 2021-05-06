@@ -5,9 +5,14 @@ const Conversation: React.FC<IConversationProps> = ({
   name,
   last_message,
   avatar,
+  selected = () => {},
+  is_selected,
 }: IConversationProps) => {
   return (
-    <div className="conversation">
+    <div
+      onClick={selected}
+      className={`conversation ${is_selected ? "conversation--selected" : ""}`}
+    >
       <div className="conversation__icon">
         <img
           src={avatar ? DefaultAvatar : DefaultAvatar}

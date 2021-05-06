@@ -1,5 +1,5 @@
 import Contact from "Classes/Contact/Contact";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addContact } from "redux/actions/contacts";
 import { closeAddContactModal } from "redux/actions/modals";
@@ -15,11 +15,8 @@ const AddContactModal = () => {
   const dispatch = useDispatch();
 
   const [first_name, set_first_name] = useState("");
-  const [first_name_error, set_first_name_error] = useState<string>();
   const [last_name, set_last_name] = useState("");
-  const [last_name_error, set_last_name_error] = useState<string>();
   const [public_key, set_public_key] = useState("");
-  const [public_key_error, set_public_key_error] = useState<string>();
 
   const submit = () => {
     const contact = new Contact(first_name, last_name, public_key, storage);
@@ -40,7 +37,6 @@ const AddContactModal = () => {
           placeHolder="green"
           value={first_name}
           onChange={set_first_name}
-          error={first_name_error}
           validations={[{ type: "REQUIRED" }]}
         />
         <TextField
@@ -48,7 +44,6 @@ const AddContactModal = () => {
           placeHolder="fox"
           value={last_name}
           onChange={set_last_name}
-          error={last_name_error}
           validations={[{ type: "REQUIRED" }]}
         />
         <TextField
@@ -56,7 +51,6 @@ const AddContactModal = () => {
           placeHolder="paste the client public key here"
           value={public_key}
           onChange={set_public_key}
-          error={public_key_error}
           validations={[{ type: "REQUIRED" }, { type: "PUBLIC_KEY" }]}
         />
       </div>

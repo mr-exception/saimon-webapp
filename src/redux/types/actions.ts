@@ -25,6 +25,8 @@ export const DISCONNECT_HOST = "disconnect_host";
 // client
 export const STORE_CLIENT = "store_client";
 export const STORE_CONNECTION_STATE = "store_connection_state";
+// conversations
+export const SELECT_CONVERSATION = "select_conversation";
 
 export type ActionType = {
   type: string;
@@ -44,5 +46,7 @@ export type ActionType = {
     connection_id: string;
     state: ConnectionStatus;
   };
+
+  conversation_index?: number;
 };
 export type DispatchType = (args: ActionType) => ActionType;

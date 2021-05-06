@@ -1,0 +1,18 @@
+.no-message {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.no-message__content {
+  flex: 1;
+  background-color: #eee;
+  max-height: 100px;
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25px;
+  font-size: 20px;
+}

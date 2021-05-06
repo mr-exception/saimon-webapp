@@ -14,6 +14,8 @@ const initialState: IInitialState = {
 
   host_connections: [],
   contact_connections: [],
+
+  selected_conversation_messages: [],
 };
 
 const reducer = (
@@ -131,6 +133,10 @@ const reducer = (
       if (!found) {
         state.host_connections.push(host_connection_state);
       }
+      return state;
+    // conversations
+    case Actions.SELECT_CONVERSATION:
+      state.selected_conversation = action.conversation_index;
       return state;
     default:
       return state;

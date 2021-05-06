@@ -7,6 +7,10 @@
   flex-direction: row;
 }
 
+.conversation--selected {
+  background-color: #eee;
+}
+
 .conversation__icon {
   width: 25%;
   display: flex;

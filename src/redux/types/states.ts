@@ -30,6 +30,9 @@ export interface IInitialState {
     online: boolean;
     last_online: number;
   }[];
+
+  selected_conversation?: number;
+  selected_conversation_messages: IMessage[];
 }
 /**
  * this state is when user is logged into the account
@@ -38,3 +41,11 @@ export interface IInitialState {
 export interface ILogedState extends IInitialState {
   client: Client;
 }
+
+export interface IMessage {
+  content: string;
+  box_type: "SENT" | "RECEIVED";
+  date: number;
+  status: MessageSentState;
+}
+export type MessageSentState = "SENT" | "DELIVERED" | "SENDING" | "FAILED";
