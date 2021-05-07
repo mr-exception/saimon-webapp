@@ -8,3 +8,10 @@ export const selectedConversation = (state: IInitialState) =>
   state.selected_conversation;
 export const selectConversationMessages = (state: IInitialState) =>
   state.selected_conversation_messages;
+export const selectSelectedContact = (state: IInitialState) => {
+  if (state.selected_conversation !== undefined) {
+    return state.contacts[state.selected_conversation];
+  } else {
+    return undefined;
+  }
+};

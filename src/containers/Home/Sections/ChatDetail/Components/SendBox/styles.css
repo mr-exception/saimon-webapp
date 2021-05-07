@@ -33,9 +33,15 @@
   width: 100%;
   border-width: 0px;
   background-color: transparent;
+  cursor: pointer;
+}
+.chat-detail-send-box__send__button:hover > img {
+  background: #eee;
 }
 
 .chat-detail-send-box__send__button__icon {
   height: 60%;
   width: 60%;
+  padding: 5px;
+  border-radius: 10px;
 }

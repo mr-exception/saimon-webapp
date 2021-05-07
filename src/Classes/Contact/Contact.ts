@@ -11,7 +11,9 @@ export default class Contact extends Entity<IContact> {
     storage: Storage
   ) {
     super(storage, "contacts");
-    this.key = Key.generateKeyByPublicKey(public_key);
+    this.key = Key.generateKeyByPublicKey(
+      `-----BEGIN PUBLIC KEY-----${public_key}-----END PUBLIC KEY-----`
+    );
   }
   /**
    * returns the object of entity based on entity interface

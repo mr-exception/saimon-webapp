@@ -1,9 +1,13 @@
 import NodeRSA from "node-rsa";
 export default class Key {
-  constructor(private key: NodeRSA) {}
+  private _public_key_normalized: string;
+  private _private_key_normalized: string;
+  constructor(private key: NodeRSA) {
+    this._public_key_normalized = Key.normalizeKey(this.getPublicKey());
+    this._private_key_normalized = Key.normalizeKey(this.getPrivateKey());
+  }
 
   // encryption using private key
-
   public encryptPrivate(data: Buffer | string): string {
     if (typeof data === "string")
       return this.key.encryptPrivate(Buffer.from(data), "base64");
@@ -57,5 +61,28 @@ export default class Key {
   }
   public static isPublicKey(key: string): boolean {
     return /^-----BEGIN PUBLIC KEY-----.+-----END PUBLIC KEY-----/.test(key);
+  }
+
+  /**
+   * returns the normalized public key
+   */
+  public getPublicKeyNormalized(): string {
+    return this._public_key_normalized;
+  }
+  /**
+   * returns the normalaized private key
+   */
+  public getPrivateKeyNormalized(): string {
+    return this._private_key_normalized;
+  }
+  // key normalization methods
+  public static normalizeKey(key: string): string {
+    key = key.replace(/\n/g, "");
+    key = key.replace(/\s/g, "");
+    key = key.replace("-----BEGINPUBLICKEY-----", "");
+    key = key.replace("-----ENDPUBLICKEY-----", "");
+    key = key.replace("-----BEGINPRIVATEKEY-----", "");
+    key = key.replace("-----ENDPRIVATEKEY-----", "");
+    return key;
   }
 }

@@ -11,4 +11,5 @@ interface ITextFieldProps {
     | { type: "PUBLIC_KEY" }
     | { type: "REGEX"; regex: RegExp }
   )[];
+  max_lines?: number;
 }

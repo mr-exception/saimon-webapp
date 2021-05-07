@@ -26,7 +26,10 @@ export const showConfirmationModal = (
   message: string,
   callback: (result: boolean) => void
 ): ActionType => {
-  return { type: SHOW_CONFIRMATION_MODAL, message, callback };
+  return {
+    type: SHOW_CONFIRMATION_MODAL,
+    confirmation_dialog: { message, callback },
+  };
 };
 
 export const closeConfirmationModal = (): ActionType => {

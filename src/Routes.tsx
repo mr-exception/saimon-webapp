@@ -9,14 +9,19 @@ import Home from "containers/Home/Home";
 import { useDispatch, useSelector } from "react-redux";
 import { IInitialState } from "redux/types/states";
 import { addHosts } from "redux/actions/hosts";
-import { addContacts } from "redux/actions/contacts";
+import { addContact, addContacts } from "redux/actions/contacts";
 import Key from "core/Key/Key";
 import Client from "core/Client/Client";
 import { storeClient, storeConnectionState } from "redux/actions/client";
 import { filter } from "rxjs/operators";
+import Message from "Classes/Message/Message";
+import { selectContacts } from "redux/types/selectors";
+import Contact from "Classes/Contact/Contact";
+import { addMessage } from "redux/actions/conversations";
 
 const Routes = () => {
   const storage = useSelector((state: IInitialState) => state.storage);
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   const [initialized, set_initialized] = useState(false);
@@ -28,6 +33,22 @@ const Routes = () => {
       if (private_key) {
         const key = Key.generateKeyByPrivateKey(private_key);
         const client = new Client(key);
+        // subscribe to all
+        client.onMessage$.subscribe(
+          ({ content, address }: { content: Buffer; address: string }) => {
+            const message = new Message(
+              "not defined",
+              "not defined",
+              address,
+              content,
+              "RECEIVED",
+              Date.now(),
+              "DELIVERED",
+              storage
+            );
+            dispatch(addMessage(message));
+          }
+        );
         // subscribe to host connections state
         client.onConnectionStates$
           .pipe(
@@ -40,8 +61,8 @@ const Routes = () => {
               );
             })
           )
-          .subscribe(({ connection_id, state }) =>
-            dispatch(storeConnectionState(connection_id, state))
+          .subscribe(({ connection_id, state, address }) =>
+            dispatch(storeConnectionState(connection_id, state, address))
           );
         dispatch(storeClient(client));
       } else {

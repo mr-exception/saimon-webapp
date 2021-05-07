@@ -12,10 +12,11 @@ export const storeClient = (client: Client): ActionType => {
 
 export const storeConnectionState = (
   connection_id: string,
-  state: ConnectionStatus
+  state: ConnectionStatus,
+  address: string
 ): ActionType => {
   return {
     type: STORE_CONNECTION_STATE,
-    host_connection_state: { connection_id, state },
+    host_connection_state: { connection_id, state, address },
   };
 };

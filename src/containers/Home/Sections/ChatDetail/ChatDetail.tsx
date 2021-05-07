@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import {
   selectConversationMessages,
   selectedConversation,
+  selectSelectedContact,
 } from "redux/types/selectors";
 import Header from "./Components/Header/Header";
 import NoConversationSelected from "./Components/NoConversationSelected/NoConversationSelected";
@@ -12,9 +13,9 @@ import SendBox from "./Components/SendBox/SendBox";
 import SentMessageRow from "./Components/SentMessageRow/SentMessageRow";
 import "./styles.css";
 const ChatDetail = () => {
-  const selected_conversation_index = useSelector(selectedConversation);
+  const selected_contact = useSelector(selectSelectedContact);
   const messages = useSelector(selectConversationMessages);
-  if (selected_conversation_index === undefined) {
+  if (selected_contact === undefined) {
     return <NoConversationSelected />;
   }
 
@@ -27,7 +28,7 @@ const ChatDetail = () => {
         return (
           <ReceivedMessageRow
             key={index}
-            text={message.content}
+            text={message.content.toString()}
             sent_at={message.date}
           />
         );
@@ -36,7 +37,7 @@ const ChatDetail = () => {
         return (
           <SentMessageRow
             key={index}
-            text={message.content}
+            text={message.content.toString()}
             sent_at={message.date}
             status={message.status}
           />
@@ -47,7 +48,10 @@ const ChatDetail = () => {
   };
   return (
     <div className="chat-detail">
-      <Header name="ahmad sharabi" last_online={Date.now()} />
+      <Header
+        name={`${selected_contact.first_name} ${selected_contact.last_name}`}
+        last_online={Date.now()}
+      />
       <div className="chat-detail__message-list">{renderMessageList()}</div>
       <SendBox />
     </div>

@@ -51,7 +51,7 @@ const AddContactModal = () => {
           placeHolder="paste the client public key here"
           value={public_key}
           onChange={set_public_key}
-          validations={[{ type: "REQUIRED" }, { type: "PUBLIC_KEY" }]}
+          validations={[{ type: "REQUIRED" }]}
         />
       </div>
       <div className="submit-row">

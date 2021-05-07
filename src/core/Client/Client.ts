@@ -12,14 +12,13 @@ import Key from "../Key/Key";
 export default class Client {
   private _connections: Connection[] = [];
   public onConnectionStates$ = new Subject<{
+    address: string;
     connection_id: string;
     state: ConnectionStatus;
   }>();
   private _clients_state: IClientStateInConnection[] = [];
-  constructor(private key: Key) {
-    console.log(key.getPublicKey());
-  }
-  public onMessage$ = new Subject<Buffer>();
+  constructor(private key: Key) {}
+  public onMessage$ = new Subject<{ address: string; content: Buffer }>();
   private pending_packets: IPacket[] = [];
   /**
    * connect to host node
@@ -79,7 +78,10 @@ export default class Client {
       this.pending_packets = this.pending_packets.filter((packet) =>
         packet.id === id ? null : packet
       );
-      this.onMessage$.next(message);
+      this.onMessage$.next({
+        content: message,
+        address: source_key.getPublicKeyNormalized(),
+      });
     }
   }
   /**
@@ -97,7 +99,11 @@ export default class Client {
       this.removeConnection(connection);
       console.log("disconnected");
     }
-    this.onConnectionStates$.next({ connection_id: connection.getId(), state });
+    this.onConnectionStates$.next({
+      address: connection.getAddress(),
+      connection_id: connection.getId(),
+      state,
+    });
   }
   /**
    * removes a connection from connection list
@@ -149,6 +155,12 @@ export default class Client {
         connection.unsubscribeToClientsState(client_addresses)
       )
     );
+  }
+  /**
+   * returns client public key
+   */
+  public getPublicKey(): string {
+    return this.key.getPublicKey();
   }
   public getClientState(
     connection_id: string,

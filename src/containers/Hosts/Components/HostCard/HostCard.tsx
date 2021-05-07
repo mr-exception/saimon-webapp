@@ -37,7 +37,7 @@ const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
   );
 
   const connectionState = connections.find(
-    (connection) => connection.connection_id === connection_id
+    (connection) => connection.address === host.address
   );
 
   const client = useSelector(selectClient);

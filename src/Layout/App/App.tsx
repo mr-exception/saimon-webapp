@@ -31,14 +31,14 @@ const App: React.FC<IAppProps> = ({ children }: IAppProps) => {
             icon={ProfileIcon}
             caption="profile"
             onClick={() => {
-              history.push("profile");
+              history.push("/profile");
             }}
           />
           <MenuItem
             icon={SettingIcon}
             caption="setting"
             onClick={() => {
-              history.push("setting");
+              history.push("/setting");
             }}
           />
         </div>

@@ -1,5 +1,6 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
+import Message from "Classes/Message/Message";
 import Client from "core/Client/Client";
 import { ConnectionStatus } from "core/Connection/def";
 
@@ -27,6 +28,8 @@ export const STORE_CLIENT = "store_client";
 export const STORE_CONNECTION_STATE = "store_connection_state";
 // conversations
 export const SELECT_CONVERSATION = "select_conversation";
+export const ADD_MESSAGE = "add_message";
+export const ADD_MESSAGES = "add_messages";
 
 export type ActionType = {
   type: string;
@@ -37,13 +40,18 @@ export type ActionType = {
   host?: Host;
   hosts?: Host[];
 
-  message?: string;
-  callback?: (result: boolean) => void;
+  message?: Message;
+  messages?: Message[];
 
+  confirmation_dialog?: {
+    message: string;
+    callback: (result: boolean) => void;
+  };
   client?: Client;
 
   host_connection_state?: {
     connection_id: string;
+    address: string;
     state: ConnectionStatus;
   };
 

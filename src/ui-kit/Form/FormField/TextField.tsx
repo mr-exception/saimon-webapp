@@ -8,6 +8,7 @@ const TextField: React.FC<ITextFieldProps> = ({
   onChange,
   error,
   validations = [],
+  max_lines = 1,
 }: ITextFieldProps) => {
   const [left, set_left] = useState(false);
   const [touched, set_touched] = useState(false);
@@ -37,29 +38,55 @@ const TextField: React.FC<ITextFieldProps> = ({
       }
     });
   }
-  return (
-    <div className="text_field">
-      <div className="text_field__label">{label}</div>
-      <input
-        type="text"
-        className="text_field__input"
-        placeholder={placeHolder}
-        value={value}
-        onFocus={() => {
-          set_touched(true);
-        }}
-        onBlur={() => {
-          set_left(true);
-        }}
-        onChange={(event) => {
-          onChange(event.target.value);
-        }}
-      />
-      {error_text !== undefined ? (
-        <div className="text_field__error">{error_text}</div>
-      ) : null}
-    </div>
-  );
+  if (max_lines === 1) {
+    return (
+      <div className="text_field">
+        <div className="text_field__label">{label}</div>
+        <input
+          type="text"
+          className="text_field__input"
+          placeholder={placeHolder}
+          value={value}
+          onFocus={() => {
+            set_touched(true);
+          }}
+          onBlur={() => {
+            set_left(true);
+          }}
+          onChange={(event) => {
+            onChange(event.target.value);
+          }}
+        />
+        {error_text !== undefined ? (
+          <div className="text_field__error">{error_text}</div>
+        ) : null}
+      </div>
+    );
+  } else {
+    return (
+      <div className="text_field">
+        <div className="text_field__label">{label}</div>
+        <textarea
+          className="text_field__input"
+          placeholder={placeHolder}
+          style={{ minHeight: max_lines * 18 }}
+          value={value}
+          onFocus={() => {
+            set_touched(true);
+          }}
+          onBlur={() => {
+            set_left(true);
+          }}
+          onChange={(event) => {
+            onChange(event.target.value);
+          }}
+        />
+        {error_text !== undefined ? (
+          <div className="text_field__error">{error_text}</div>
+        ) : null}
+      </div>
+    );
+  }
 };
 
 export default TextField;

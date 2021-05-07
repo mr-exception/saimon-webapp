@@ -1,5 +1,6 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
+import Message, { MessageSentState } from "Classes/Message/Message";
 import Client from "core/Client/Client";
 import { ConnectionStatus } from "core/Connection/def";
 import Storage from "storage/Storage";
@@ -24,7 +25,11 @@ export interface IInitialState {
   hosts: Host[];
   contacts: Contact[];
 
-  host_connections: { connection_id: string; state: ConnectionStatus }[];
+  host_connections: {
+    address: string;
+    connection_id: string;
+    state: ConnectionStatus;
+  }[];
   contact_connections: {
     contact_address: string;
     online: boolean;
@@ -32,7 +37,7 @@ export interface IInitialState {
   }[];
 
   selected_conversation?: number;
-  selected_conversation_messages: IMessage[];
+  selected_conversation_messages: Message[];
 }
 /**
  * this state is when user is logged into the account
@@ -41,11 +46,3 @@ export interface IInitialState {
 export interface ILogedState extends IInitialState {
   client: Client;
 }
-
-export interface IMessage {
-  content: string;
-  box_type: "SENT" | "RECEIVED";
-  date: number;
-  status: MessageSentState;
-}
-export type MessageSentState = "SENT" | "DELIVERED" | "SENDING" | "FAILED";
