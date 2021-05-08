@@ -1,8 +1,9 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
-import Message, { MessageSentState } from "Classes/Message/Message";
+import Message from "Classes/Message/Message";
 import Client from "core/Client/Client";
 import { ConnectionStatus } from "core/Connection/def";
+import Key from "core/Key/Key";
 import Storage from "storage/Storage";
 /**
  * this state is when user just has opened the webapp
@@ -44,5 +45,6 @@ export interface IInitialState {
  * and key pairs are loaded into store
  */
 export interface ILogedState extends IInitialState {
+  app_key: Key;
   client: Client;
 }

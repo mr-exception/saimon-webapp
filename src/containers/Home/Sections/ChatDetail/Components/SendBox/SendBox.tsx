@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import "./styles.css";
 import SendIcon from "img/send.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { selectClient, selectSelectedContact } from "redux/types/selectors";
+import {
+  selectClient,
+  selectSelectedContact,
+  selectStorage,
+} from "redux/types/selectors";
 import Key from "core/Key/Key";
 import { addMessage } from "redux/actions/conversations";
 import Message from "Classes/Message/Message";
-import { IInitialState } from "redux/types/states";
 const SendBox: React.FC<ISendBoxProps> = () => {
   const client = useSelector(selectClient);
-  const storage = useSelector((state: IInitialState) => state.storage);
+  const storage = useSelector(selectStorage);
   const selected_contact = useSelector(selectSelectedContact);
   const [content, set_content] = useState("");
   const dispatch = useDispatch();
@@ -40,7 +43,7 @@ const SendBox: React.FC<ISendBoxProps> = () => {
       <div className="chat-detail-send-box__content">
         <textarea
           onKeyUp={(event) => {
-            if(event.ctrlKey && event.key === "Enter"){
+            if (event.ctrlKey && event.key === "Enter") {
               send();
             }
           }}

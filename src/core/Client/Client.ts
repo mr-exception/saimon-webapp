@@ -1,3 +1,4 @@
+import Host from "Classes/Host/Host";
 import { Subject } from "rxjs";
 import Connection from "../Connection/Connection";
 import {
@@ -166,6 +167,12 @@ export default class Client {
    */
   public getPublicKey(): string {
     return this.key.getPublicKey();
+  }
+  /**
+   * returns address
+   */
+  public getAddress(): string {
+    return Key.normalizeKey(this.key.getPublicKey());
   }
   public getClientState(
     connection_id: string,

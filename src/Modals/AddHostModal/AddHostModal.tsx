@@ -7,12 +7,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { clsoeAddHostModal } from "redux/actions/modals";
 import Host, { IHost } from "Classes/Host/Host";
 import { addHosts } from "redux/actions/hosts";
+import {
+  selectAppKey,
+  selectClient,
+  selectStorage,
+} from "redux/types/selectors";
 const AddHostModal = () => {
   const files_input = useRef<HTMLInputElement>(null);
   const show = useSelector(
     (state: IInitialState) => state.modals.add_host.show
   );
-  const storage = useSelector((state: IInitialState) => state.storage);
+  const storage = useSelector(selectStorage);
+  const app_key = useSelector(selectAppKey);
+  const client = useSelector(selectClient);
   const dispatch = useDispatch();
   const createHost = async (files: IUploadedJSON[]) => {
     const results: IHost[] = [];
@@ -37,6 +44,13 @@ const AddHostModal = () => {
         record.type,
         record.protocl,
         record.advertise_period,
+        app_key,
+        (packet) => {
+          console.log(packet);
+        },
+        (state) => {
+          console.log(state);
+        },
         storage
       );
       host.store();

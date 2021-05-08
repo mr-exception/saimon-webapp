@@ -20,25 +20,15 @@ export default class Storage {
   }
 
   // query in entities
-  public async getHosts(): Promise<Host[]> {
+  public async getHosts(): Promise<IHost[]> {
     const keys = await this._hosts.toCollection().primaryKeys();
     return await Promise.all(
       keys.map(
         (key) =>
-          new Promise<Host>(async (resolve, reject) => {
+          new Promise<IHost>(async (resolve, reject) => {
             const record = await this._hosts.get(key);
             if (!record) return reject(`host with key ${key} not found`);
-            const host = new Host(
-              record.name,
-              record.address,
-              record.score,
-              record.type,
-              record.protocl,
-              record.advertise_period,
-              this
-            );
-            host.id = key;
-            resolve(host);
+            resolve(record);
           })
       )
     );

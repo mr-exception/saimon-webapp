@@ -3,6 +3,7 @@ import Host from "Classes/Host/Host";
 import Message from "Classes/Message/Message";
 import Client from "core/Client/Client";
 import { ConnectionStatus } from "core/Connection/def";
+import Key from "core/Key/Key";
 
 // modals
 export const SHOW_ADD_CONTACT_MODAL = "show_add_contact_modal";
@@ -26,6 +27,7 @@ export const DISCONNECT_HOST = "disconnect_host";
 // client
 export const STORE_CLIENT = "store_client";
 export const STORE_CONNECTION_STATE = "store_connection_state";
+export const STORE_APP_KEY = "store_app_key";
 // conversations
 export const SELECT_CONVERSATION = "select_conversation";
 export const ADD_MESSAGE = "add_message";
@@ -49,7 +51,9 @@ export type ActionType = {
     message: string;
     callback: (result: boolean) => void;
   };
+
   client?: Client;
+  app_key?: Key;
 
   host_connection_state?: {
     connection_id: string;

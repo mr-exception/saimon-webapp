@@ -2,6 +2,7 @@ import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { io, Socket } from "socket.io-client";
 import Client from "../Client/Client";
+import { v4 as uuidV4 } from "uuid";
 import Key from "../Key/Key";
 import {
   ConnectionStatus,
@@ -14,7 +15,7 @@ import {
 
 export default class Connection {
   // props
-  private _id?: string;
+  private _id: string;
   private _socket?: Socket;
   private _host_key?: Key;
   private _ttr_avg = 0;
@@ -30,7 +31,9 @@ export default class Connection {
     private _packet_length: number,
     private _client_key: Key,
     private _client: Client
-  ) {}
+  ) {
+    this._id = uuidV4();
+  }
   /**
    * on packet got recievied
    */
@@ -154,7 +157,6 @@ export default class Connection {
       this._connectionStatus$.next("VA");
       // VS: waits if host accepted the verifictaion
       this._socket.once("VS", () => {
-        if (this._socket) this._id = this._socket.id;
         resolve(true);
         this._connectionStatus$.next("CONNECTED");
         this.startListeningToHost();
