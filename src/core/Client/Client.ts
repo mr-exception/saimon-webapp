@@ -25,16 +25,21 @@ export default class Client {
    */
   public async connect(server_url: string, packet_size: number) {
     const connection = new Connection(server_url, packet_size, this.key, this);
-    await connection.connect();
-    this.handleConnectionStates(connection, "CONNECTED");
-    // subscribe to connection state
-    connection.subscribeToConnectionStatus((state) => {
-      this.handleConnectionStates(connection, state);
-    });
-    // subscribe to ttd informations
-    connection.onPacketGot((ttd: IPacketTTD) => {
-      console.log(`packet delivered in ${ttd.time}ms`);
-    });
+    try {
+      await connection.connect();
+      this.handleConnectionStates(connection, "CONNECTED");
+
+      // subscribe to connection state
+      connection.subscribeToConnectionStatus((state) => {
+        this.handleConnectionStates(connection, state);
+      });
+      // subscribe to ttd informations
+      connection.onPacketGot((ttd: IPacketTTD) => {
+        console.log(`packet delivered in ${ttd.time}ms`);
+      });
+    } catch (error) {
+      this.handleConnectionStates(connection, "NETWORK_ERROR");
+    }
     return connection;
   }
   public async disconnectByConnectionId(connection_id: string) {

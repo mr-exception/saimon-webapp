@@ -30,6 +30,8 @@ export const STORE_CONNECTION_STATE = "store_connection_state";
 export const SELECT_CONVERSATION = "select_conversation";
 export const ADD_MESSAGE = "add_message";
 export const ADD_MESSAGES = "add_messages";
+// others
+export const CLEAR_ALL = "clear_all";
 
 export type ActionType = {
   type: string;

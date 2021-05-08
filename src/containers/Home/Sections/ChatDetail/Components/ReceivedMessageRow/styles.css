@@ -1,4 +1,5 @@
 .chat-detail-received-message-row {
+  word-wrap: break-word;
   min-height: 80px;
   padding: 10px;
   display: flex;

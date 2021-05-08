@@ -111,6 +111,11 @@ export default class Connection {
   public async connect(): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
       this._socket = io(this._address);
+      this._socket.on("connect_error", (error) => {
+        this._connectionStatus$.next("NETWORK_ERROR");
+        reject("connection error");
+        this.close();
+      });
       // listen to socket on disconnecting
       this._socket.on("disconnect", () => {
         this._connectionStatus$.next("DISCONNECTED");

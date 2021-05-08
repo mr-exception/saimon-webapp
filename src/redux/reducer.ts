@@ -140,7 +140,7 @@ const reducer = (
       return state;
     case Actions.ADD_MESSAGE:
       if (!action.message) return state;
-      if (action.message.box_type === "SENT") {
+      if (action.message.box_type === "RECEIVED") {
         let contact = state.contacts.find(
           (cnt) => cnt.public_key === action.message?.public_key
         );
@@ -169,6 +169,9 @@ const reducer = (
         ...(action.messages || []),
       ];
       return state;
+    // others
+    case Actions.CLEAR_ALL:
+      return initialState;
     default:
       return state;
   }

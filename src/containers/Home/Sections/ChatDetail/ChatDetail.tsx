@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
   selectConversationMessages,
-  selectedConversation,
   selectSelectedContact,
 } from "redux/types/selectors";
 import Header from "./Components/Header/Header";

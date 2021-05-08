@@ -9,25 +9,24 @@ import Home from "containers/Home/Home";
 import { useDispatch, useSelector } from "react-redux";
 import { IInitialState } from "redux/types/states";
 import { addHosts } from "redux/actions/hosts";
-import { addContact, addContacts } from "redux/actions/contacts";
+import { addContacts } from "redux/actions/contacts";
 import Key from "core/Key/Key";
 import Client from "core/Client/Client";
 import { storeClient, storeConnectionState } from "redux/actions/client";
 import { filter } from "rxjs/operators";
 import Message from "Classes/Message/Message";
-import { selectContacts } from "redux/types/selectors";
-import Contact from "Classes/Contact/Contact";
 import { addMessage } from "redux/actions/conversations";
+import { clearAll } from "redux/actions/clear";
 
 const Routes = () => {
   const storage = useSelector((state: IInitialState) => state.storage);
-  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
   const [initialized, set_initialized] = useState(false);
 
   useEffect(() => {
     const loadDateFromStorage = async () => {
+      dispatch(clearAll());
       // load client
       const private_key = localStorage.getItem("private_key");
       if (private_key) {

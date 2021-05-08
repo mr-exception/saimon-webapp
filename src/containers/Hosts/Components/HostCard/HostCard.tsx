@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DeleteIcon from "img/delete.svg";
 import DisconnectIcon from "img/disconnect.svg";
 import ConnectIcon from "img/connect.svg";
@@ -39,32 +39,34 @@ const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
   const connectionState = connections.find(
     (connection) => connection.address === host.address
   );
+  console.log(connectionState);
 
   const client = useSelector(selectClient);
   const dispatch = useDispatch();
 
-  const canConnect = (): boolean => {
-    if (connectionState) {
-      return connectionState.state !== "CONNECTED";
-    } else {
-      return true;
+  const canConnect = connectionState
+    ? connectionState.state === "CONNECTED"
+    : true;
+  const canDisconnect = connectionState
+    ? connectionState.state !== "CONNECTED"
+    : false;
+  const connect = useCallback(async () => {
+    if (!canConnect) return;
+    try {
+      const connection = await client.connect(host.address, 2000);
+      set_connection_id(connection.getId());
+    } catch (error) {
+      console.log(error);
     }
-  };
-  const canDisConnect = (): boolean => {
-    if (connectionState) {
-      return connectionState.state === "CONNECTED";
-    } else {
-      return false;
-    }
-  };
-  const connect = async () => {
-    const connection = await client.connect(host.address, 2000);
-    set_connection_id(connection.getId());
-  };
+  }, [client, host, canConnect]);
 
   const disconnect = async () => {
     client.disconnectByConnectionId(connection_id);
   };
+
+  useEffect(() => {
+    connect();
+  }, [connect]);
   return (
     <div className="host-card">
       <div className="status-bar">
@@ -105,7 +107,7 @@ const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
             />
             <div className="host-card__actions__caption">delete</div>
           </div>
-          {canDisConnect() ? (
+          {canDisconnect ? (
             <div className="host-card__actions__item" onClick={disconnect}>
               <img
                 src={DisconnectIcon}
@@ -115,7 +117,7 @@ const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
               <div className="host-card__actions__caption">disconnect</div>
             </div>
           ) : null}
-          {canConnect() ? (
+          {canConnect ? (
             <div className="host-card__actions__item" onClick={connect}>
               <img
                 src={ConnectIcon}
