@@ -27,12 +27,11 @@ export interface IInitialState {
   contacts: Contact[];
 
   host_connections: {
-    address: string;
-    connection_id: string;
+    connection_id: number;
     state: ConnectionStatus;
   }[];
   contact_connections: {
-    contact_address: string;
+    contact_id: number;
     online: boolean;
     last_online: number;
   }[];

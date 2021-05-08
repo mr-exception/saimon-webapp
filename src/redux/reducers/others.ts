@@ -1,12 +1,17 @@
 import { ActionType } from "redux/types/actions";
 import { IInitialState } from "redux/types/states";
 import * as Actions from "redux/types/actions";
-import { initialState } from "redux/reducer";
 
 const reducer = (state: IInitialState, action: ActionType): IInitialState => {
   switch (action.type) {
     case Actions.CLEAR_ALL:
-      return initialState;
+      state.contacts = [];
+      state.hosts = [];
+      state.contact_connections = [];
+      state.selected_conversation = undefined;
+      state.selected_conversation_messages = [];
+      state.host_connections = [];
+      return state;
     default:
       return state;
   }

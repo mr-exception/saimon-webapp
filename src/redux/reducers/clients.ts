@@ -3,10 +3,10 @@ import { IInitialState, ILogedState } from "redux/types/states";
 import * as Actions from "redux/types/actions";
 
 const reducer = (state: IInitialState, action: ActionType): IInitialState => {
+  const loged_state = state as ILogedState;
   switch (action.type) {
     case Actions.STORE_CLIENT:
       if (!action.client) return state;
-      const loged_state = state as ILogedState;
       loged_state.client = action.client;
       return state;
     case Actions.STORE_CONNECTION_STATE:
@@ -24,7 +24,10 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
         state.host_connections.push(host_connection_state);
       }
       return state;
-
+    case Actions.STORE_APP_KEY:
+      if (!action.app_key) return state;
+      loged_state.app_key = action.app_key;
+      return loged_state;
     default:
       return state;
   }

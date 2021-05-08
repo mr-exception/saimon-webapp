@@ -57,8 +57,7 @@ export type ActionType = {
   app_key?: Key;
 
   host_connection_state?: {
-    connection_id: string;
-    address: string;
+    connection_id: number;
     state: ConnectionStatus;
   };
 

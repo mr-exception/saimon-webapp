@@ -20,27 +20,35 @@ export default class Host extends Entity<IHost> {
   private _pending_ttd_packets: IPacketTTD[] = [];
   // observables
   private _finished$ = new Subject<void>();
-  private _connectionStatus$ = new Subject<ConnectionStatus>();
   private _onPacketGot$ = new Subject<IPacketTTD>();
-  constructor(
-    public name: string,
-    public address: string,
-    public score: number,
-    public type: HostType,
-    public protocl: HostProtocol,
-    public advertise_period: number,
-    public client_key: Key,
-    public packetReceived: (packet: IPacket) => void,
-    public updateClientState: (state: IClientState) => void,
-    storage: Storage
-  ) {
-    super(storage, "hosts");
+  public name: string;
+  public address: string;
+  public score: number;
+  public type: HostType;
+  public protocl: HostProtocol;
+  public advertise_period: number;
+
+  // event listeners
+  public packetReceived: (packet: IPacket) => void = (packet) => {};
+  public updateClientState: (state: IClientState) => void = (state) => {};
+  public connectionStatusChanged: (state: ConnectionStatus) => void = (
+    state
+  ) => {};
+  constructor(host_record: IHost, public client_key: Key, storage: Storage) {
+    super(storage, "hosts", host_record.id);
+    this.name = host_record.name;
+    this.address = host_record.address;
+    this.score = host_record.score;
+    this.type = host_record.type;
+    this.protocl = host_record.protocl;
+    this.advertise_period = host_record.advertise_period;
   }
   /**
    * returns the object of entity based on entity interface
    */
   public getFormattedObject(): IHost {
     return {
+      id: this.id,
       name: this.name,
       address: this.address,
       score: this.score,
@@ -82,15 +90,15 @@ export default class Host extends Entity<IHost> {
     return new Promise(async (resolve, reject) => {
       this._socket = io(this.address);
       this._socket.on("connect_error", (error) => {
-        this._connectionStatus$.next("NETWORK_ERROR");
+        this.connectionStatusChanged("NETWORK_ERROR");
         reject("connection error");
         this.close();
       });
       // listen to socket on disconnecting
       this._socket.on("disconnect", () => {
-        this._connectionStatus$.next("DISCONNECTED");
+        this.connectionStatusChanged("DISCONNECTED");
       });
-      this._connectionStatus$.next("CONNECTING");
+      this.connectionStatusChanged("CONNECTING");
       // HK: waits for host node to send its public key
       const host_public_key = await Host.onAsyncStatic<string>(
         this._socket,
@@ -102,33 +110,33 @@ export default class Host extends Entity<IHost> {
         reject("timeout");
       }, 3000);
 
-      this._connectionStatus$.next("HK");
+      this.connectionStatusChanged("HK");
       // got HK, creates the host key
       this._host_key = Key.generateKeyByPublicKey(host_public_key);
       // CK: sends client node public key to host node
       this._socket.emit("CK", this.client_key.getPublicKey());
-      this._connectionStatus$.next("CK");
+      this.connectionStatusChanged("CK");
       // VQ: waits for host node to return a verfication question
       // encrypted by client node public key
       const vq_cipher = await Host.onAsyncStatic<string>(this._socket, "VQ");
-      this._connectionStatus$.next("VQ");
+      this.connectionStatusChanged("VQ");
       // decrypts the verification question by client node private key
       const va = this.client_key.decryptPrivate(vq_cipher);
       // encrypts the verifiction answer by host node public key
       const va_cipher = this._host_key.encryptPublic(va);
       // VA: sends the verification answer
       this._socket.emit("VA", va_cipher);
-      this._connectionStatus$.next("VA");
+      this.connectionStatusChanged("VA");
       // VS: waits if host accepted the verifictaion
       this._socket.once("VS", () => {
         resolve(true);
-        this._connectionStatus$.next("CONNECTED");
+        this.connectionStatusChanged("CONNECTED");
         this.startListeningToHost();
         clearTimeout(timeout);
       });
       // VF: waits if host refused the verification
       this._socket.once("VF", () => {
-        this._connectionStatus$.next("VF");
+        this.connectionStatusChanged("VF");
       });
     });
   }
@@ -202,6 +210,7 @@ export default class Host extends Entity<IHost> {
 }
 
 export interface IHost {
+  id: number;
   address: string;
   type: HostType;
   protocl: HostProtocol;

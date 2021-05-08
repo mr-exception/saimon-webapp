@@ -1,8 +1,11 @@
 import Storage from "storage/Storage";
 
 export default abstract class Entity<T> {
-  constructor(private _storage: Storage, private _table_name: string) {}
-  public id?: number;
+  constructor(
+    private _storage: Storage,
+    private _table_name: string,
+    public id: number
+  ) {}
   public isEqual(entity: Entity<T>): boolean {
     // if one of hosts is not stored in storage
     if (this.id === undefined || entity.id === undefined) return false;

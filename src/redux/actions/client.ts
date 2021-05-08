@@ -17,12 +17,11 @@ export const storeAppKey = (app_key: Key): ActionType => {
 };
 
 export const storeConnectionState = (
-  connection_id: string,
-  state: ConnectionStatus,
-  address: string
+  connection_id: number,
+  state: ConnectionStatus
 ): ActionType => {
   return {
     type: STORE_CONNECTION_STATE,
-    host_connection_state: { connection_id, state, address },
+    host_connection_state: { connection_id, state },
   };
 };

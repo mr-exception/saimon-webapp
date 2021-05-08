@@ -22,6 +22,7 @@ const AddHostModal = () => {
       const values = file.value;
       values.forEach((value) => {
         results.push({
+          id: 0,
           name: value.name,
           address: value.address,
           type: value.type,
@@ -32,22 +33,7 @@ const AddHostModal = () => {
       });
     });
     const hosts = results.map((record) => {
-      const host = new Host(
-        record.name,
-        record.address,
-        record.score,
-        record.type,
-        record.protocl,
-        record.advertise_period,
-        app_key,
-        (packet) => {
-          console.log(packet);
-        },
-        (state) => {
-          console.log(state);
-        },
-        storage
-      );
+      const host = new Host(record, app_key, storage);
       host.store();
       return host;
     });

@@ -28,27 +28,22 @@ export default class Storage {
           new Promise<IHost>(async (resolve, reject) => {
             const record = await this._hosts.get(key);
             if (!record) return reject(`host with key ${key} not found`);
+            record.id = key;
             resolve(record);
           })
       )
     );
   }
-  public async getContacts(): Promise<Contact[]> {
+  public async getContacts(): Promise<IContact[]> {
     const keys = await this._contacts.toCollection().primaryKeys();
     return await Promise.all(
       keys.map(
         (key) =>
-          new Promise<Contact>(async (resolve, reject) => {
+          new Promise<IContact>(async (resolve, reject) => {
             const record = await this._contacts.get(key);
             if (!record) return reject(`contact with key ${key} not found`);
-            const contact = new Contact(
-              record.first_name,
-              record.last_name,
-              record.public_key,
-              this
-            );
-            contact.id = key;
-            resolve(contact);
+            record.id = key;
+            resolve(record);
           })
       )
     );

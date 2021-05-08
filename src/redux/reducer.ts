@@ -6,6 +6,7 @@ import contactReducers from "./reducers/contact";
 import hostsReducers from "./reducers/hosts";
 import conversationsReducers from "./reducers/conversations";
 import othersReducers from "./reducers/others";
+import clientReducers from "./reducers/clients";
 
 export const initialState: IInitialState = {
   storage: new Storage(),
@@ -31,6 +32,7 @@ const reducer = (
   state = contactReducers(state, action);
   state = hostsReducers(state, action);
   state = conversationsReducers(state, action);
+  state = clientReducers(state, action);
   state = othersReducers(state, action);
   return state;
 };

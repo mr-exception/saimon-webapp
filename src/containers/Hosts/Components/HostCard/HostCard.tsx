@@ -31,15 +31,14 @@ const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
 };
 
 const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
-  const [connection_id, set_connection_id] = useState("no_id");
   let connections = useSelector((state: IInitialState) =>
     selectHostConnectionStates(state)
   );
 
   const connectionState = connections.find(
-    (connection) => connection.address === host.address
+    (connection) => connection.connection_id === host.id
   );
-  console.log(connectionState);
+  console.log(connections);
 
   const client = useSelector(selectClient);
   const dispatch = useDispatch();
@@ -50,18 +49,19 @@ const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
   const canDisconnect = connectionState
     ? connectionState.state !== "CONNECTED"
     : false;
+
+  // connect to the host node (again)
   const connect = useCallback(async () => {
     if (!canConnect) return;
     try {
-      const connection = await client.connect(host.address, 2000);
-      set_connection_id(connection.getId());
+      await host.connect();
     } catch (error) {
       console.log(error);
     }
-  }, [client, host, canConnect]);
+  }, [host, canConnect]);
 
   const disconnect = async () => {
-    client.disconnectByConnectionId(connection_id);
+    // client.disconnectByConnectionId(connection_id);
   };
 
   useEffect(() => {

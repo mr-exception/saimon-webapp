@@ -12,7 +12,7 @@ export default class Message extends Entity<IMessage> {
     public status: MessageSentState,
     storage: Storage
   ) {
-    super(storage, "hosts");
+    super(storage, "hosts", 0);
   }
   /**
    * returns the object of entity based on entity interface
