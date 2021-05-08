@@ -1,7 +1,6 @@
-import Contact from "Classes/Contact/Contact";
 import Storage from "storage/Storage";
 import * as Actions from "./types/actions";
-import { IInitialState, ILogedState } from "./types/states";
+import { IInitialState } from "./types/states";
 import modalsReducers from "./reducers/modals";
 import contactReducers from "./reducers/contact";
 import hostsReducers from "./reducers/hosts";

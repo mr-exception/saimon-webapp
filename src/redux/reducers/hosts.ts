@@ -7,6 +7,9 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
     case Actions.ADD_HOSTS:
       state.hosts = [...state.hosts, ...(action.hosts ? action.hosts : [])];
       return state;
+    case Actions.RESET_HOSTS:
+      state.hosts = action.hosts || [];
+      return state;
     case Actions.ADD_HOST:
       if (!action.host) {
         return state;

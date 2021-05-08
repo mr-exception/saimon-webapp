@@ -20,12 +20,19 @@ import { filter } from "rxjs/operators";
 import Message from "Classes/Message/Message";
 import { addMessage } from "redux/actions/conversations";
 import { clearAll } from "redux/actions/clear";
-import { selectAppKey, selectStorage } from "redux/types/selectors";
+import {
+  selectAppKey,
+  selectHosts,
+  selectStorage,
+} from "redux/types/selectors";
 import Host from "Classes/Host/Host";
+
+import hostsSyncer from "syncers/hosts";
 
 const Routes = () => {
   const storage = useSelector(selectStorage);
   const app_key = useSelector(selectAppKey);
+  const hosts = useSelector(selectHosts);
   const dispatch = useDispatch();
 
   const [initialized, set_initialized] = useState(false);
@@ -134,6 +141,14 @@ const Routes = () => {
     };
     loadDateFromStorage();
   }, [dispatch, loadKey, loadHosts, loadContacts]);
+
+  /**
+   * registering syncers. syncers subscribe to a list and update
+   * the redux store based on changes
+   */
+  useEffect(() => {
+    hostsSyncer(hosts, dispatch, app_key);
+  }, [hosts, dispatch, app_key]);
 
   if (!initialized) return <div>loading...</div>;
   else

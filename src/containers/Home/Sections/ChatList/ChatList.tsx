@@ -19,9 +19,9 @@ const ChatList = () => {
     );
     console.log(results);
   }, [client, contacts]);
-  useEffect(() => {
-    getClientConnectionsMaps();
-  }, [getClientConnectionsMaps]);
+  // useEffect(() => {
+  //   getClientConnectionsMaps();
+  // }, [getClientConnectionsMaps]);
   return (
     <div className="chat-list">
       <AddContact />

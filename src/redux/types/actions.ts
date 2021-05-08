@@ -20,6 +20,7 @@ export const REMOVE_CONTACT = "rmeove_contact";
 // hosts
 export const ADD_HOST = "add_host";
 export const ADD_HOSTS = "add_hosts";
+export const RESET_HOSTS = "reset_hosts";
 export const REMOVE_HOST = "remove_host";
 export const EDIT_HOST = "edit_host";
 export const CONNECT_HOST = "connect_host";
