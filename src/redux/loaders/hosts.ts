@@ -16,10 +16,10 @@ const load = async (
   const hosts = host_records.map((rec) => {
     const host = new Host(rec, app_key, storage);
     host.connectionStatusChanged = (state: ConnectionStatus) => {
-      console.log(state);
       if (!host.id) return;
       dispatch(storeConnectionState(host.id, state));
     };
+    host.connect();
     return host;
   });
   dispatch(addHosts(hosts));

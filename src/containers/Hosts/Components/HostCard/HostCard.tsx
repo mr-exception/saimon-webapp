@@ -19,6 +19,8 @@ const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
     return <span>no connection</span>;
   }
   switch (state) {
+    case "CONNECTING":
+      return <span style={{ color: "blue" }}>connecting</span>;
     case "CONNECTED":
       return <span style={{ color: "green" }}>connected</span>;
     case "DISCONNECTED":
@@ -34,13 +36,10 @@ const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
   let connections = useSelector((state: IInitialState) =>
     selectHostConnectionStates(state)
   );
-
   const connectionState = connections.find(
     (connection) => connection.connection_id === host.id
   );
-  console.log(connections);
 
-  const client = useSelector(selectClient);
   const dispatch = useDispatch();
 
   const canConnect = connectionState
@@ -63,10 +62,6 @@ const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
   const disconnect = async () => {
     // client.disconnectByConnectionId(connection_id);
   };
-
-  useEffect(() => {
-    connect();
-  }, [connect]);
   return (
     <div className="host-card">
       <div className="status-bar">
