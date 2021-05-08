@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addContact } from "redux/actions/contacts";
 import { closeAddContactModal } from "redux/actions/modals";
-import { selectClient, selectStorage } from "redux/types/selectors";
+import { selectStorage } from "redux/types/selectors";
 import { IInitialState } from "redux/types/states";
 import TextField from "ui-kit/Form/FormField/TextField";
 import Modal from "ui-kit/Modal/Modal";
@@ -12,7 +12,6 @@ const AddContactModal = () => {
   const show = useSelector(
     (state: IInitialState) => state.modals.add_contact.show
   );
-  const client = useSelector(selectClient);
   const storage = useSelector(selectStorage);
   const dispatch = useDispatch();
 
