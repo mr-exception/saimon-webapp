@@ -2,8 +2,13 @@ import Contact from "Classes/Contact/Contact";
 import Storage from "storage/Storage";
 import * as Actions from "./types/actions";
 import { IInitialState, ILogedState } from "./types/states";
+import modalsReducers from "./reducers/modals";
+import contactReducers from "./reducers/contact";
+import hostsReducers from "./reducers/hosts";
+import conversationsReducers from "./reducers/conversations";
+import othersReducers from "./reducers/others";
 
-const initialState: IInitialState = {
+export const initialState: IInitialState = {
   storage: new Storage(),
   modals: {
     add_contact: { show: false },
@@ -23,158 +28,12 @@ const reducer = (
   state: IInitialState = initialState,
   action: Actions.ActionType
 ): IInitialState => {
-  switch (action.type) {
-    // modals
-    case Actions.SHOW_ADD_CONTACT_MODAL:
-      state.modals.add_contact.show = true;
-      return state;
-    case Actions.CLOSE_ADD_CONTACT_MODAL:
-      state.modals.add_contact.show = false;
-      return state;
-    case Actions.SHOW_ADD_HOST_MODAL:
-      state.modals.add_host.show = true;
-      return state;
-    case Actions.CLOSE_ADD_HOST_MODAL:
-      state.modals.add_host.show = false;
-      return state;
-    case Actions.SHOW_CONFIRMATION_MODAL:
-      state.modals.confirmation = {
-        show: true,
-        ...(action.confirmation_dialog || { callback: () => {}, message: "" }),
-      };
-      return state;
-    case Actions.CLOSE_CONFIRMATION_MODAL:
-      state.modals.confirmation = {
-        show: false,
-        message: "",
-        callback: () => {},
-      };
-      return state;
-    // contacts
-    case Actions.ADD_CONTACTS:
-      state.contacts = [
-        ...state.contacts,
-        ...(action.contacts ? action.contacts : []),
-      ];
-      return state;
-    case Actions.ADD_CONTACT:
-      state.contacts = [
-        ...state.contacts,
-        ...(action.contact ? [action.contact] : []),
-      ];
-      return state;
-    case Actions.REMOVE_CONTACT:
-      state.contacts = state.contacts.filter((contact) => {
-        if (action.contact) {
-          if (contact.public_key === action.contact.public_key) return null;
-          else return contact;
-        } else {
-          return contact;
-        }
-      });
-      return state;
-    case Actions.EDIT_CONTACT:
-      state.contacts = state.contacts.map((contact) => {
-        if (action.contact) {
-          if (contact.public_key === action.contact.public_key) return contact;
-          else return contact;
-        } else {
-          return contact;
-        }
-      });
-      return state;
-    // hosts
-    case Actions.ADD_HOSTS:
-      state.hosts = [...state.hosts, ...(action.hosts ? action.hosts : [])];
-      return state;
-    case Actions.ADD_HOST:
-      if (!action.host) {
-        return state;
-      }
-      state.hosts = [...state.hosts, action.host];
-      return state;
-    case Actions.REMOVE_HOST:
-      state.hosts = state.hosts.filter((host) => {
-        if (action.host) {
-          if (host.isEqual(action.host)) return null;
-          else return host;
-        } else {
-          return host;
-        }
-      });
-      return state;
-    case Actions.EDIT_HOST:
-      state.hosts = state.hosts.map((host) => {
-        if (action.host) {
-          if (host.name === action.host.name) return host;
-          else return host;
-        } else {
-          return host;
-        }
-      });
-      return state;
-    // client
-    case Actions.STORE_CLIENT:
-      if (!action.client) return state;
-      const loged_state = state as ILogedState;
-      loged_state.client = action.client;
-      return state;
-    case Actions.STORE_CONNECTION_STATE:
-      if (!action.host_connection_state) return state;
-      const host_connection_state = action.host_connection_state;
-      let found = false;
-      state.host_connections = state.host_connections.map((hc) => {
-        if (hc.connection_id === host_connection_state.connection_id) {
-          hc.state = host_connection_state.state;
-          found = true;
-        }
-        return hc;
-      });
-      if (!found) {
-        state.host_connections.push(host_connection_state);
-      }
-      return state;
-    // conversations
-    case Actions.SELECT_CONVERSATION:
-      state.selected_conversation = action.conversation_index;
-      return state;
-    case Actions.ADD_MESSAGE:
-      if (!action.message) return state;
-      if (action.message.box_type === "RECEIVED") {
-        let contact = state.contacts.find(
-          (cnt) => cnt.public_key === action.message?.public_key
-        );
-        if (!contact) {
-          contact = new Contact(
-            "unknown",
-            "unknow",
-            action.message.public_key,
-            state.storage
-          );
-          contact.store();
-          state.contacts = [...state.contacts, ...[contact]];
-        } else {
-          action.message.first_name = contact.first_name;
-          action.message.last_name = contact.last_name;
-        }
-      }
-      state.selected_conversation_messages = [
-        ...state.selected_conversation_messages,
-        ...[action.message],
-      ];
-      return state;
-    case Actions.ADD_MESSAGES:
-      state.selected_conversation_messages = [
-        ...state.selected_conversation_messages,
-        ...(action.messages || []),
-      ];
-      return state;
-    // others
-    case Actions.CLEAR_ALL:
-      return initialState;
-    default:
-      return state;
-  }
+  state = modalsReducers(state, action);
+  state = contactReducers(state, action);
+  state = hostsReducers(state, action);
+  state = conversationsReducers(state, action);
+  state = othersReducers(state, action);
+  return state;
 };
 
 export default reducer;
