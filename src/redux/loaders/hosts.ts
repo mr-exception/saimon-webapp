@@ -13,15 +13,16 @@ const load = async (
   dispatch: Dispatch<ActionType>
 ) => {
   const host_records = await storage.getHosts();
-  const hosts = host_records.map((rec) => {
-    const host = new Host(rec, app_key);
-    host.connectionStatusChanged = (state: ConnectionStatus) => {
-      if (!host.id) return;
-      dispatch(storeConnectionState(host.id, state));
-    };
-    host.connect();
-    return host;
-  });
+  const hosts = await Promise.all(
+    host_records.map(
+      (rec) =>
+        new Promise<Host>(async (resolve, reject) => {
+          const host = new Host(rec, app_key);
+          host.connect();
+          resolve(host);
+        })
+    )
+  );
   dispatch(addHosts(hosts));
 };
 

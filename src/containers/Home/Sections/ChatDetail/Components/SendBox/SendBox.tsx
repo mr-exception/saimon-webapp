@@ -7,6 +7,7 @@ import Key from "core/Key/Key";
 import { addMessage } from "redux/actions/conversations";
 import Message from "Classes/Message/Message";
 import Client from "core/Client/Client";
+import { v4 as uuidV4 } from "uuid";
 const SendBox: React.FC<ISendBoxProps> = () => {
   const app_key = useSelector(selectAppKey);
   const selected_contact = useSelector(selectSelectedContact);
@@ -15,22 +16,24 @@ const SendBox: React.FC<ISendBoxProps> = () => {
   if (!selected_contact) {
     return null;
   }
-  const send = () => {
+  const send = async () => {
     const dst_key = Key.generateKeyByPublicKey(selected_contact.public_key);
-    Client.sendMessage(Buffer.from(content), dst_key);
-    dispatch(
-      addMessage(
-        new Message(
-          "me",
-          "me",
-          app_key.getPublicKeyNormalized(),
-          Buffer.from(content),
-          "SENT",
-          Date.now(),
-          "SENDING"
-        )
-      )
+    const message = new Message(
+      {
+        id: 0,
+        contact_id: 0,
+        public_key: app_key.getPublicKeyNormalized(),
+        content: Buffer.from(content),
+        status: "SENDING",
+        date: Date.now(),
+        box_type: "SENT",
+        network_id: uuidV4(),
+      },
+      "SENDING"
     );
+    await message.store();
+    dispatch(addMessage(message));
+    Client.sendMessage(message, dst_key);
     set_content("");
   };
   return (

@@ -1,7 +1,6 @@
 import { ActionType } from "redux/types/actions";
 import { IInitialState } from "redux/types/states";
 import * as Actions from "redux/types/actions";
-import Contact from "Classes/Contact/Contact";
 
 const reducer = (state: IInitialState, action: ActionType): IInitialState => {
   switch (action.type) {
@@ -10,28 +9,22 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
       return state;
     case Actions.ADD_MESSAGE:
       if (!action.message) return state;
-      if (action.message.box_type === "RECEIVED") {
-        let contact = state.contacts.find(
-          (cnt) => cnt.public_key === action.message?.public_key
-        );
-        if (!contact) {
-          contact = new Contact({
-            id: 0,
-            first_name: "unknow",
-            last_name: "unknow",
-            public_key: action.message.public_key,
-          });
-          contact.store();
-          state.contacts = [...state.contacts, ...[contact]];
-        } else {
-          action.message.first_name = contact.first_name;
-          action.message.last_name = contact.last_name;
-        }
-      }
       state.selected_conversation_messages = [
         ...state.selected_conversation_messages,
         ...[action.message],
       ];
+      return state;
+    case Actions.UPDATE_MESSAGE_STATUS:
+      state.selected_conversation_messages = state.selected_conversation_messages.map(
+        (message) => {
+          if (!action.message_status) return message;
+          if (message.id === action.message_status.message_id) {
+            message.status = action.message_status.status;
+            message.store(state.storage);
+          }
+          return message;
+        }
+      );
       return state;
     case Actions.ADD_MESSAGES:
       state.selected_conversation_messages = [

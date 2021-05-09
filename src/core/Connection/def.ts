@@ -7,6 +7,12 @@ export interface IPacket {
   src: string; // public key of source node
 }
 
+export interface IDeliverPacketStatus {
+  id: string; // id
+  position: number; // position of packet in sending message
+  status: SendStatus;
+}
+
 export interface IPacketGot {
   id: string; // id
   position: number; // position

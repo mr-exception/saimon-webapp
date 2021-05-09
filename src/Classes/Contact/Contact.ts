@@ -18,9 +18,8 @@ export default class Contact extends Entity<IContact> {
   /**
    * returns the object of entity based on entity interface
    */
-  public getFormattedObject(): IContact {
+  public getFormattedObject(): any {
     return {
-      id: this.id,
       first_name: this.first_name,
       last_name: this.last_name,
       public_key: this.public_key,

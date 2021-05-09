@@ -1,12 +1,79 @@
 import Key from "../Key/Key";
 import store from "redux/store";
-import { IPacket } from "core/Connection/def";
-import { addMessage } from "redux/actions/conversations";
+import { IDeliverPacketStatus, IPacket, SendStatus } from "core/Connection/def";
+import { addMessage, updateMessage } from "redux/actions/conversations";
+import { v4 as uuidV4 } from "uuid";
 import Message from "Classes/Message/Message";
 import Contact from "Classes/Contact/Contact";
 
 export default class Client {
-  private static pending_packets: IPacket[] = [];
+  private static income_pending_packets: IPacket[] = [];
+  private static devlier_pending_packets: IDeliverPacketStatus[] = [];
+
+  public static updateDeliverPendingPacket(
+    id: string,
+    position: number,
+    count: number,
+    status: SendStatus
+  ) {
+    let found = false;
+    this.devlier_pending_packets = this.devlier_pending_packets.map(
+      (packet) => {
+        if (packet.id === id && packet.position === position) {
+          packet.status = status;
+        }
+        found = true;
+        return packet;
+      }
+    );
+    if (!found) {
+      this.devlier_pending_packets.push({ id, position, status });
+    }
+    this.checkDeliverStatus(id, count);
+  }
+  private static checkDeliverStatus(id: string, count: number) {
+    const packet_status = this.devlier_pending_packets.filter(
+      (status) => status.id === id
+    );
+    if (packet_status.length !== count) {
+      // we need all packet status to decide what happend to message
+      return;
+    }
+    // get message from state
+    const messages = store.getState().selected_conversation_messages;
+    const message = messages.find((m) => m.network_id === id);
+    if (!message) {
+      throw new Error("message entity not found");
+    }
+    let hasDelivered = false;
+    let hasError = false;
+    let hasReserved = false;
+    packet_status.forEach((status) => {
+      switch (status.status) {
+        case "DELIVERED":
+          hasDelivered = true;
+          break;
+        case "FAILED":
+          hasError = true;
+          break;
+        case "RESERVED":
+          hasReserved = true;
+          break;
+      }
+    });
+    if (hasError) {
+      store.dispatch(updateMessage(message.id, "FAILED"));
+      return;
+    }
+    if (hasReserved) {
+      store.dispatch(updateMessage(message.id, "SENT"));
+      return;
+    }
+    if (hasDelivered) {
+      store.dispatch(updateMessage(message.id, "DELIVERED"));
+      return;
+    }
+  }
   // public async disconnectByConnectionId(connection_id: number) {
   //   this.hosts.forEach((host) => {
   //     if (host.id === connection_id) {
@@ -15,17 +82,17 @@ export default class Client {
   //   });
   // }
   public static packetReceived(packet: IPacket) {
-    this.pending_packets.push(packet);
+    this.income_pending_packets.push(packet);
     this.checkPackets(packet.id, packet.count);
   }
   // /**
   //  * send message to a client node
   //  */
-  public static sendMessage(data: Buffer, address: Key) {
+  public static sendMessage(message: Message, address: Key) {
     const hosts = store.getState().hosts;
-    hosts.forEach((host) => {
-      host.sendMessageToClient(data, address);
-    });
+    if (hosts.length > 0) {
+      hosts[0].sendMessageToClient(message, address);
+    }
   }
   /**
    * checks if a message is received
@@ -37,7 +104,7 @@ export default class Client {
     if (!key) {
       throw new Error("application key not provided");
     }
-    const packets = this.pending_packets
+    const packets = this.income_pending_packets
       .filter((packet) => {
         if (packet.id !== id) return null;
         return packet;
@@ -52,8 +119,8 @@ export default class Client {
           );
         })
         .reduce((prev, cur) => Buffer.concat([prev, cur]));
-      this.pending_packets = this.pending_packets.filter((packet) =>
-        packet.id === id ? null : packet
+      this.income_pending_packets = this.income_pending_packets.filter(
+        (packet) => (packet.id === id ? null : packet)
       );
 
       // find contact
@@ -70,12 +137,16 @@ export default class Client {
         contact.store();
       }
       const message = new Message(
-        contact.first_name,
-        contact.last_name,
-        contact.public_key,
-        message_buffer,
-        "RECEIVED",
-        Date.now(),
+        {
+          id: 0,
+          network_id: uuidV4(),
+          contact_id: contact.id,
+          public_key: contact.public_key,
+          content: message_buffer,
+          box_type: "RECEIVED",
+          date: Date.now(),
+          status: "DELIVERED",
+        },
         "DELIVERED"
       );
       store.dispatch(addMessage(message));

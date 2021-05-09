@@ -11,8 +11,11 @@ import {
 } from "core/Connection/def";
 import Key from "core/Key/Key";
 import { Subject } from "rxjs";
+import { v4 as uuidV4 } from "uuid";
 import { io, Socket } from "socket.io-client";
-
+import Message from "Classes/Message/Message";
+import store from "redux/store";
+import { storeConnectionState } from "redux/actions/client";
 export default class Host extends Entity<IHost> {
   // props
   private _socket?: Socket;
@@ -31,11 +34,12 @@ export default class Host extends Entity<IHost> {
   public advertise_period: number;
 
   // event listeners
-  public packetReceived: (packet: IPacket) => void = (packet) => {};
-  public updateClientState: (state: IClientState) => void = (state) => {};
-  public connectionStatusChanged: (state: ConnectionStatus) => void = (
-    state
-  ) => {};
+  public connectionStatusChanged(state: ConnectionStatus): void {
+    store.dispatch(storeConnectionState(this.id, state));
+  }
+  public updateClientState(state: IClientState): void {
+    console.log(state);
+  }
   constructor(host_record: IHost, public client_key: Key) {
     super("hosts", host_record.id);
     this.name = host_record.name;
@@ -48,9 +52,8 @@ export default class Host extends Entity<IHost> {
   /**
    * returns the object of entity based on entity interface
    */
-  public getFormattedObject(): IHost {
+  public getFormattedObject(): any {
     return {
-      id: this.id,
       name: this.name,
       address: this.address,
       score: this.score,
@@ -212,13 +215,16 @@ export default class Host extends Entity<IHost> {
   /**
    * send message to a client by address
    */
-  public async sendMessageToClient(data: Buffer, dest_key: Key) {
-    const length = data.length;
+  public async sendMessageToClient(message: Message, dest_key: Key) {
+    const length = message.content.length;
     const packet_count = Math.ceil(length / configs.packet_length);
     const data_parts: Buffer[] = [];
     for (let i = 0; i < packet_count; i++) {
       data_parts.push(
-        data.slice(i * configs.packet_length, (i + 1) * configs.packet_length)
+        message.content.slice(
+          i * configs.packet_length,
+          (i + 1) * configs.packet_length
+        )
       );
     }
     const parts_cipher = await Promise.all(
@@ -232,7 +238,7 @@ export default class Host extends Entity<IHost> {
     parts_cipher.forEach(async (part, position) => {
       if (!this._socket) throw new Error("connection is dead");
       const packet: IPacket = {
-        id: "some-random_id",
+        id: message.network_id,
         payload: part,
         position,
         count: packet_count,
@@ -240,15 +246,18 @@ export default class Host extends Entity<IHost> {
         src: this.client_key.getPublicKey(),
       };
       const result = await this.sendPacket(packet);
-      console.log(result);
+      Client.updateDeliverPendingPacket(
+        packet.id,
+        packet.position,
+        packet_count,
+        result
+      );
     });
   }
   /**
    * send a single direct packet to host
    */
-  public async sendPacket(
-    packet: IPacket
-  ): Promise<"DELIVERED" | "RESERVED" | "FAILED"> {
+  public async sendPacket(packet: IPacket): Promise<SendStatus> {
     return new Promise((resolve, reject) => {
       if (!this._socket) {
         return reject("connection is dead");
@@ -274,7 +283,6 @@ export default class Host extends Entity<IHost> {
         // this._ttr_avg =
         //   (this._ttr_avg * this._ttr_count + ttr) / (this._ttr_count + 1);
         // this._ttr_count++;
-        console.log(ack_data);
         resolve(ack_data);
       });
       setTimeout(() => {

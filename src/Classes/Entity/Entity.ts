@@ -1,4 +1,5 @@
 import store from "redux/store";
+import Storage from "storage/Storage";
 export default abstract class Entity<T> {
   constructor(private _table_name: string, public id: number) {}
   public isEqual(entity: Entity<T>): boolean {
@@ -6,12 +7,12 @@ export default abstract class Entity<T> {
     if (this.id === undefined || entity.id === undefined) return false;
     return entity.id === this.id;
   }
-  abstract getFormattedObject(): T;
+  abstract getFormattedObject(): any;
   /**
    * stores current entity in storage and sets/resets the id
    */
-  public async store(): Promise<boolean> {
-    const storage = store.getState().storage;
+  public async store(storage?: Storage): Promise<boolean> {
+    if (!storage) storage = store.getState().storage;
     this.id = await storage
       .getTable(this._table_name)
       .put(this.getFormattedObject());

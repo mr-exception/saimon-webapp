@@ -1,8 +1,8 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
-import Message from "Classes/Message/Message";
+import Message, { MessageSentState } from "Classes/Message/Message";
 import Client from "core/Client/Client";
-import { ConnectionStatus } from "core/Connection/def";
+import { ConnectionStatus, SendStatus } from "core/Connection/def";
 import Key from "core/Key/Key";
 
 // modals
@@ -33,6 +33,7 @@ export const STORE_APP_KEY = "store_app_key";
 export const SELECT_CONVERSATION = "select_conversation";
 export const ADD_MESSAGE = "add_message";
 export const ADD_MESSAGES = "add_messages";
+export const UPDATE_MESSAGE_STATUS = "update_message_status";
 // others
 export const CLEAR_ALL = "clear_all";
 
@@ -47,6 +48,10 @@ export type ActionType = {
 
   message?: Message;
   messages?: Message[];
+  message_status?: {
+    message_id: number;
+    status: MessageSentState;
+  };
 
   confirmation_dialog?: {
     message: string;
