@@ -1,5 +1,6 @@
 import Entity from "Classes/Entity/Entity";
 import configs from "confg";
+import Client from "core/Client/Client";
 import {
   ConnectionStatus,
   IClientState,
@@ -11,7 +12,6 @@ import {
 import Key from "core/Key/Key";
 import { Subject } from "rxjs";
 import { io, Socket } from "socket.io-client";
-import Storage from "storage/Storage";
 
 export default class Host extends Entity<IHost> {
   // props
@@ -36,8 +36,8 @@ export default class Host extends Entity<IHost> {
   public connectionStatusChanged: (state: ConnectionStatus) => void = (
     state
   ) => {};
-  constructor(host_record: IHost, public client_key: Key, storage: Storage) {
-    super(storage, "hosts", host_record.id);
+  constructor(host_record: IHost, public client_key: Key) {
+    super("hosts", host_record.id);
     this.name = host_record.name;
     this.address = host_record.address;
     this.score = host_record.score;
@@ -163,7 +163,7 @@ export default class Host extends Entity<IHost> {
     this._socket.on("pck", (packet_cipher: string, ackCallback) => {
       const packet_buffer = this.client_key.decryptPrivate(packet_cipher);
       const packet = JSON.parse(packet_buffer.toString()) as IPacket;
-      this.packetReceived(packet);
+      Client.packetReceived(packet);
       ackCallback("got");
     });
     // listen to packet got event from host node
@@ -274,6 +274,7 @@ export default class Host extends Entity<IHost> {
         // this._ttr_avg =
         //   (this._ttr_avg * this._ttr_count + ttr) / (this._ttr_count + 1);
         // this._ttr_count++;
+        console.log(ack_data);
         resolve(ack_data);
       });
       setTimeout(() => {

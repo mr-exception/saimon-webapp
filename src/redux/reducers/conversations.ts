@@ -15,15 +15,12 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
           (cnt) => cnt.public_key === action.message?.public_key
         );
         if (!contact) {
-          contact = new Contact(
-            {
-              id: 0,
-              first_name: "unknow",
-              last_name: "unknow",
-              public_key: action.message.public_key,
-            },
-            state.storage
-          );
+          contact = new Contact({
+            id: 0,
+            first_name: "unknow",
+            last_name: "unknow",
+            public_key: action.message.public_key,
+          });
           contact.store();
           state.contacts = [...state.contacts, ...[contact]];
         } else {

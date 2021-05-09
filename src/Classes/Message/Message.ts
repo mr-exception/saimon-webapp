@@ -1,5 +1,4 @@
 import Entity from "Classes/Entity/Entity";
-import Storage from "storage/Storage";
 
 export default class Message extends Entity<IMessage> {
   constructor(
@@ -9,10 +8,9 @@ export default class Message extends Entity<IMessage> {
     public content: Buffer,
     public box_type: BoxType,
     public date: number,
-    public status: MessageSentState,
-    storage: Storage
+    public status: MessageSentState
   ) {
-    super(storage, "hosts", 0);
+    super("hosts", 0);
   }
   /**
    * returns the object of entity based on entity interface

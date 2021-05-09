@@ -1,11 +1,6 @@
-import Storage from "storage/Storage";
-
+import store from "redux/store";
 export default abstract class Entity<T> {
-  constructor(
-    private _storage: Storage,
-    private _table_name: string,
-    public id: number
-  ) {}
+  constructor(private _table_name: string, public id: number) {}
   public isEqual(entity: Entity<T>): boolean {
     // if one of hosts is not stored in storage
     if (this.id === undefined || entity.id === undefined) return false;
@@ -16,7 +11,8 @@ export default abstract class Entity<T> {
    * stores current entity in storage and sets/resets the id
    */
   public async store(): Promise<boolean> {
-    this.id = await this._storage
+    const storage = store.getState().storage;
+    this.id = await storage
       .getTable(this._table_name)
       .put(this.getFormattedObject());
     return true;
@@ -26,7 +22,8 @@ export default abstract class Entity<T> {
    */
   public async update(): Promise<boolean> {
     if (!this.id) return false;
-    await this._storage
+    const storage = store.getState().storage;
+    await storage
       .getTable(this._table_name)
       .update(this.id, this.getFormattedObject());
     return true;
@@ -36,7 +33,8 @@ export default abstract class Entity<T> {
    */
   public async delete(): Promise<boolean> {
     if (!this.id) return false;
-    await this._storage.getTable(this._table_name).delete(this.id);
+    const storage = store.getState().storage;
+    await storage.getTable(this._table_name).delete(this.id);
     return true;
   }
   /**

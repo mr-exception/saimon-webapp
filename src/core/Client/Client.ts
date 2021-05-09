@@ -1,7 +1,12 @@
 import Key from "../Key/Key";
 import store from "redux/store";
+import { IPacket } from "core/Connection/def";
+import { addMessage } from "redux/actions/conversations";
+import Message from "Classes/Message/Message";
+import Contact from "Classes/Contact/Contact";
 
 export default class Client {
+  private static pending_packets: IPacket[] = [];
   // public async disconnectByConnectionId(connection_id: number) {
   //   this.hosts.forEach((host) => {
   //     if (host.id === connection_id) {
@@ -9,10 +14,10 @@ export default class Client {
   //     }
   //   });
   // }
-  // public packetReceived(packet: IPacket) {
-  //   this.pending_packets.push(packet);
-  //   this.checkPackets(packet.id, packet.count);
-  // }
+  public static packetReceived(packet: IPacket) {
+    this.pending_packets.push(packet);
+    this.checkPackets(packet.id, packet.count);
+  }
   // /**
   //  * send message to a client node
   //  */
@@ -22,34 +27,60 @@ export default class Client {
       host.sendMessageToClient(data, address);
     });
   }
-  // /**
-  //  * checks if a message is received
-  //  */
-  // private checkPackets(id: string, count: number) {
-  //   const packets = this.pending_packets
-  //     .filter((packet) => {
-  //       if (packet.id !== id) return null;
-  //       return packet;
-  //     })
-  //     .sort((pa, pb) => pa.position - pb.position);
-  //   if (packets.length === count) {
-  //     const source_key = Key.generateKeyByPublicKey(packets[0].src);
-  //     const message = packets
-  //       .map((packet) => {
-  //         return source_key.decryptPublic(
-  //           this.key.decryptPrivate(packet.payload).toString()
-  //         );
-  //       })
-  //       .reduce((prev, cur) => Buffer.concat([prev, cur]));
-  //     this.pending_packets = this.pending_packets.filter((packet) =>
-  //       packet.id === id ? null : packet
-  //     );
-  //     this.onMessage$.next({
-  //       content: message,
-  //       address: source_key.getPublicKeyNormalized(),
-  //     });
-  //   }
-  // }
+  /**
+   * checks if a message is received
+   */
+  private static checkPackets(id: string, count: number) {
+    const reduxState = store.getState();
+    const key = reduxState.app_key;
+    const contacts = reduxState.contacts;
+    if (!key) {
+      throw new Error("application key not provided");
+    }
+    const packets = this.pending_packets
+      .filter((packet) => {
+        if (packet.id !== id) return null;
+        return packet;
+      })
+      .sort((pa, pb) => pa.position - pb.position);
+    if (packets.length === count) {
+      const source_key = Key.generateKeyByPublicKey(packets[0].src);
+      const message_buffer = packets
+        .map((packet) => {
+          return source_key.decryptPublic(
+            key.decryptPrivate(packet.payload).toString()
+          );
+        })
+        .reduce((prev, cur) => Buffer.concat([prev, cur]));
+      this.pending_packets = this.pending_packets.filter((packet) =>
+        packet.id === id ? null : packet
+      );
+
+      // find contact
+      let contact = contacts.find(
+        (cnt) => cnt.public_key === source_key.getPublicKeyNormalized()
+      );
+      if (!contact) {
+        contact = new Contact({
+          first_name: "unknown",
+          last_name: "unknow",
+          public_key: source_key.getPublicKeyNormalized(),
+          id: 0,
+        });
+        contact.store();
+      }
+      const message = new Message(
+        contact.first_name,
+        contact.last_name,
+        contact.public_key,
+        message_buffer,
+        "RECEIVED",
+        Date.now(),
+        "DELIVERED"
+      );
+      store.dispatch(addMessage(message));
+    }
+  }
   // /**
   //  * handle connection states
   //  */

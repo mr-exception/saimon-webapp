@@ -2,18 +2,13 @@ import React, { useState } from "react";
 import "./styles.css";
 import SendIcon from "img/send.svg";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectAppKey,
-  selectSelectedContact,
-  selectStorage,
-} from "redux/types/selectors";
+import { selectAppKey, selectSelectedContact } from "redux/types/selectors";
 import Key from "core/Key/Key";
 import { addMessage } from "redux/actions/conversations";
 import Message from "Classes/Message/Message";
 import Client from "core/Client/Client";
 const SendBox: React.FC<ISendBoxProps> = () => {
   const app_key = useSelector(selectAppKey);
-  const storage = useSelector(selectStorage);
   const selected_contact = useSelector(selectSelectedContact);
   const [content, set_content] = useState("");
   const dispatch = useDispatch();
@@ -32,8 +27,7 @@ const SendBox: React.FC<ISendBoxProps> = () => {
           Buffer.from(content),
           "SENT",
           Date.now(),
-          "SENDING",
-          storage
+          "SENDING"
         )
       )
     );

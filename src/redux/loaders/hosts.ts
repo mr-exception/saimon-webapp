@@ -14,7 +14,7 @@ const load = async (
 ) => {
   const host_records = await storage.getHosts();
   const hosts = host_records.map((rec) => {
-    const host = new Host(rec, app_key, storage);
+    const host = new Host(rec, app_key);
     host.connectionStatusChanged = (state: ConnectionStatus) => {
       if (!host.id) return;
       dispatch(storeConnectionState(host.id, state));

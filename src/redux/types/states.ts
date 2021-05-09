@@ -9,6 +9,7 @@ import Storage from "storage/Storage";
  * this state is when user just has opened the webapp
  */
 export interface IInitialState {
+  app_key?: Key;
   storage: Storage;
   modals: {
     add_contact: {

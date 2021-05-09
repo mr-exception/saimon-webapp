@@ -7,7 +7,7 @@ import Storage from "storage/Storage";
 const load = async (storage: Storage, dispatch: Dispatch<ActionType>) => {
   const contact_records = await storage.getContacts();
   const contacts = contact_records.map((record) => {
-    const contact = new Contact(record, storage);
+    const contact = new Contact(record);
     return contact;
   });
   dispatch(addContacts(contacts));
