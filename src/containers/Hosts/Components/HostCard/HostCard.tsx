@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import DeleteIcon from "img/delete.svg";
 import DisconnectIcon from "img/disconnect.svg";
 import ConnectIcon from "img/connect.svg";
@@ -7,10 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { showConfirmationModal } from "redux/actions/modals";
 import { IHostCardProps } from "./def";
 import { removeHost } from "redux/actions/hosts";
-import {
-  selectClient,
-  selectHostConnectionStates,
-} from "redux/types/selectors";
+import { selectHostConnectionStates } from "redux/types/selectors";
 import { IInitialState } from "redux/types/states";
 import { ConnectionStatus } from "core/Connection/def";
 

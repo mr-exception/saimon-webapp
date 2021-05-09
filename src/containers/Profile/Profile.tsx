@@ -1,15 +1,12 @@
-import Key from "core/Key/Key";
 import React from "react";
 import "./styles.css";
 import { useSelector } from "react-redux";
-import { selectClient } from "redux/types/selectors";
+import { selectAppKey } from "redux/types/selectors";
 const Profile = () => {
-  const client = useSelector(selectClient);
+  const app_key = useSelector(selectAppKey);
   return (
     <div className="profile-container">
-      <div className="address-box">
-        {Key.normalizeKey(client.getPublicKey())}
-      </div>
+      <div className="address-box">{app_key.getPublicKeyNormalized()}</div>
     </div>
   );
 };

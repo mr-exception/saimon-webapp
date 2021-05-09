@@ -1,22 +1,17 @@
-import Client from "core/Client/Client";
 import Key from "core/Key/Key";
 import { Dispatch } from "redux";
-import { storeAppKey, storeClient } from "redux/actions/client";
+import { storeAppKey } from "redux/actions/client";
 import { ActionType } from "redux/types/actions";
 
 const load = async (dispatch: Dispatch<ActionType>) => {
   const private_key = localStorage.getItem("private_key");
   let key: Key;
-  let client: Client;
   if (private_key) {
     key = Key.generateKeyByPrivateKey(private_key);
-    client = new Client(key);
   } else {
     key = Key.generateFreshKey();
     localStorage.setItem("private_key", key.getPrivateKey());
-    client = new Client(key);
   }
-  dispatch(storeClient(client));
   dispatch(storeAppKey(key));
   // // subscribe to all
   // client.onMessage$.subscribe(

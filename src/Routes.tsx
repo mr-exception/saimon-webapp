@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Debug from "containers/Debug/Debug";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import Hosts from "containers/Hosts/Hosts";
 import Profile from "containers/Profile/Profile";
@@ -81,9 +80,6 @@ const Routes = () => {
             <App>
               <Setting />
             </App>
-          </Route>
-          <Route path="/debug">
-            <Debug />
           </Route>
           <Route path="/">
             <App>

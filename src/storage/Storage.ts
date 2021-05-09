@@ -1,4 +1,4 @@
-import Contact, { IContact } from "Classes/Contact/Contact";
+import { IContact } from "Classes/Contact/Contact";
 import { IHost } from "Classes/Host/Host";
 import Dexie from "dexie";
 export default class Storage {

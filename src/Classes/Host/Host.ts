@@ -1,10 +1,12 @@
 import Entity from "Classes/Entity/Entity";
+import configs from "confg";
 import {
   ConnectionStatus,
   IClientState,
   IPacket,
   IPacketGot,
   IPacketTTD,
+  SendStatus,
 } from "core/Connection/def";
 import Key from "core/Key/Key";
 import { Subject } from "rxjs";
@@ -206,6 +208,78 @@ export default class Host extends Entity<IHost> {
     this._pending_ttd_packets = this._pending_ttd_packets.filter((packet) =>
       packet.id === id && packet.position === position ? null : packet
     );
+  }
+  /**
+   * send message to a client by address
+   */
+  public async sendMessageToClient(data: Buffer, dest_key: Key) {
+    const length = data.length;
+    const packet_count = Math.ceil(length / configs.packet_length);
+    const data_parts: Buffer[] = [];
+    for (let i = 0; i < packet_count; i++) {
+      data_parts.push(
+        data.slice(i * configs.packet_length, (i + 1) * configs.packet_length)
+      );
+    }
+    const parts_cipher = await Promise.all(
+      data_parts.map((part) => {
+        return new Promise<string>((resolve) => {
+          resolve(dest_key.encryptPublic(this.client_key.encryptPrivate(part)));
+        });
+      })
+    );
+
+    parts_cipher.forEach(async (part, position) => {
+      if (!this._socket) throw new Error("connection is dead");
+      const packet: IPacket = {
+        id: "some-random_id",
+        payload: part,
+        position,
+        count: packet_count,
+        dst: dest_key.getPublicKey(),
+        src: this.client_key.getPublicKey(),
+      };
+      const result = await this.sendPacket(packet);
+      console.log(result);
+    });
+  }
+  /**
+   * send a single direct packet to host
+   */
+  public async sendPacket(
+    packet: IPacket
+  ): Promise<"DELIVERED" | "RESERVED" | "FAILED"> {
+    return new Promise((resolve, reject) => {
+      if (!this._socket) {
+        return reject("connection is dead");
+      }
+      if (!this._host_key) {
+        return reject("host key is not valid");
+      }
+      const packet_string = JSON.stringify(packet);
+      const packet_encrypted = this._host_key.encryptPublic(
+        Buffer.from(packet_string)
+      );
+
+      // add packet ttd object to list
+      this._pending_ttd_packets.push({
+        id: packet.id,
+        position: packet.position,
+        time: Date.now(),
+      });
+
+      // const sending_time = Date.now();
+      this._socket.emit("pck", packet_encrypted, (ack_data: SendStatus) => {
+        // const ttr = Date.now() - sending_time;
+        // this._ttr_avg =
+        //   (this._ttr_avg * this._ttr_count + ttr) / (this._ttr_count + 1);
+        // this._ttr_count++;
+        resolve(ack_data);
+      });
+      setTimeout(() => {
+        resolve("FAILED");
+      }, 3000);
+    });
   }
 }
 
