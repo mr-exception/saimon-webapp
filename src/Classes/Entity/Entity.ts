@@ -21,9 +21,9 @@ export default abstract class Entity<T> {
   /**
    * updates the current entity is storage
    */
-  public async update(): Promise<boolean> {
+  public async update(storage?: Storage): Promise<boolean> {
     if (!this.id) return false;
-    const storage = store.getState().storage;
+    if (!storage) storage = store.getState().storage;
     await storage
       .getTable(this._table_name)
       .update(this.id, this.getFormattedObject());

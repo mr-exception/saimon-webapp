@@ -8,7 +8,7 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
       state.contacts = [];
       state.hosts = [];
       state.contact_connections = [];
-      state.selected_conversation = undefined;
+      state.selected_contact_id = undefined;
       state.selected_conversation_messages = [];
       state.host_connections = [];
       return state;

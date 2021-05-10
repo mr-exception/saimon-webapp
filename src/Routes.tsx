@@ -16,6 +16,7 @@ import {
 import hostsSyncer from "redux/syncers/hosts";
 // loaders
 import hostLoader from "redux/loaders/hosts";
+import messageLoader from "redux/loaders/messages";
 import contactLoader from "redux/loaders/contacts";
 import clientLoader from "redux/loaders/clients";
 import { IInitialState } from "redux/types/states";
@@ -29,6 +30,9 @@ const Routes = () => {
   const app_key = useSelector(selectAppKey);
   const hosts = useSelector(selectHosts);
   const contacts = useSelector(selectContacts);
+  const contact_id = useSelector(
+    (state: IInitialState) => state.selected_contact_id
+  );
   const dispatch = useDispatch();
 
   const incoming_messages = useSelector(
@@ -71,6 +75,11 @@ const Routes = () => {
     contactLoader(storage, dispatch);
     set_contacts_loaded(true);
   }, [storage, dispatch]);
+  // load all messages for selected contact id
+  useEffect(() => {
+    if (!contact_id) return;
+    messageLoader(contact_id, storage, dispatch);
+  }, [storage, contact_id, dispatch]);
   // load all hosts for the first time
   useEffect(() => {
     if (!app_key) return;

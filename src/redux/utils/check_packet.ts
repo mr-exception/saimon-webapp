@@ -2,7 +2,6 @@ import Contact from "Classes/Contact/Contact";
 import Message, {
   IIncomingMessagePackets,
   IMessageState,
-  MessageSentState,
 } from "Classes/Message/Message";
 import Key from "core/Key/Key";
 import { Dispatch } from "react";
@@ -71,6 +70,7 @@ const checkIncomingMessage = (
         );
       })
       .reduce((prev, cur) => Buffer.concat([prev, cur]));
+    console.log("message received");
     const message = new Message({
       id: 0,
       network_id: incoming_packet_list.id,

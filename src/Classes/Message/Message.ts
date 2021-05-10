@@ -23,15 +23,16 @@ export default class Message extends Entity<IMessage> {
    * returns the object of entity based on entity interface
    */
   public getFormattedObject(): any {
-    return {
+    const data = {
       network_id: this.network_id,
       contact_id: this.contact_id,
       public_key: this.public_key,
-      content: this.content,
+      content: this.content.toString(),
       box_type: this.box_type,
       date: this.date,
       status: this.status,
     };
+    return data;
   }
 }
 export interface IMessageState {

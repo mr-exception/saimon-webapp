@@ -1,14 +1,14 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectConversation } from "redux/actions/conversations";
-import { selectedConversation } from "redux/types/selectors";
+import { selectedContactId } from "redux/types/selectors";
 import { IInitialState } from "redux/types/states";
 import AddContact from "./Components/AddContact/AddContact";
 import Conversation from "./Components/Conversation/Conversation";
 import "./styles.css";
 const ChatList = () => {
   const contacts = useSelector((state: IInitialState) => state.contacts);
-  const selected_conversation_index = useSelector(selectedConversation);
+  const selected_contact_id = useSelector(selectedContactId);
   const dispatch = useDispatch();
   // const getClientConnectionsMaps = useCallback(async () => {
   //   const results = await client.getClientStates(
@@ -27,9 +27,9 @@ const ChatList = () => {
       {contacts.map((contact, index) => (
         <Conversation
           selected={() => {
-            dispatch(selectConversation(index));
+            dispatch(selectConversation(contact.id));
           }}
-          is_selected={selected_conversation_index === index}
+          is_selected={selected_contact_id === contact.id}
           key={index}
           name={`${contact.first_name} ${contact.last_name}`}
           last_message="no message"

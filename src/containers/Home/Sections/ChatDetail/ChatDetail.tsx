@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {
   selectConversationMessages,
-  selectSelectedContact,
+  selectedContact,
 } from "redux/types/selectors";
 import Header from "./Components/Header/Header";
 import NoConversationSelected from "./Components/NoConversationSelected/NoConversationSelected";
@@ -12,7 +12,7 @@ import SendBox from "./Components/SendBox/SendBox";
 import SentMessageRow from "./Components/SentMessageRow/SentMessageRow";
 import "./styles.css";
 const ChatDetail = () => {
-  const selected_contact = useSelector(selectSelectedContact);
+  const selected_contact = useSelector(selectedContact);
   const messages = useSelector(selectConversationMessages);
   if (selected_contact === undefined) {
     return <NoConversationSelected />;

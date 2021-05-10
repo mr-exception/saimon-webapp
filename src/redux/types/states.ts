@@ -5,12 +5,7 @@ import Message, {
   IMessageState,
 } from "Classes/Message/Message";
 import Client from "core/Client/Client";
-import {
-  ConnectionStatus,
-  IDeliverPacketStatus,
-  IPacket,
-  PacketSendStatus,
-} from "core/Connection/def";
+import { ConnectionStatus } from "core/Connection/def";
 import Key from "core/Key/Key";
 import Storage from "storage/Storage";
 /**
@@ -45,7 +40,7 @@ export interface IInitialState {
     last_online: number;
   }[];
 
-  selected_conversation?: number;
+  selected_contact_id?: number;
   selected_conversation_messages: Message[];
 
   incoming_messages_packets: IIncomingMessagePackets[];

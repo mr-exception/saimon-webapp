@@ -10,14 +10,16 @@ export const selectContacts = (state: IInitialState) => state.contacts;
 export const selectHostConnectionStates = (state: IInitialState) =>
   state.host_connections;
 
-export const selectedConversation = (state: IInitialState) =>
-  state.selected_conversation;
-export const selectConversationMessages = (state: IInitialState) =>
-  state.selected_conversation_messages;
-export const selectSelectedContact = (state: IInitialState) => {
-  if (state.selected_conversation !== undefined) {
-    return state.contacts[state.selected_conversation];
+export const selectedContactId = (state: IInitialState) =>
+  state.selected_contact_id;
+export const selectedContact = (state: IInitialState) => {
+  if (state.selected_contact_id !== undefined) {
+    return state.contacts.find(
+      (contact) => contact.id === state.selected_contact_id
+    );
   } else {
     return undefined;
   }
 };
+export const selectConversationMessages = (state: IInitialState) =>
+  state.selected_conversation_messages;

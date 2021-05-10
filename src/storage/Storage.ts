@@ -52,8 +52,10 @@ export default class Storage {
       )
     );
   }
-  public async getMessages(): Promise<IMessage[]> {
-    const keys = await this._messages.toCollection().primaryKeys();
+  public async getMessages(contact_id?: number): Promise<IMessage[]> {
+    let keys: number[] = [];
+    if (!contact_id) keys = await this._messages.toCollection().primaryKeys();
+    else keys = await this._messages.where({ contact_id }).primaryKeys();
     return await Promise.all(
       keys.map(
         (key) =>

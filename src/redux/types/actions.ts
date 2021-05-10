@@ -43,6 +43,7 @@ export const STORE_DELIVERING_PACKET_STATUS = "store_delivering_packet_status";
 export const SELECT_CONVERSATION = "select_conversation";
 export const ADD_MESSAGE = "add_message";
 export const ADD_MESSAGES = "add_messages";
+export const RESET_MESSAGES = "reset_messages";
 export const UPDATE_MESSAGE_STATUS = "update_message_status";
 // others
 export const CLEAR_ALL = "clear_all";
@@ -76,7 +77,7 @@ export type ActionType = {
     state: ConnectionStatus;
   };
 
-  conversation_index?: number;
+  contact_id?: number;
 
   packet?: IPacket;
   incoming_messages?: IIncomingMessagePackets[];
