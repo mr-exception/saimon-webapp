@@ -1,8 +1,6 @@
 import Host from "Classes/Host/Host";
-import { ConnectionStatus } from "core/Connection/def";
 import Key from "core/Key/Key";
 import { Dispatch } from "redux";
-import { storeConnectionState } from "redux/actions/client";
 import { addHosts } from "redux/actions/hosts";
 import { ActionType } from "redux/types/actions";
 import Storage from "storage/Storage";

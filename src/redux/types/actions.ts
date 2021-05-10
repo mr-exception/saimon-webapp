@@ -1,8 +1,15 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
-import Message, { MessageSentState } from "Classes/Message/Message";
+import Message, {
+  IIncomingMessagePackets,
+  MessageSentState,
+} from "Classes/Message/Message";
 import Client from "core/Client/Client";
-import { ConnectionStatus, SendStatus } from "core/Connection/def";
+import {
+  ConnectionStatus,
+  IPacket,
+  PacketSendStatus,
+} from "core/Connection/def";
 import Key from "core/Key/Key";
 
 // modals
@@ -29,6 +36,9 @@ export const DISCONNECT_HOST = "disconnect_host";
 export const STORE_CLIENT = "store_client";
 export const STORE_CONNECTION_STATE = "store_connection_state";
 export const STORE_APP_KEY = "store_app_key";
+export const STORE_INCOMING_PACKET = "store_incoming_packet";
+export const RESET_INCOMING_PACKETS = "reset_incoming_packets";
+export const STORE_DELIVERING_PACKET_STATUS = "store_delivering_packet_status";
 // conversations
 export const SELECT_CONVERSATION = "select_conversation";
 export const ADD_MESSAGE = "add_message";
@@ -49,7 +59,7 @@ export type ActionType = {
   message?: Message;
   messages?: Message[];
   message_status?: {
-    message_id: number;
+    message_id: string;
     status: MessageSentState;
   };
 
@@ -67,5 +77,15 @@ export type ActionType = {
   };
 
   conversation_index?: number;
+
+  packet?: IPacket;
+  incoming_messages?: IIncomingMessagePackets[];
+
+  packet_deliver_status?: {
+    id: string;
+    position: number;
+    status: PacketSendStatus;
+    count: number;
+  };
 };
 export type DispatchType = (args: ActionType) => ActionType;

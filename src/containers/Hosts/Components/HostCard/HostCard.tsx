@@ -36,14 +36,13 @@ const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
   const connectionState = connections.find(
     (connection) => connection.connection_id === host.id
   );
-
   const dispatch = useDispatch();
 
   const canConnect = connectionState
-    ? connectionState.state === "CONNECTED"
+    ? connectionState.state !== "CONNECTED"
     : true;
   const canDisconnect = connectionState
-    ? connectionState.state !== "CONNECTED"
+    ? connectionState.state === "CONNECTED"
     : false;
 
   // connect to the host node (again)
@@ -57,7 +56,7 @@ const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
   }, [host, canConnect]);
 
   const disconnect = async () => {
-    // client.disconnectByConnectionId(connection_id);
+    host.close();
   };
   return (
     <div className="host-card">

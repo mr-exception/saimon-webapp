@@ -18,19 +18,16 @@ const SendBox: React.FC<ISendBoxProps> = () => {
   }
   const send = async () => {
     const dst_key = Key.generateKeyByPublicKey(selected_contact.public_key);
-    const message = new Message(
-      {
-        id: 0,
-        contact_id: 0,
-        public_key: app_key.getPublicKeyNormalized(),
-        content: Buffer.from(content),
-        status: "SENDING",
-        date: Date.now(),
-        box_type: "SENT",
-        network_id: uuidV4(),
-      },
-      "SENDING"
-    );
+    const message = new Message({
+      id: 0,
+      contact_id: 0,
+      public_key: app_key.getPublicKeyNormalized(),
+      content: Buffer.from(content),
+      status: "SENDING",
+      date: Date.now(),
+      box_type: "SENT",
+      network_id: uuidV4(),
+    });
     await message.store();
     dispatch(addMessage(message));
     Client.sendMessage(message, dst_key);

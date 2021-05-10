@@ -7,11 +7,10 @@ import {
   IPacket,
   IPacketGot,
   IPacketTTD,
-  SendStatus,
+  PacketSendStatus,
 } from "core/Connection/def";
 import Key from "core/Key/Key";
 import { Subject } from "rxjs";
-import { v4 as uuidV4 } from "uuid";
 import { io, Socket } from "socket.io-client";
 import Message from "Classes/Message/Message";
 import store from "redux/store";
@@ -257,7 +256,7 @@ export default class Host extends Entity<IHost> {
   /**
    * send a single direct packet to host
    */
-  public async sendPacket(packet: IPacket): Promise<SendStatus> {
+  public async sendPacket(packet: IPacket): Promise<PacketSendStatus> {
     return new Promise((resolve, reject) => {
       if (!this._socket) {
         return reject("connection is dead");
@@ -278,13 +277,17 @@ export default class Host extends Entity<IHost> {
       });
 
       // const sending_time = Date.now();
-      this._socket.emit("pck", packet_encrypted, (ack_data: SendStatus) => {
-        // const ttr = Date.now() - sending_time;
-        // this._ttr_avg =
-        //   (this._ttr_avg * this._ttr_count + ttr) / (this._ttr_count + 1);
-        // this._ttr_count++;
-        resolve(ack_data);
-      });
+      this._socket.emit(
+        "pck",
+        packet_encrypted,
+        (ack_data: PacketSendStatus) => {
+          // const ttr = Date.now() - sending_time;
+          // this._ttr_avg =
+          //   (this._ttr_avg * this._ttr_count + ttr) / (this._ttr_count + 1);
+          // this._ttr_count++;
+          resolve(ack_data);
+        }
+      );
       setTimeout(() => {
         resolve("FAILED");
       }, 3000);

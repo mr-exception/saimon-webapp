@@ -8,6 +8,7 @@ import Home from "containers/Home/Home";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectAppKey,
+  selectContacts,
   selectHosts,
   selectStorage,
 } from "redux/types/selectors";
@@ -17,12 +18,38 @@ import hostsSyncer from "redux/syncers/hosts";
 import hostLoader from "redux/loaders/hosts";
 import contactLoader from "redux/loaders/contacts";
 import clientLoader from "redux/loaders/clients";
+import { IInitialState } from "redux/types/states";
+import {
+  checkDeliverStatus,
+  checkIncomingPackets,
+} from "redux/utils/check_packet";
 
 const Routes = () => {
   const storage = useSelector(selectStorage);
   const app_key = useSelector(selectAppKey);
   const hosts = useSelector(selectHosts);
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
+
+  const incoming_messages = useSelector(
+    (state: IInitialState) => state.incoming_messages_packets
+  );
+  useEffect(() => {
+    checkIncomingPackets(
+      incoming_messages,
+      app_key,
+      contacts,
+      storage,
+      dispatch
+    );
+  }, [incoming_messages, app_key, contacts, storage, dispatch]);
+
+  const delivering_messages = useSelector(
+    (state: IInitialState) => state.deliver_message_state
+  );
+  useEffect(() => {
+    checkDeliverStatus(delivering_messages, dispatch);
+  }, [delivering_messages, dispatch]);
 
   const [contacts_loaded, set_contacts_loaded] = useState(false);
   const [hosts_loaded, set_hosts_loaded] = useState(false);

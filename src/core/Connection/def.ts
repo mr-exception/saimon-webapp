@@ -10,7 +10,7 @@ export interface IPacket {
 export interface IDeliverPacketStatus {
   id: string; // id
   position: number; // position of packet in sending message
-  status: SendStatus;
+  status: PacketSendStatus;
 }
 
 export interface IPacketGot {
@@ -44,4 +44,4 @@ export interface IClientStateInConnection extends IClientState {
   connection_id: string;
 }
 
-export type SendStatus = "DELIVERED" | "RESERVED" | "FAILED";
+export type PacketSendStatus = "DELIVERED" | "RESERVED" | "FAILED";

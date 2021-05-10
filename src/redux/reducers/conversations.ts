@@ -18,7 +18,7 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
       state.selected_conversation_messages = state.selected_conversation_messages.map(
         (message) => {
           if (!action.message_status) return message;
-          if (message.id === action.message_status.message_id) {
+          if (message.network_id === action.message_status.message_id) {
             message.status = action.message_status.status;
             message.store(state.storage);
           }

@@ -22,6 +22,9 @@ export const initialState: IInitialState = {
   contact_connections: [],
 
   selected_conversation_messages: [],
+
+  incoming_messages_packets: [],
+  deliver_message_state: [],
 };
 
 const reducer = (

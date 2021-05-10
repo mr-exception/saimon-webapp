@@ -12,8 +12,8 @@ export const selectConversation = (conversation_index: number): ActionType => {
 export const addMessage = (message: Message): ActionType => {
   return { type: ADD_MESSAGE, message };
 };
-export const updateMessage = (
-  message_id: number,
+export const updateMessageStatus = (
+  message_id: string,
   status: MessageSentState
 ): ActionType => {
   return {

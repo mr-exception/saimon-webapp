@@ -1,8 +1,16 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
-import Message from "Classes/Message/Message";
+import Message, {
+  IIncomingMessagePackets,
+  IMessageState,
+} from "Classes/Message/Message";
 import Client from "core/Client/Client";
-import { ConnectionStatus } from "core/Connection/def";
+import {
+  ConnectionStatus,
+  IDeliverPacketStatus,
+  IPacket,
+  PacketSendStatus,
+} from "core/Connection/def";
 import Key from "core/Key/Key";
 import Storage from "storage/Storage";
 /**
@@ -39,6 +47,9 @@ export interface IInitialState {
 
   selected_conversation?: number;
   selected_conversation_messages: Message[];
+
+  incoming_messages_packets: IIncomingMessagePackets[];
+  deliver_message_state: IMessageState[];
 }
 /**
  * this state is when user is logged into the account

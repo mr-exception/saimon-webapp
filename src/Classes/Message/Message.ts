@@ -1,4 +1,5 @@
 import Entity from "Classes/Entity/Entity";
+import { IPacket, PacketSendStatus } from "core/Connection/def";
 
 export default class Message extends Entity<IMessage> {
   public network_id: string;
@@ -7,7 +8,8 @@ export default class Message extends Entity<IMessage> {
   public content: Buffer;
   public box_type: BoxType;
   public date: number;
-  constructor(message_record: IMessage, public status: MessageSentState) {
+  public status: MessageSentState;
+  constructor(message_record: IMessage) {
     super("messages", message_record.id);
     this.network_id = message_record.network_id;
     this.contact_id = message_record.contact_id;
@@ -15,6 +17,7 @@ export default class Message extends Entity<IMessage> {
     this.content = message_record.content;
     this.box_type = message_record.box_type;
     this.date = message_record.date;
+    this.status = message_record.status;
   }
   /**
    * returns the object of entity based on entity interface
@@ -31,7 +34,17 @@ export default class Message extends Entity<IMessage> {
     };
   }
 }
-
+export interface IMessageState {
+  id: string;
+  count: number;
+  packets: { position: number; status: PacketSendStatus }[];
+}
+export interface IIncomingMessagePackets {
+  id: string;
+  contact_id: number;
+  count: number;
+  packets: IPacket[];
+}
 export interface IMessage {
   id: number;
   network_id: string;

@@ -1,155 +1,31 @@
 import Key from "../Key/Key";
 import store from "redux/store";
-import { IDeliverPacketStatus, IPacket, SendStatus } from "core/Connection/def";
-import { addMessage, updateMessage } from "redux/actions/conversations";
-import { v4 as uuidV4 } from "uuid";
+import { IPacket, PacketSendStatus } from "core/Connection/def";
 import Message from "Classes/Message/Message";
-import Contact from "Classes/Contact/Contact";
+import {
+  storeDeliveringPacketStatus,
+  storeIncomingPacket,
+} from "redux/actions/client";
 
 export default class Client {
-  private static income_pending_packets: IPacket[] = [];
-  private static devlier_pending_packets: IDeliverPacketStatus[] = [];
-
   public static updateDeliverPendingPacket(
     id: string,
     position: number,
     count: number,
-    status: SendStatus
+    status: PacketSendStatus
   ) {
-    let found = false;
-    this.devlier_pending_packets = this.devlier_pending_packets.map(
-      (packet) => {
-        if (packet.id === id && packet.position === position) {
-          packet.status = status;
-        }
-        found = true;
-        return packet;
-      }
-    );
-    if (!found) {
-      this.devlier_pending_packets.push({ id, position, status });
-    }
-    this.checkDeliverStatus(id, count);
+    store.dispatch(storeDeliveringPacketStatus(id, position, status, count));
   }
-  private static checkDeliverStatus(id: string, count: number) {
-    const packet_status = this.devlier_pending_packets.filter(
-      (status) => status.id === id
-    );
-    if (packet_status.length !== count) {
-      // we need all packet status to decide what happend to message
-      return;
-    }
-    // get message from state
-    const messages = store.getState().selected_conversation_messages;
-    const message = messages.find((m) => m.network_id === id);
-    if (!message) {
-      throw new Error("message entity not found");
-    }
-    let hasDelivered = false;
-    let hasError = false;
-    let hasReserved = false;
-    packet_status.forEach((status) => {
-      switch (status.status) {
-        case "DELIVERED":
-          hasDelivered = true;
-          break;
-        case "FAILED":
-          hasError = true;
-          break;
-        case "RESERVED":
-          hasReserved = true;
-          break;
-      }
-    });
-    if (hasError) {
-      store.dispatch(updateMessage(message.id, "FAILED"));
-      return;
-    }
-    if (hasReserved) {
-      store.dispatch(updateMessage(message.id, "SENT"));
-      return;
-    }
-    if (hasDelivered) {
-      store.dispatch(updateMessage(message.id, "DELIVERED"));
-      return;
-    }
-  }
-  // public async disconnectByConnectionId(connection_id: number) {
-  //   this.hosts.forEach((host) => {
-  //     if (host.id === connection_id) {
-  //       // host.emitDisconnect();
-  //     }
-  //   });
-  // }
   public static packetReceived(packet: IPacket) {
-    this.income_pending_packets.push(packet);
-    this.checkPackets(packet.id, packet.count);
+    store.dispatch(storeIncomingPacket(packet));
   }
-  // /**
-  //  * send message to a client node
-  //  */
+  /**
+   * send message to a client node
+   */
   public static sendMessage(message: Message, address: Key) {
     const hosts = store.getState().hosts;
     if (hosts.length > 0) {
       hosts[0].sendMessageToClient(message, address);
-    }
-  }
-  /**
-   * checks if a message is received
-   */
-  private static checkPackets(id: string, count: number) {
-    const reduxState = store.getState();
-    const key = reduxState.app_key;
-    const contacts = reduxState.contacts;
-    if (!key) {
-      throw new Error("application key not provided");
-    }
-    const packets = this.income_pending_packets
-      .filter((packet) => {
-        if (packet.id !== id) return null;
-        return packet;
-      })
-      .sort((pa, pb) => pa.position - pb.position);
-    if (packets.length === count) {
-      const source_key = Key.generateKeyByPublicKey(packets[0].src);
-      const message_buffer = packets
-        .map((packet) => {
-          return source_key.decryptPublic(
-            key.decryptPrivate(packet.payload).toString()
-          );
-        })
-        .reduce((prev, cur) => Buffer.concat([prev, cur]));
-      this.income_pending_packets = this.income_pending_packets.filter(
-        (packet) => (packet.id === id ? null : packet)
-      );
-
-      // find contact
-      let contact = contacts.find(
-        (cnt) => cnt.public_key === source_key.getPublicKeyNormalized()
-      );
-      if (!contact) {
-        contact = new Contact({
-          first_name: "unknown",
-          last_name: "unknow",
-          public_key: source_key.getPublicKeyNormalized(),
-          id: 0,
-        });
-        contact.store();
-      }
-      const message = new Message(
-        {
-          id: 0,
-          network_id: uuidV4(),
-          contact_id: contact.id,
-          public_key: contact.public_key,
-          content: message_buffer,
-          box_type: "RECEIVED",
-          date: Date.now(),
-          status: "DELIVERED",
-        },
-        "DELIVERED"
-      );
-      store.dispatch(addMessage(message));
     }
   }
   // /**

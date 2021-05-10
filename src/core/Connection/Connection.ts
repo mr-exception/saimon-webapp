@@ -10,7 +10,7 @@ import {
   IPacket,
   IPacketGot,
   IPacketTTD,
-  SendStatus,
+  PacketSendStatus,
 } from "./def";
 
 export default class Connection {
@@ -236,7 +236,7 @@ export default class Connection {
   //       time: Date.now(),
   //     });
   //     // const sending_time = Date.now();
-  //     this._socket.emit("pck", packet_encrypted, (ack_data: SendStatus) => {
+  //     this._socket.emit("pck", packet_encrypted, (ack_data: PacketSendStatus) => {
   //       // const ttr = Date.now() - sending_time;
   //       // this._ttr_avg =
   //       //   (this._ttr_avg * this._ttr_count + ttr) / (this._ttr_count + 1);
