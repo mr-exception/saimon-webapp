@@ -1,11 +1,12 @@
 import Host from "Classes/Host/Host";
+import RelayHost from "Classes/Host/RelayHost";
 import Key from "core/Key/Key";
 import { Dispatch } from "react";
 import { resetHosts } from "redux/actions/hosts";
 import { ActionType } from "redux/types/actions";
 
 const syncer = (
-  hosts: Host[],
+  hosts: RelayHost[],
   dispatch: Dispatch<ActionType>,
   app_key: Key
 ) => {

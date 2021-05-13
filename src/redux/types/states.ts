@@ -1,5 +1,6 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
+import RelayHost from "Classes/Host/RelayHost";
 import Message, {
   IIncomingMessagePackets,
   IMessageState,
@@ -27,7 +28,7 @@ export interface IInitialState {
       callback: (result: boolean) => void;
     };
   };
-  hosts: Host[];
+  hosts: RelayHost[];
   contacts: Contact[];
 
   host_connections: {

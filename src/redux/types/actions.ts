@@ -1,5 +1,6 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
+import RelayHost from "Classes/Host/RelayHost";
 import Message, {
   IIncomingMessagePackets,
   MessageSentState,
@@ -54,8 +55,8 @@ export type ActionType = {
   contact?: Contact;
   contacts?: Contact[];
 
-  host?: Host;
-  hosts?: Host[];
+  host?: RelayHost;
+  hosts?: RelayHost[];
 
   message?: Message;
   messages?: Message[];

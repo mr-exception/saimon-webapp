@@ -8,6 +8,7 @@ import { clsoeAddHostModal } from "redux/actions/modals";
 import Host, { IHost } from "Classes/Host/Host";
 import { addHosts } from "redux/actions/hosts";
 import { selectAppKey } from "redux/types/selectors";
+import RelayHost from "Classes/Host/RelayHost";
 const AddHostModal = () => {
   const files_input = useRef<HTMLInputElement>(null);
   const show = useSelector(
@@ -32,7 +33,7 @@ const AddHostModal = () => {
       });
     });
     const hosts = results.map((record) => {
-      const host = new Host(record, app_key);
+      const host = new RelayHost(record, app_key);
       host.store();
       return host;
     });

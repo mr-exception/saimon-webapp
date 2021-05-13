@@ -1,4 +1,5 @@
 import Host from "Classes/Host/Host";
+import RelayHost from "Classes/Host/RelayHost";
 import Key from "core/Key/Key";
 import { Dispatch } from "redux";
 import { addHosts } from "redux/actions/hosts";
@@ -14,8 +15,8 @@ const load = async (
   const hosts = await Promise.all(
     host_records.map(
       (rec) =>
-        new Promise<Host>(async (resolve, reject) => {
-          const host = new Host(rec, app_key);
+        new Promise<RelayHost>(async (resolve, reject) => {
+          const host = new RelayHost(rec, app_key);
           host.connect();
           resolve(host);
         })
