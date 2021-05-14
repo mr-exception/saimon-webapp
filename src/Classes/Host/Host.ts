@@ -1,17 +1,5 @@
 import Entity from "Classes/Entity/Entity";
-import configs from "confg";
-import Client from "core/Client/Client";
-import {
-  ConnectionStatus,
-  IClientState,
-  IPacket,
-  IPacketGot,
-  IPacketTTD,
-  PacketSendStatus,
-} from "core/Connection/def";
 import Key from "core/Key/Key";
-import { io, Socket } from "socket.io-client";
-import Message from "Classes/Message/Message";
 export default class Host extends Entity<IHost> {
   public name: string;
   public address: string;

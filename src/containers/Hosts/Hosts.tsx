@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import HostCard from "./Components/HostCard/HostCard";
 import "./styles.css";
 import AddIcon from "img/add.svg";
 import { IInitialState } from "redux/types/states";
 import { useDispatch, useSelector } from "react-redux";
 import { showAddHostModal } from "redux/actions/modals";
+import RelayHost from "Classes/Host/RelayHost";
+import RelayHostCard from "./Components/HostCard/RelayHostCard";
+import AdvertisorHost from "Classes/Host/AdvertisorHost";
+import AdvertisorHostCard from "./Components/HostCard/AdvertisorHostCard";
 const Hosts = () => {
   const [search_term, set_search_term] = useState("");
 
@@ -35,9 +38,17 @@ const Hosts = () => {
           if (host.name.includes(search_term)) return host;
           return null;
         })
-        .map((host, key) => (
-          <HostCard key={key} host={host} />
-        ))}
+        .map((host, key) => {
+          if (host.type === "RELAY" && host instanceof RelayHost) {
+            return <RelayHostCard key={key} host={host as RelayHost} />;
+          }
+          if (host.type === "ADVERTISOR" && host instanceof AdvertisorHost) {
+            return (
+              <AdvertisorHostCard key={key} host={host as AdvertisorHost} />
+            );
+          }
+          return null;
+        })}
     </div>
   );
 };

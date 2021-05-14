@@ -19,8 +19,6 @@ export default class RelayHost extends Host {
   // props
   private _socket?: Socket;
   private _host_key?: Key;
-  private _ttr_avg = 0;
-  private _ttr_count = 0;
   private _pending_ttd_packets: IPacketTTD[] = [];
   // observables
   private _finished$ = new Subject<void>();

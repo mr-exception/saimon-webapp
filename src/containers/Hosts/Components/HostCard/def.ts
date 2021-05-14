@@ -1,6 +1,9 @@
-import Host from "Classes/Host/Host";
+import AdvertisorHost from "Classes/Host/AdvertisorHost";
 import RelayHost from "Classes/Host/RelayHost";
 
-export interface IHostCardProps {
+export interface IRelayHostCardProps {
   host: RelayHost;
+}
+export interface IAdvertisorHostCardProps {
+  host: AdvertisorHost;
 }

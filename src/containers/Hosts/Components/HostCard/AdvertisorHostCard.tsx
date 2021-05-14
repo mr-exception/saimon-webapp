@@ -1,15 +1,14 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import DeleteIcon from "img/delete.svg";
-import DisconnectIcon from "img/disconnect.svg";
-import ConnectIcon from "img/connect.svg";
 import "./styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import { showConfirmationModal } from "redux/actions/modals";
-import { IHostCardProps } from "./def";
+import { IAdvertisorHostCardProps } from "./def";
 import { removeHost } from "redux/actions/hosts";
 import { selectHostConnectionStates } from "redux/types/selectors";
 import { IInitialState } from "redux/types/states";
 import { ConnectionStatus } from "core/Connection/def";
+import { storeConnectionState } from "redux/actions/client";
 
 const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
   if (!state) {
@@ -29,7 +28,9 @@ const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
   }
 };
 
-const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
+const AdvertisorHostCard: React.FC<IAdvertisorHostCardProps> = ({
+  host,
+}: IAdvertisorHostCardProps) => {
   let connections = useSelector((state: IInitialState) =>
     selectHostConnectionStates(state)
   );
@@ -38,26 +39,18 @@ const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
   );
   const dispatch = useDispatch();
 
-  const canConnect = connectionState
-    ? connectionState.state !== "CONNECTED"
-    : true;
-  const canDisconnect = connectionState
-    ? connectionState.state === "CONNECTED"
-    : false;
-
-  // connect to the host node (again)
-  const connect = useCallback(async () => {
-    if (!canConnect) return;
-    try {
-      await host.connect();
-    } catch (error) {
-      console.log(error);
+  const checkHeartBeat = useCallback(async () => {
+    const result = await host.isLive();
+    if (result) {
+      dispatch(storeConnectionState(host.id, "CONNECTED"));
+    } else {
+      dispatch(storeConnectionState(host.id, "NETWORK_ERROR"));
     }
-  }, [host, canConnect]);
+  }, [host, dispatch]);
 
-  const disconnect = async () => {
-    host.close();
-  };
+  useEffect(() => {
+    checkHeartBeat();
+  }, [checkHeartBeat]);
   return (
     <div className="host-card">
       <div className="status-bar">
@@ -98,30 +91,10 @@ const HostCard: React.FC<IHostCardProps> = ({ host }: IHostCardProps) => {
             />
             <div className="host-card__actions__caption">delete</div>
           </div>
-          {canDisconnect ? (
-            <div className="host-card__actions__item" onClick={disconnect}>
-              <img
-                src={DisconnectIcon}
-                className="host-card__actions__icon"
-                alt="delete"
-              />
-              <div className="host-card__actions__caption">disconnect</div>
-            </div>
-          ) : null}
-          {canConnect ? (
-            <div className="host-card__actions__item" onClick={connect}>
-              <img
-                src={ConnectIcon}
-                className="host-card__actions__icon"
-                alt="delete"
-              />
-              <div className="host-card__actions__caption">connect</div>
-            </div>
-          ) : null}
         </div>
       </div>
     </div>
   );
 };
 
-export default HostCard;
+export default AdvertisorHostCard;

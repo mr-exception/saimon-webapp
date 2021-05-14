@@ -1,5 +1,4 @@
 import Host from "Classes/Host/Host";
-import RelayHost from "Classes/Host/RelayHost";
 import {
   ActionType,
   ADD_HOST,
@@ -8,15 +7,15 @@ import {
   RESET_HOSTS,
 } from "redux/types/actions";
 
-export const addHost = (host: RelayHost): ActionType => {
+export const addHost = (host: Host): ActionType => {
   return { type: ADD_HOST, host };
 };
-export const addHosts = (hosts: RelayHost[]): ActionType => {
+export const addHosts = (hosts: Host[]): ActionType => {
   return { type: ADD_HOSTS, hosts };
 };
-export const resetHosts = (hosts: RelayHost[]): ActionType => {
+export const resetHosts = (hosts: Host[]): ActionType => {
   return { type: RESET_HOSTS, hosts };
 };
-export const removeHost = (host: RelayHost): ActionType => {
+export const removeHost = (host: Host): ActionType => {
   return { type: REMOVE_HOST, host };
 };

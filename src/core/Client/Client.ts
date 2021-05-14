@@ -6,6 +6,7 @@ import {
   storeDeliveringPacketStatus,
   storeIncomingPacket,
 } from "redux/actions/client";
+import RelayHost from "Classes/Host/RelayHost";
 
 export default class Client {
   public static updateDeliverPendingPacket(
@@ -24,8 +25,11 @@ export default class Client {
    */
   public static sendMessage(message: Message, address: Key) {
     const hosts = store.getState().hosts;
-    if (hosts.length > 0) {
-      hosts[0].sendMessageToClient(message, address);
+    const relay_hosts = hosts
+      .filter((host) => (host.type === "RELAY" ? host : null))
+      .map((host) => host as RelayHost);
+    if (relay_hosts.length > 0) {
+      relay_hosts[0].sendMessageToClient(message, address);
     }
   }
   // /**

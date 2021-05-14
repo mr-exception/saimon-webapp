@@ -5,7 +5,7 @@ import JSONReader from "ui-kit/JSONReader/JSONReader";
 import { IInitialState } from "redux/types/states";
 import { useDispatch, useSelector } from "react-redux";
 import { clsoeAddHostModal } from "redux/actions/modals";
-import Host, { IHost } from "Classes/Host/Host";
+import { IHost } from "Classes/Host/Host";
 import { addHosts } from "redux/actions/hosts";
 import { selectAppKey } from "redux/types/selectors";
 import RelayHost from "Classes/Host/RelayHost";

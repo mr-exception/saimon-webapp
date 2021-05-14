@@ -1,3 +1,4 @@
+import AdvertisorHost from "Classes/Host/AdvertisorHost";
 import Host from "Classes/Host/Host";
 import RelayHost from "Classes/Host/RelayHost";
 import Key from "core/Key/Key";
@@ -15,9 +16,17 @@ const load = async (
   const hosts = await Promise.all(
     host_records.map(
       (rec) =>
-        new Promise<RelayHost>(async (resolve, reject) => {
-          const host = new RelayHost(rec, app_key);
-          host.connect();
+        new Promise<Host>(async (resolve, reject) => {
+          if (rec.type === "RELAY") {
+            const host = new RelayHost(rec, app_key);
+            host.connect();
+            resolve(host);
+          }
+          if (rec.type === "ADVERTISOR") {
+            const host = new AdvertisorHost(rec, app_key);
+            resolve(host);
+          }
+          const host = new Host(rec, app_key);
           resolve(host);
         })
     )
