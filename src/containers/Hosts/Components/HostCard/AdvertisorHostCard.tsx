@@ -5,7 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { showConfirmationModal } from "redux/actions/modals";
 import { IAdvertisorHostCardProps } from "./def";
 import { removeHost } from "redux/actions/hosts";
-import { selectHostConnectionStates } from "redux/types/selectors";
+import {
+  selectAppKey,
+  selectHostConnectionStates,
+} from "redux/types/selectors";
 import { IInitialState } from "redux/types/states";
 import { ConnectionStatus } from "core/Connection/def";
 import { storeConnectionState } from "redux/actions/client";
@@ -31,9 +34,9 @@ const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
 const AdvertisorHostCard: React.FC<IAdvertisorHostCardProps> = ({
   host,
 }: IAdvertisorHostCardProps) => {
-  let connections = useSelector((state: IInitialState) =>
-    selectHostConnectionStates(state)
-  );
+  const connections = useSelector(selectHostConnectionStates);
+  const app_key = useSelector(selectAppKey);
+
   const connectionState = connections.find(
     (connection) => connection.connection_id === host.id
   );
@@ -43,10 +46,14 @@ const AdvertisorHostCard: React.FC<IAdvertisorHostCardProps> = ({
     const result = await host.isLive();
     if (result) {
       dispatch(storeConnectionState(host.id, "CONNECTED"));
+      await host.updateClient(app_key, {
+        first_name: "alireza",
+        last_name: "darbandi",
+      });
     } else {
       dispatch(storeConnectionState(host.id, "NETWORK_ERROR"));
     }
-  }, [host, dispatch]);
+  }, [host, dispatch, app_key]);
 
   useEffect(() => {
     checkHeartBeat();

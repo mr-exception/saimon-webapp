@@ -29,7 +29,6 @@ const SendBox: React.FC<ISendBoxProps> = () => {
     });
     await message.store();
     dispatch(addMessage(message));
-    console.log(message);
     Client.sendMessage(message, dst_key);
     set_content("");
   };

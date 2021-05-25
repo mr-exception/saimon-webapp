@@ -65,12 +65,12 @@ const checkIncomingMessage = (
     const source_key = contact.key;
     const content = incoming_packet_list.packets
       .map((packet) => {
+        console.log(packet.payload.toString());
         return source_key.decryptPublic(
           app_key.decryptPrivate(packet.payload).toString()
         );
       })
       .reduce((prev, cur) => Buffer.concat([prev, cur]));
-    console.log("message received");
     const message = new Message({
       id: 0,
       network_id: incoming_packet_list.id,

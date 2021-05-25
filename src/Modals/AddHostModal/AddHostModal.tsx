@@ -5,10 +5,11 @@ import JSONReader from "ui-kit/JSONReader/JSONReader";
 import { IInitialState } from "redux/types/states";
 import { useDispatch, useSelector } from "react-redux";
 import { clsoeAddHostModal } from "redux/actions/modals";
-import { IHost } from "Classes/Host/Host";
+import Host, { IHost } from "Classes/Host/Host";
 import { addHosts } from "redux/actions/hosts";
 import { selectAppKey } from "redux/types/selectors";
 import RelayHost from "Classes/Host/RelayHost";
+import AdvertisorHost from "Classes/Host/AdvertisorHost";
 const AddHostModal = () => {
   const files_input = useRef<HTMLInputElement>(null);
   const show = useSelector(
@@ -32,11 +33,22 @@ const AddHostModal = () => {
         });
       });
     });
-    const hosts = results.map((record) => {
-      const host = new RelayHost(record, app_key);
-      host.store();
-      return host;
-    });
+    const hosts: Host[] = [];
+    for (let i = 0; i < results.length; i++) {
+      const record = results[i];
+      let host: Host | undefined = undefined;
+      if (record.type === "RELAY") {
+        host = new RelayHost(record, app_key);
+        (host as RelayHost).connect();
+      }
+      if (record.type === "ADVERTISOR") {
+        host = new AdvertisorHost(record, app_key);
+      }
+      if (host !== undefined) {
+        host.store();
+        hosts.push(host);
+      }
+    }
     dispatch(addHosts(hosts));
     dispatch(clsoeAddHostModal());
   };
