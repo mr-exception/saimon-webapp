@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import Key from "core/Key/Key";
 import Host from "./Host";
 export default class AdvertisorHost extends Host {
@@ -6,8 +6,25 @@ export default class AdvertisorHost extends Host {
     try {
       await axios.get("/heart-beat", { baseURL: this.address });
       return true;
-    } catch {
+    } catch (error) {
+      console.log(error);
       return false;
+    }
+  }
+  public async fetchClient(address: string) {
+    try {
+      const response = await axios.get("/fetch", {
+        params: { address },
+        baseURL: this.address,
+      });
+      console.log(response);
+      return response.data;
+    } catch (err) {
+      const error = err as AxiosError;
+      if (error.response?.status === 404) {
+        console.log("client not found");
+      }
+      return undefined;
     }
   }
   public async updateClient(

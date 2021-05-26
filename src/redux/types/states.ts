@@ -4,6 +4,8 @@ import Message, {
   IIncomingMessagePackets,
   IMessageState,
 } from "Classes/Message/Message";
+import { IAdvertiserRequest } from "Classes/Queue/def";
+import Queue from "Classes/Queue/Queue";
 import Client from "core/Client/Client";
 import { ConnectionStatus } from "core/Connection/def";
 import Key from "core/Key/Key";
@@ -45,6 +47,9 @@ export interface IInitialState {
 
   incoming_messages_packets: IIncomingMessagePackets[];
   deliver_message_state: IMessageState[];
+
+  // request queues
+  advertiser_queue: Queue<IAdvertiserRequest>;
 }
 /**
  * this state is when user is logged into the account

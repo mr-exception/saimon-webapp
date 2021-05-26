@@ -6,6 +6,7 @@ import { Dispatch } from "redux";
 import { addHosts } from "redux/actions/hosts";
 import { ActionType } from "redux/types/actions";
 import Storage from "storage/Storage";
+import store from "../store";
 
 const load = async (
   app_key: Key,
@@ -24,6 +25,11 @@ const load = async (
           }
           if (rec.type === "ADVERTISOR") {
             const host = new AdvertisorHost(rec, app_key);
+            const queue = store.getState().advertiser_queue;
+            queue.push({
+              type: "HEART_BEAT",
+              host_id: host.id,
+            });
             resolve(host);
           }
           const host = new Host(rec, app_key);

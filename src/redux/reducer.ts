@@ -7,6 +7,8 @@ import hostsReducers from "./reducers/hosts";
 import conversationsReducers from "./reducers/conversations";
 import othersReducers from "./reducers/others";
 import clientReducers from "./reducers/clients";
+import Queue from "Classes/Queue/Queue";
+import { IAdvertiserRequest } from "Classes/Queue/def";
 
 export const initialState: IInitialState = {
   storage: new Storage(),
@@ -25,6 +27,8 @@ export const initialState: IInitialState = {
 
   incoming_messages_packets: [],
   deliver_message_state: [],
+
+  advertiser_queue: new Queue<IAdvertiserRequest>(),
 };
 
 const reducer = (

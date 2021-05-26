@@ -21,6 +21,10 @@ import contactLoader from "redux/loaders/contacts";
 import clientLoader from "redux/loaders/clients";
 import { IInitialState } from "redux/types/states";
 import {
+  start as startAdvertiserLayer,
+  finish as finihsAdvertiserLayer,
+} from "Queues/AdvertiserLayer";
+import {
   checkDeliverStatus,
   checkIncomingPackets,
 } from "redux/utils/check_packet";
@@ -95,6 +99,16 @@ const Routes = () => {
     if (!app_key) return;
     hostsSyncer(hosts, dispatch, app_key);
   }, [hosts, dispatch, app_key]);
+
+  /**
+   * register layer handlers
+   */
+  useEffect(() => {
+    startAdvertiserLayer();
+    return () => {
+      finihsAdvertiserLayer();
+    };
+  }, []);
 
   if (!contacts_loaded || !hosts_loaded || !client_loaded)
     return <div>loading...</div>;

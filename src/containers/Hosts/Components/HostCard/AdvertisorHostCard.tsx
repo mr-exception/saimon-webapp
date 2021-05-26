@@ -9,7 +9,6 @@ import {
   selectAppKey,
   selectHostConnectionStates,
 } from "redux/types/selectors";
-import { IInitialState } from "redux/types/states";
 import { ConnectionStatus } from "core/Connection/def";
 import { storeConnectionState } from "redux/actions/client";
 

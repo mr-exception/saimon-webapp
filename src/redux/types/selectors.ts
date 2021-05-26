@@ -23,3 +23,6 @@ export const selectedContact = (state: IInitialState) => {
 };
 export const selectConversationMessages = (state: IInitialState) =>
   state.selected_conversation_messages;
+
+export const selectAdvertiserRequestsQueue = (state: IInitialState) =>
+  state.advertiser_queue;
