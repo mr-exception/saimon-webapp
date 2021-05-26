@@ -1,47 +1,35 @@
-import { AxiosError } from "axios";
+import Contact from "Classes/Contact/Contact";
 import AdvertisorHost from "Classes/Host/AdvertisorHost";
 import { storeConnectionState } from "redux/actions/client";
+import { updateContact } from "redux/actions/contacts";
 import store from "redux/store";
 let interval: NodeJS.Timeout;
 
-const handleHeartBeat = async (hostId: number) => {
+const handleHeartBeat = async (host: AdvertisorHost) => {
   const { contacts, advertiser_queue } = store.getState();
-  const host = store
-    .getState()
-    .hosts.find((host) => host.id === hostId) as AdvertisorHost;
-  if (!host) {
-    console.log("host not found");
-    return;
-  }
   const result = await host.isLive();
   if (result) {
     store.dispatch(storeConnectionState(host.id, "CONNECTED"));
     contacts.forEach((contact) => {
       advertiser_queue.push({
         type: "FETCH",
-        host_id: hostId,
-        address: contact.key.getPublicKeyNormalized(),
+        host,
+        contact,
       });
     });
   } else {
     store.dispatch(storeConnectionState(host.id, "NETWORK_ERROR"));
   }
 };
-const handleFetchProfile = async (hostId: number, address: string) => {
-  const host = store
-    .getState()
-    .hosts.find((host) => host.id === hostId) as AdvertisorHost;
-  if (!host) return;
-
-  const contact = store
-    .getState()
-    .contacts.find(
-      (contact) => contact.key.getPublicKeyNormalized() === address
-    );
-  if (!contact) return;
-  const result = await host.fetchClient(address);
-  if (result) {
-    console.log(result);
+const handleFetchProfile = async (host: AdvertisorHost, contact: Contact) => {
+  try {
+    const result = await host.fetchClient(contact.key.getPublicKeyNormalized());
+    contact.first_name = result.client.first_name;
+    contact.last_name = result.client.last_name;
+    await contact.update();
+    store.dispatch(updateContact(contact));
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -53,11 +41,11 @@ export const start = () => {
       return;
     }
     if (job.type === "HEART_BEAT") {
-      await handleHeartBeat(job.host_id);
+      await handleHeartBeat(job.host);
       queue.push(job);
     }
-    if (job.type === "FETCH" && !!job.address) {
-      await handleFetchProfile(job.host_id, job.address);
+    if (job.type === "FETCH" && !!job.contact) {
+      await handleFetchProfile(job.host, job.contact);
       queue.push(job);
     }
   }, 2500);

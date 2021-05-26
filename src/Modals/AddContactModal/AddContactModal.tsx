@@ -18,7 +18,14 @@ const AddContactModal = () => {
   const [public_key, set_public_key] = useState("");
 
   const submit = () => {
-    const contact = new Contact({ id: 0, first_name, last_name, public_key });
+    const contact = new Contact({
+      id: 0,
+      first_name,
+      last_name,
+      public_key,
+      advertiser_host_ids: [],
+      relay_host_ids: [],
+    });
     contact.store();
     dispatch(addContact(contact));
     dispatch(closeAddContactModal());

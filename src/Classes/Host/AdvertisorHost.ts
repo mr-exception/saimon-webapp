@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 import Key from "core/Key/Key";
 import Host from "./Host";
 export default class AdvertisorHost extends Host {
@@ -11,20 +11,20 @@ export default class AdvertisorHost extends Host {
       return false;
     }
   }
-  public async fetchClient(address: string) {
+  public async fetchClient(address: string): Promise<IFetchClientResponse> {
     try {
-      const response = await axios.get("/fetch", {
+      const response = await axios.get<IFetchClientResponse>("/fetch", {
         params: { address },
         baseURL: this.address,
       });
-      console.log(response);
       return response.data;
     } catch (err) {
       const error = err as AxiosError;
       if (error.response?.status === 404) {
-        console.log("client not found");
+        throw new Error("ClientNotFound");
+      } else {
+        throw error;
       }
-      return undefined;
     }
   }
   public async updateClient(
@@ -48,4 +48,12 @@ export default class AdvertisorHost extends Host {
     // );
     // console.log(response);
   }
+}
+export interface IFetchClientResponse {
+  client: {
+    first_name: string;
+    last_name: string;
+    avatar: string;
+  };
+  addresses: string[];
 }

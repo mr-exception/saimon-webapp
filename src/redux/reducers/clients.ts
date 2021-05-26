@@ -59,6 +59,8 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
             first_name: "unknow",
             last_name: "unknow",
             public_key: Key.normalizeKey(action.packet.src),
+            advertiser_host_ids: [],
+            relay_host_ids: [],
           });
           contact.store(state.storage);
           state.contacts.push(contact);

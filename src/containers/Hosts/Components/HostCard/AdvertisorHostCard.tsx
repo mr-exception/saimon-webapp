@@ -1,16 +1,12 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import DeleteIcon from "img/delete.svg";
 import "./styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import { showConfirmationModal } from "redux/actions/modals";
 import { IAdvertisorHostCardProps } from "./def";
 import { removeHost } from "redux/actions/hosts";
-import {
-  selectAppKey,
-  selectHostConnectionStates,
-} from "redux/types/selectors";
+import { selectHostConnectionStates } from "redux/types/selectors";
 import { ConnectionStatus } from "core/Connection/def";
-import { storeConnectionState } from "redux/actions/client";
 
 const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
   if (!state) {
@@ -34,29 +30,28 @@ const AdvertisorHostCard: React.FC<IAdvertisorHostCardProps> = ({
   host,
 }: IAdvertisorHostCardProps) => {
   const connections = useSelector(selectHostConnectionStates);
-  const app_key = useSelector(selectAppKey);
 
   const connectionState = connections.find(
     (connection) => connection.connection_id === host.id
   );
   const dispatch = useDispatch();
 
-  const checkHeartBeat = useCallback(async () => {
-    const result = await host.isLive();
-    if (result) {
-      dispatch(storeConnectionState(host.id, "CONNECTED"));
-      await host.updateClient(app_key, {
-        first_name: "alireza",
-        last_name: "darbandi",
-      });
-    } else {
-      dispatch(storeConnectionState(host.id, "NETWORK_ERROR"));
-    }
-  }, [host, dispatch, app_key]);
+  // const checkHeartBeat = useCallback(async () => {
+  //   const result = await host.isLive();
+  //   if (result) {
+  //     dispatch(storeConnectionState(host.id, "CONNECTED"));
+  //     await host.updateClient(app_key, {
+  //       first_name: "alireza",
+  //       last_name: "darbandi",
+  //     });
+  //   } else {
+  //     dispatch(storeConnectionState(host.id, "NETWORK_ERROR"));
+  //   }
+  // }, [host, dispatch, app_key]);
 
-  useEffect(() => {
-    checkHeartBeat();
-  }, [checkHeartBeat]);
+  // useEffect(() => {
+  //   checkHeartBeat();
+  // }, [checkHeartBeat]);
   return (
     <div className="host-card">
       <div className="status-bar">

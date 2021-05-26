@@ -1,5 +1,8 @@
+import Contact from "Classes/Contact/Contact";
+import AdvertisorHost from "Classes/Host/AdvertisorHost";
+
 export interface IAdvertiserRequest {
   type: "HEART_BEAT" | "FETCH";
-  host_id: number;
-  address?: string;
+  host: AdvertisorHost;
+  contact?: Contact;
 }

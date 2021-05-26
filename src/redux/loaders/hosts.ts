@@ -28,7 +28,7 @@ const load = async (
             const queue = store.getState().advertiser_queue;
             queue.push({
               type: "HEART_BEAT",
-              host_id: host.id,
+              host,
             });
             resolve(host);
           }
