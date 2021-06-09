@@ -21,11 +21,19 @@ const handleHeartBeat = async (host: AdvertisorHost) => {
     store.dispatch(storeConnectionState(host.id, "NETWORK_ERROR"));
   }
 };
+
 const handleFetchProfile = async (host: AdvertisorHost, contact: Contact) => {
   try {
     const result = await host.fetchClient(contact.key.getPublicKeyNormalized());
     contact.first_name = result.client.first_name;
     contact.last_name = result.client.last_name;
+
+    const hostIsAdded =
+      contact.advertiser_host_ids.find((id) => id === host.id) !== undefined;
+    if (!hostIsAdded) {
+      contact.advertiser_host_ids.push(host.id);
+    }
+
     await contact.update();
     store.dispatch(updateContact(contact));
   } catch (error) {
@@ -50,6 +58,7 @@ export const start = () => {
     }
   }, 2500);
 };
+
 export const finish = () => {
   clearInterval(interval);
 };

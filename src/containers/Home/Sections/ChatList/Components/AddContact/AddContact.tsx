@@ -6,12 +6,14 @@ const AddContact: React.FC<IAddContactProps> = () => {
   const dispatch = useDispatch();
   return (
     <div
-      className="add-contact"
+      className="add-contact border-b-2 flex flex-row"
       onClick={() => {
         dispatch(showAddContactModal());
       }}
     >
-      <div className="add-contact__btn">add new contact</div>
+      <div className="rounded-lg bg-secondary border-secondary text-white border-2 p-2 hover:bg-primary hover:border-primary">
+        add new contact
+      </div>
     </div>
   );
 };
