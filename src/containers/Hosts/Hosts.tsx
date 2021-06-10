@@ -6,14 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { showAddHostModal } from "redux/actions/modals";
 import RelayHost from "Classes/Host/RelayHost";
 import RelayHostCard from "./Components/HostCard/RelayHostCard";
-import AdvertisorHost from "Classes/Host/AdvertisorHost";
-import AdvertisorHostCard from "./Components/HostCard/AdvertisorHostCard";
+import AdvertiserHost from "Classes/Host/AdvertiserHost";
+import AdvertiserHostCard from "./Components/HostCard/AdvertiserHostCard";
+import StorageHost from "Classes/Host/StorageHost";
+import StorageHostCard from "./Components/HostCard/StorageHostCard";
 const Hosts = () => {
   const [search_term, set_search_term] = useState("");
 
   const hosts = useSelector((state: IInitialState) => state.hosts);
   const dispatch = useDispatch();
-
   return (
     <div className="hosts">
       <div className="search">
@@ -42,10 +43,13 @@ const Hosts = () => {
           if (host.type === "RELAY" && host instanceof RelayHost) {
             return <RelayHostCard key={key} host={host as RelayHost} />;
           }
-          if (host.type === "ADVERTISOR" && host instanceof AdvertisorHost) {
+          if (host.type === "ADVERTISER" && host instanceof AdvertiserHost) {
             return (
-              <AdvertisorHostCard key={key} host={host as AdvertisorHost} />
+              <AdvertiserHostCard key={key} host={host as AdvertiserHost} />
             );
+          }
+          if (host.type === "STORAGE" && host instanceof StorageHost) {
+            return <StorageHostCard key={key} host={host as StorageHost} />;
           }
           return null;
         })}

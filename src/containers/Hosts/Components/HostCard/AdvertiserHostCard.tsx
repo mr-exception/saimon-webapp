@@ -3,7 +3,7 @@ import DeleteIcon from "img/delete.svg";
 import "./styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import { showConfirmationModal } from "redux/actions/modals";
-import { IAdvertisorHostCardProps } from "./def";
+import { IAdvertiserHostCardProps } from "./def";
 import { removeHost } from "redux/actions/hosts";
 import { selectHostConnectionStates } from "redux/types/selectors";
 import { ConnectionStatus } from "core/Connection/def";
@@ -26,9 +26,9 @@ const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
   }
 };
 
-const AdvertisorHostCard: React.FC<IAdvertisorHostCardProps> = ({
+const AdvertiserHostCard: React.FC<IAdvertiserHostCardProps> = ({
   host,
-}: IAdvertisorHostCardProps) => {
+}: IAdvertiserHostCardProps) => {
   const connections = useSelector(selectHostConnectionStates);
 
   const connectionState = connections.find(
@@ -98,4 +98,4 @@ const AdvertisorHostCard: React.FC<IAdvertisorHostCardProps> = ({
   );
 };
 
-export default AdvertisorHostCard;
+export default AdvertiserHostCard;

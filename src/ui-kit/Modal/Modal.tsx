@@ -9,7 +9,7 @@ const Modal: React.FC<IModalProps> = ({
   return (
     <div className="overlay" onClick={close}>
       <div
-        className="modal-container"
+        className="modal-container border-0 rounded-lg"
         onClick={(event) => {
           event.stopPropagation();
         }}

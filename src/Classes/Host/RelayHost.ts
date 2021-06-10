@@ -14,7 +14,7 @@ import { io, Socket } from "socket.io-client";
 import Message from "Classes/Message/Message";
 import store from "redux/store";
 import { storeConnectionState } from "redux/actions/client";
-import Host from "./Host";
+import Host, { HostProtocol, HostType } from "./Host";
 export default class RelayHost extends Host {
   // props
   private _socket?: Socket;
@@ -264,6 +264,3 @@ export interface IHost {
   score: number;
   advertise_period: number;
 }
-
-export type HostType = "RELAY" | "STORAGE" | "ADVERTISOR";
-export type HostProtocol = "LIVE" | "REST";

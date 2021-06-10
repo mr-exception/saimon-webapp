@@ -12,7 +12,7 @@ export default class Storage {
     this._db.version(1).stores({
       hosts: "++id,name,address,type,protocl,advertise_period,score",
       contacts:
-        "++id,first_name,last_name,public_key,advertisor_host_ids,relay_host_ids",
+        "++id,first_name,last_name,public_key,Advertiser_host_ids,relay_host_ids",
       messages: "++id,network_id,contact_id,content,public_key,box_type,date",
     });
     this._hosts = this._db.table("hosts");

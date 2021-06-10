@@ -1,11 +1,11 @@
 import Contact from "Classes/Contact/Contact";
-import AdvertisorHost from "Classes/Host/AdvertisorHost";
+import AdvertiserHost from "Classes/Host/AdvertiserHost";
 import { storeConnectionState } from "redux/actions/client";
 import { updateContact } from "redux/actions/contacts";
 import store from "redux/store";
 let interval: NodeJS.Timeout;
 
-const handleHeartBeat = async (host: AdvertisorHost) => {
+const handleHeartBeat = async (host: AdvertiserHost) => {
   const { contacts, advertiser_queue } = store.getState();
   const result = await host.isLive();
   if (result) {
@@ -22,7 +22,7 @@ const handleHeartBeat = async (host: AdvertisorHost) => {
   }
 };
 
-const handleFetchProfile = async (host: AdvertisorHost, contact: Contact) => {
+const handleFetchProfile = async (host: AdvertiserHost, contact: Contact) => {
   try {
     const result = await host.fetchClient(contact.key.getPublicKeyNormalized());
     contact.first_name = result.client.first_name;

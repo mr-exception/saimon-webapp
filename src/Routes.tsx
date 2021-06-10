@@ -25,6 +25,10 @@ import {
   finish as finihsAdvertiserLayer,
 } from "Queues/AdvertiserLayer";
 import {
+  start as startStorageLayer,
+  finish as finihsStorageLayer,
+} from "Queues/StorageLayer";
+import {
   checkDeliverStatus,
   checkIncomingPackets,
 } from "redux/utils/check_packet";
@@ -105,8 +109,10 @@ const Routes = () => {
    */
   useEffect(() => {
     startAdvertiserLayer();
+    startStorageLayer();
     return () => {
       finihsAdvertiserLayer();
+      finihsStorageLayer();
     };
   }, []);
 

@@ -54,5 +54,5 @@ export interface IHost {
   advertise_period: number;
 }
 
-export type HostType = "RELAY" | "STORAGE" | "ADVERTISOR";
-export type HostProtocol = "LIVE" | "REST";
+export type HostType = "RELAY" | "STORAGE" | "ADVERTISER";
+export type HostProtocol = "LIVE" | "RESPONDER";

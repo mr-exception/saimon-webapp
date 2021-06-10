@@ -1,50 +1,83 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import "./styles.css";
 import Modal from "ui-kit/Modal/Modal";
-import JSONReader from "ui-kit/JSONReader/JSONReader";
 import { IInitialState } from "redux/types/states";
 import { useDispatch, useSelector } from "react-redux";
 import { clsoeAddHostModal } from "redux/actions/modals";
-import Host, { IHost } from "Classes/Host/Host";
-import { addHosts } from "redux/actions/hosts";
-import { selectAppKey } from "redux/types/selectors";
+import Button from "ui-kit/Button/Button";
+import { getHeartBeat, IServiceInfo } from "Apis/HeartBeat";
+import Host from "Classes/Host/Host";
 import RelayHost from "Classes/Host/RelayHost";
-import AdvertisorHost from "Classes/Host/AdvertisorHost";
+import AdvertiserHost from "Classes/Host/AdvertiserHost";
+import { selectAppKey } from "redux/types/selectors";
+import { addHosts } from "redux/actions/hosts";
+import StorageHost from "Classes/Host/StorageHost";
+
+interface IHostRecord {
+  address: string;
+  status: "EMPTY" | "CHECKING" | "FAILED" | "PASSED";
+  service?: IServiceInfo;
+}
+
 const AddHostModal = () => {
-  const files_input = useRef<HTMLInputElement>(null);
   const show = useSelector(
     (state: IInitialState) => state.modals.add_host.show
   );
   const app_key = useSelector(selectAppKey);
   const dispatch = useDispatch();
-  const createHost = async (files: IUploadedJSON[]) => {
-    const results: IHost[] = [];
-    (files as IUploadedHostList[]).forEach((file) => {
-      const values = file.value;
-      values.forEach((value) => {
-        results.push({
-          id: 0,
-          name: value.name,
-          address: value.address,
-          type: value.type,
-          protocl: value.protocol,
-          advertise_period: value.ad_period || 0,
-          score: 0,
-        });
-      });
-    });
+
+  const storeRecords = () => {
     const hosts: Host[] = [];
-    for (let i = 0; i < results.length; i++) {
-      const record = results[i];
+    for (let i = 0; i < records.length; i++) {
+      const record = records[i];
+      if (!record.service) {
+        continue;
+      }
       let host: Host | undefined = undefined;
-      if (record.type === "RELAY") {
-        host = new RelayHost(record, app_key);
+      if (record.service.type === "RELAY") {
+        host = new RelayHost(
+          {
+            id: 0,
+            name: record.service.name,
+            address: record.address,
+            type: record.service.type,
+            protocl: record.service.protocol,
+            advertise_period: parseInt(record.service.ad_price),
+            score: 0,
+          },
+          app_key
+        );
         (host as RelayHost).connect();
       }
-      if (record.type === "ADVERTISOR") {
-        host = new AdvertisorHost(record, app_key);
+      if (record.service.type === "ADVERTISER") {
+        host = new AdvertiserHost(
+          {
+            id: 0,
+            name: record.service.name,
+            address: record.address,
+            type: record.service.type,
+            protocl: record.service.protocol,
+            advertise_period: parseInt(record.service.ad_price),
+            score: 0,
+          },
+          app_key
+        );
       }
-      if (host !== undefined) {
+      if (record.service.type === "STORAGE") {
+        host = new StorageHost(
+          {
+            id: 0,
+            name: record.service.name,
+            address: record.address,
+            type: record.service.type,
+            protocl: record.service.protocol,
+            advertise_period: parseInt(record.service.ad_price),
+            score: 0,
+          },
+          app_key
+        );
+      }
+      if (!!host) {
         host.store();
         hosts.push(host);
       }
@@ -52,6 +85,77 @@ const AddHostModal = () => {
     dispatch(addHosts(hosts));
     dispatch(clsoeAddHostModal());
   };
+
+  const renderStatus = (record: IHostRecord) => {
+    switch (record.status) {
+      case "EMPTY":
+        return (
+          <div
+            style={{ flex: 2 }}
+            className="flex justify-left items-center pl-4"
+          ></div>
+        );
+      case "PASSED":
+        return (
+          <div
+            style={{ flex: 2 }}
+            className="flex justify-left items-center pl-4"
+          >
+            host is available ({record.service?.name})
+          </div>
+        );
+      case "FAILED":
+        return (
+          <div
+            style={{ flex: 2 }}
+            className="flex justify-left items-center pl-4"
+          >
+            failed to connect
+          </div>
+        );
+      case "CHECKING":
+        return (
+          <div
+            style={{ flex: 2 }}
+            className="flex justify-left items-center pl-4"
+          >
+            fetching host informations
+          </div>
+        );
+    }
+  };
+
+  const checkHeartBeat = async (index: number) => {
+    try {
+      const response = await getHeartBeat(records[index].address);
+      set_records(
+        records.map((record, i) => {
+          if (i === index) {
+            record.status = "PASSED";
+            record.service = response;
+          }
+          return record;
+        })
+      );
+    } catch (error) {
+      console.log(error);
+      set_records(
+        records.map((record, i) => {
+          if (i === index) {
+            record.status = "FAILED";
+          }
+          return record;
+        })
+      );
+    }
+  };
+
+  const [records, set_records] = useState<IHostRecord[]>([
+    {
+      address: "",
+      status: "EMPTY",
+    },
+  ]);
   return (
     <Modal
       show={show}
@@ -59,19 +163,57 @@ const AddHostModal = () => {
         dispatch(clsoeAddHostModal());
       }}
     >
-      <div className="add_host_modal__description">
-        upload host node config files here
-      </div>
-      <div className="add_host_modal__uploader">
-        <JSONReader onFileRead={createHost} input_ref={files_input} />
-        <button
-          className="add_host_modal__uploader__btn"
+      <div className="flex w-full p-2">enter host addresses here:</div>
+      {records.map((record, index) => (
+        <div key={index} className="flex w-full p-2">
+          <input
+            style={{ flex: 1 }}
+            placeholder="http://relay.salimon.ir"
+            value={record.address}
+            onChange={(e) => {
+              set_records(
+                records.map((record, i) => {
+                  if (i === index) {
+                    record.address = e.target.value;
+                    record.status = "EMPTY";
+                  }
+                  return record;
+                })
+              );
+            }}
+            onBlur={() => {
+              set_records(
+                records.map((record, i) => {
+                  if (i === index) {
+                    record.status = "CHECKING";
+                    checkHeartBeat(i);
+                  }
+                  return record;
+                })
+              );
+            }}
+            className="border-2 rounded-md p-1 text-black"
+          />
+          {renderStatus(record)}
+        </div>
+      ))}
+
+      <div className="flex w-full flex-row justify-center p-4">
+        <Button
+          onClick={storeRecords}
+          caption="upload host configs"
+          size="sm"
+          variant="primary"
+        />
+        <Button
           onClick={() => {
-            if (files_input.current) files_input.current.click();
+            set_records([...records, { address: "", status: "EMPTY" }]);
           }}
-        >
-          upload host configs
-        </button>
+          caption="add new record"
+          className="ml-1"
+          size="sm"
+          variant="secondary"
+        />
       </div>
     </Modal>
   );

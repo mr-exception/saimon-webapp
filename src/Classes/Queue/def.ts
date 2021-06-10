@@ -1,8 +1,16 @@
 import Contact from "Classes/Contact/Contact";
-import AdvertisorHost from "Classes/Host/AdvertisorHost";
+import AdvertiserHost from "Classes/Host/AdvertiserHost";
+import StorageHost from "Classes/Host/StorageHost";
+import Message from "Classes/Message/Message";
 
 export interface IAdvertiserRequest {
   type: "HEART_BEAT" | "FETCH";
-  host: AdvertisorHost;
+  host: AdvertiserHost;
   contact?: Contact;
+}
+
+export interface IStorageRequest {
+  type: "HEART_BEAT" | "FETCH" | "PUT";
+  host: StorageHost;
+  message?: Message;
 }

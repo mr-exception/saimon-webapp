@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import Key from "core/Key/Key";
 import Host from "./Host";
-export default class AdvertisorHost extends Host {
+export default class AdvertiserHost extends Host {
   public async isLive(): Promise<boolean> {
     try {
       await axios.get("/heart-beat", { baseURL: this.address });

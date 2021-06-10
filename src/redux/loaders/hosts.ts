@@ -1,6 +1,7 @@
-import AdvertisorHost from "Classes/Host/AdvertisorHost";
+import AdvertiserHost from "Classes/Host/AdvertiserHost";
 import Host from "Classes/Host/Host";
 import RelayHost from "Classes/Host/RelayHost";
+import StorageHost from "Classes/Host/StorageHost";
 import Key from "core/Key/Key";
 import { Dispatch } from "redux";
 import { addHosts } from "redux/actions/hosts";
@@ -23,9 +24,18 @@ const load = async (
             host.connect();
             resolve(host);
           }
-          if (rec.type === "ADVERTISOR") {
-            const host = new AdvertisorHost(rec, app_key);
+          if (rec.type === "ADVERTISER") {
+            const host = new AdvertiserHost(rec, app_key);
             const queue = store.getState().advertiser_queue;
+            queue.push({
+              type: "HEART_BEAT",
+              host,
+            });
+            resolve(host);
+          }
+          if (rec.type === "STORAGE") {
+            const host = new StorageHost(rec, app_key);
+            const queue = store.getState().storage_queue;
             queue.push({
               type: "HEART_BEAT",
               host,
