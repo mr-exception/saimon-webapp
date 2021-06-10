@@ -10,6 +10,7 @@ import { removeHost } from "redux/actions/hosts";
 import { selectHostConnectionStates } from "redux/types/selectors";
 import { IInitialState } from "redux/types/states";
 import { ConnectionStatus } from "core/Connection/def";
+import ActionItem from "../ActionItem/ActionItem";
 
 const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
   if (!state) {
@@ -61,7 +62,7 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
     host.close();
   };
   return (
-    <div className="host-card">
+    <div className="m-8 p-4 border-2 rounded-lg border-secondary">
       <div className="status-bar">
         {translateConnectionState(connectionState?.state)}
       </div>
@@ -77,8 +78,8 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
           <p>advertise period: {host.getAdvertisePeriod()}</p>
         </div>
         <div className="host-card__actions">
-          <div
-            className="host-card__actions__item"
+          <ActionItem
+            caption="delete"
             onClick={() => {
               dispatch(
                 showConfirmationModal(
@@ -92,34 +93,22 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
                 )
               );
             }}
-          >
-            <img
-              src={DeleteIcon}
-              className="host-card__actions__icon"
-              alt="delete"
+            icon={DeleteIcon}
+          />
+          {!canConnect && (
+            <ActionItem
+              onClick={disconnect}
+              caption="disconnect"
+              icon={DisconnectIcon}
             />
-            <div className="host-card__actions__caption">delete</div>
-          </div>
-          {canDisconnect ? (
-            <div className="host-card__actions__item" onClick={disconnect}>
-              <img
-                src={DisconnectIcon}
-                className="host-card__actions__icon"
-                alt="delete"
-              />
-              <div className="host-card__actions__caption">disconnect</div>
-            </div>
-          ) : null}
-          {canConnect ? (
-            <div className="host-card__actions__item" onClick={connect}>
-              <img
-                src={ConnectIcon}
-                className="host-card__actions__icon"
-                alt="delete"
-              />
-              <div className="host-card__actions__caption">connect</div>
-            </div>
-          ) : null}
+          )}
+          {canConnect && (
+            <ActionItem
+              onClick={connect}
+              caption="connect"
+              icon={ConnectIcon}
+            />
+          )}
         </div>
       </div>
     </div>

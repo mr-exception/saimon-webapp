@@ -7,6 +7,7 @@ import { IStorageHostCardProps } from "./def";
 import { removeHost } from "redux/actions/hosts";
 import { selectHostConnectionStates } from "redux/types/selectors";
 import { ConnectionStatus } from "core/Connection/def";
+import ActionItem from "../ActionItem/ActionItem";
 
 const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
   if (!state) {
@@ -36,7 +37,7 @@ const StorageHostCard: React.FC<IStorageHostCardProps> = ({
   );
   const dispatch = useDispatch();
   return (
-    <div className="host-card">
+    <div className="m-8 p-4 border-2 rounded-lg border-secondary">
       <div className="status-bar">
         {translateConnectionState(connectionState?.state)}
       </div>
@@ -52,8 +53,8 @@ const StorageHostCard: React.FC<IStorageHostCardProps> = ({
           <p>advertise period: {host.getAdvertisePeriod()}</p>
         </div>
         <div className="host-card__actions">
-          <div
-            className="host-card__actions__item"
+          <ActionItem
+            caption="delete"
             onClick={() => {
               dispatch(
                 showConfirmationModal(
@@ -67,14 +68,8 @@ const StorageHostCard: React.FC<IStorageHostCardProps> = ({
                 )
               );
             }}
-          >
-            <img
-              src={DeleteIcon}
-              className="host-card__actions__icon"
-              alt="delete"
-            />
-            <div className="host-card__actions__caption">delete</div>
-          </div>
+            icon={DeleteIcon}
+          />
         </div>
       </div>
     </div>
