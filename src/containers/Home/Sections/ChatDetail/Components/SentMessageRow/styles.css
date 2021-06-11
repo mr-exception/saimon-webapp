@@ -1,23 +1,11 @@
 .chat-detail-sent-message-row {
   word-wrap: break-word;
   min-height: 80px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-end;
 }
 .chat-detail-sent-message-row__content {
   flex: 1;
   max-width: 70%;
-  padding: 20px;
-  border: 1px solid #bbb;
-  border-top-left-radius: 40px;
-  border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
 }
 .chat-detail-sent-message-row__send {
   flex: 1;
-  font-size: 12px;
-  padding: 10px;
 }

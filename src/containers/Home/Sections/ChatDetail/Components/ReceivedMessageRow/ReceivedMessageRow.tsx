@@ -9,9 +9,11 @@ const ReceivedMessageRow: React.FC<IReceivedMessageRowProps> = ({
     return `${date.getHours()}:${date.getMinutes()}`;
   };
   return (
-    <div className="chat-detail-received-message-row">
-      <div className="chat-detail-received-message-row__content">{text}</div>
-      <div className="chat-detail-received-message-row__date">
+    <div className="chat-detail-sent-message-row flex flex-col justify-start items-start p-8">
+      <div className="chat-detail-sent-message-row__content p-4 border-2 bg-secondary border-secondary rounded-xl rounded-tl-none text-white">
+        {text}
+      </div>
+      <div className="chat-detail-sent-message-row__date text-xs">
         {generateSentAtDateString()}
       </div>
     </div>
