@@ -17,9 +17,12 @@ const ConfirmationModal = () => {
         dispatch(closeConfirmationModal());
       }}
     >
-      <div className="confirmation__description">{message}</div>
-      <div className="confirmation__description">
+      <div className="confirmation__message flex justify-center items-center content-center px-8 pt-8">
+        {message}
+      </div>
+      <div className="confirmation__actions flex justify-center items-center content-center px-8 pb-8 mt-4">
         <button
+          className="action-button bg-danger p-2 border-2 rounded-lg border-danger text-white mr-2 hover:bg-warning hover:border-warning uppercase"
           onClick={() => {
             callback(true);
             dispatch(closeConfirmationModal());
@@ -28,12 +31,13 @@ const ConfirmationModal = () => {
           yes
         </button>
         <button
+          className="action-button bg-secondary p-2 border-2 rounded-lg border-secondary text-white mr-2 hover:bg-primary hover:border-primary uppercase"
           onClick={() => {
             callback(false);
             dispatch(closeConfirmationModal());
           }}
         >
-          cancel
+          no
         </button>
       </div>
     </Modal>
