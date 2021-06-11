@@ -33,8 +33,8 @@ const SendBox: React.FC<ISendBoxProps> = () => {
     set_content("");
   };
   return (
-    <div className="chat-detail-send-box">
-      <div className="chat-detail-send-box__content">
+    <div className="chat-detail-send-box flex flex-row border-t-2 border-base">
+      <div className="chat-detail-send-box__content flex flex-col p-2">
         <textarea
           onKeyUp={(event) => {
             if (event.ctrlKey && event.key === "Enter") {
@@ -43,11 +43,14 @@ const SendBox: React.FC<ISendBoxProps> = () => {
           }}
           value={content}
           onChange={(e) => set_content(e.target.value)}
-          className="chat-detail-send-box__content__input"
+          className="chat-detail-send-box__content__input rounded-lg border-2 border-base"
         ></textarea>
       </div>
-      <div className="chat-detail-send-box__send">
-        <button className="chat-detail-send-box__send__button" onClick={send}>
+      <div className="chat-detail-send-box__send flex flex-row py-4 justify-center">
+        <button
+          className="chat-detail-send-box__send__button bg-secondary border-2 border-secondary rounded-xl flex justify-center items-center"
+          onClick={send}
+        >
           <img
             className="chat-detail-send-box__send__button__icon"
             src={SendIcon}
