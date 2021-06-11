@@ -1,28 +1,18 @@
 .text_field {
-  display: flex;
-  flex-direction: column;
   width: 90%;
-  margin-top: 10px;
 }
 .text_field__label {
   min-height: 30px;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
 }
 .text_field__error {
   min-height: 30px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  color: red;
 }
 .text_field__input {
   margin-top: 5px;
   margin-bottom: 10px;
   height: 30px;
   border-radius: 10px;
-  border: 1px solid #999;
   padding-left: 10px;
   padding-right: 10px;
 }

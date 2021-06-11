@@ -40,11 +40,11 @@ const TextField: React.FC<ITextFieldProps> = ({
   }
   if (max_lines === 1) {
     return (
-      <div className="text_field">
-        <div className="text_field__label">{label}</div>
+      <div className="text_field flex flex-col mt-2">
+        <div className="text_field__label flex flex-col">{label}</div>
         <input
           type="text"
-          className="text_field__input"
+          className="text_field__input border-2 rounded-md border-secondary p-4"
           placeholder={placeHolder}
           value={value}
           onFocus={() => {
@@ -58,16 +58,18 @@ const TextField: React.FC<ITextFieldProps> = ({
           }}
         />
         {error_text !== undefined ? (
-          <div className="text_field__error">{error_text}</div>
+          <div className="text_field__error flex flex-row justify-start text-danger">
+            {error_text}
+          </div>
         ) : null}
       </div>
     );
   } else {
     return (
-      <div className="text_field">
-        <div className="text_field__label">{label}</div>
+      <div className="text_field flex flex-col mt-2">
+        <div className="text_field__label flex flex-col">{label}</div>
         <textarea
-          className="text_field__input"
+          className="text_field__input border-2 rounded-md border-secondary p-4"
           placeholder={placeHolder}
           style={{ minHeight: max_lines * 18 }}
           value={value}
@@ -82,7 +84,9 @@ const TextField: React.FC<ITextFieldProps> = ({
           }}
         />
         {error_text !== undefined ? (
-          <div className="text_field__error">{error_text}</div>
+          <div className="text_field__error flex flex-row justify-start text-danger">
+            {error_text}
+          </div>
         ) : null}
       </div>
     );

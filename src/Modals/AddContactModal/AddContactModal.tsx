@@ -60,8 +60,11 @@ const AddContactModal = () => {
           validations={[{ type: "REQUIRED" }]}
         />
       </div>
-      <div className="submit-row">
-        <button className="submit-btn" onClick={submit}>
+      <div className="submit-row flex flex-row justify-center">
+        <button
+          className="submit-btn border-2 border-secondary rounded-md hover:bg-secondary hover:text-white mb-4"
+          onClick={submit}
+        >
           submit
         </button>
       </div>
