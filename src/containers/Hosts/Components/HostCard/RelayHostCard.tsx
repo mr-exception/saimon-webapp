@@ -95,7 +95,7 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
             }}
             icon={DeleteIcon}
           />
-          {!canConnect && (
+          {canDisconnect && (
             <ActionItem
               onClick={disconnect}
               caption="disconnect"
