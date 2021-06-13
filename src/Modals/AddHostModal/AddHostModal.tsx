@@ -201,7 +201,7 @@ const AddHostModal = () => {
       <div className="flex w-full flex-row justify-center p-4">
         <Button
           onClick={storeRecords}
-          caption="upload host configs"
+          caption="submit hosts"
           size="sm"
           variant="primary"
         />

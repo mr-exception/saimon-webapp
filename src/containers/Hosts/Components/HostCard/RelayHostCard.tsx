@@ -18,13 +18,19 @@ const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
   }
   switch (state) {
     case "CONNECTING":
-      return <span style={{ color: "blue" }}>connecting</span>;
+      return <span>connecting</span>;
+    case "CK":
+    case "HK":
+    case "VA":
+    case "VF":
+    case "VQ":
+      return <span>handshake</span>;
     case "CONNECTED":
-      return <span style={{ color: "green" }}>connected</span>;
+      return <span>connected</span>;
     case "DISCONNECTED":
-      return <span style={{ color: "red" }}>disconnected</span>;
+      return <span>disconnected</span>;
     case "NETWORK_ERROR":
-      return <span style={{ color: "orange" }}>network error</span>;
+      return <span>network error</span>;
     default:
       return <span>not connected</span>;
   }
