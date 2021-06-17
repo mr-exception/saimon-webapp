@@ -2,18 +2,10 @@
   flex: 1;
   max-height: 80px;
   border-bottom: 1px solid #555;
-
-  display: flex;
-  flex-direction: row;
 }
 
 .chat-detail-header__avatar {
   width: 20%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
 }
 
 .chat-detail-header__avatar__image {
@@ -23,27 +15,16 @@
 
 .chat-detail-header__content {
   width: 60%;
-  display: flex;
-  flex-direction: column;
 }
 
 .chat-detail-header__content__name {
   flex: 1;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
 }
 
 .chat-detail-header__content__last_online {
   flex: 1;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
 }
 
 .chat-detail-header__info {
   width: 20%;
-  flex-direction: column;
-  display: flex;
-  flex-direction: column;
 }

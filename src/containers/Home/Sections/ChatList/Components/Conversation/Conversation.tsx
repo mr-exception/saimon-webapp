@@ -15,19 +15,20 @@ const Conversation: React.FC<IConversationProps> = ({
     >
       <div className="conversation__icon">
         <img
-          src={avatar ? DefaultAvatar : DefaultAvatar}
+          src={DefaultAvatar}
           className="conversation__icon__image"
           alt="avatar"
         />
       </div>
       <div className="conversation_content">
-        <div className="conversation_content_name">
+        <div className="conversation_content_name flex flex-col justify-end items-start">
           <label>{name}</label>
         </div>
-        <div className="conversation_content_last_message">
-          <label>{last_message}</label>
+        <div className="flex-1 flex flex-col justify-start items-start">
+          <label className="last-message">{last_message}</label>
         </div>
       </div>
+      <div className="conversation_actions"></div>
     </div>
   );
 };

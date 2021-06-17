@@ -4,7 +4,7 @@
 }
 .chat-detail-sent-message-row__content {
   flex: 1;
-  max-width: 70%;
+  max-width: 500px;
 }
 .chat-detail-sent-message-row__send {
   flex: 1;
