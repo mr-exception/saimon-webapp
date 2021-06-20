@@ -20,6 +20,10 @@ export interface IInitialState {
     add_contact: {
       show: boolean;
     };
+    contact_details: {
+      show: boolean;
+      contact?: Contact;
+    };
     add_host: {
       show: boolean;
     };

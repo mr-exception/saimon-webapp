@@ -19,7 +19,7 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
     case Actions.REMOVE_CONTACT:
       state.contacts = state.contacts.filter((contact) => {
         if (action.contact) {
-          if (contact.public_key === action.contact.public_key) return null;
+          if (contact.id === action.contact.id) return null;
           else return contact;
         } else {
           return contact;

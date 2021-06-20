@@ -18,11 +18,8 @@ const ChatDetail = () => {
     return <NoConversationSelected />;
   }
 
-  const renderMessageList = () => {
-    if (messages.length === 0) {
-      return <NoMessage />;
-    }
-    return messages.map((message, index) => {
+  const renderMessageList = () =>
+    messages.map((message, index) => {
       if (message.box_type === "RECEIVED") {
         return (
           <ReceivedMessageRow
@@ -44,14 +41,17 @@ const ChatDetail = () => {
       }
       return null;
     });
-  };
+
   return (
     <div className="chat-detail">
       <Header
         name={`${selected_contact.first_name} ${selected_contact.last_name}`}
         last_online={Date.now()}
       />
-      <div className="chat-detail__message-list">{renderMessageList()}</div>
+      {messages.length === 0 && <NoMessage />}
+      {messages.length > 0 && (
+        <div className="chat-detail__message-list">{renderMessageList()}</div>
+      )}
       <SendBox />
     </div>
   );

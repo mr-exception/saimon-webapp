@@ -19,6 +19,8 @@ export const SHOW_ADD_HOST_MODAL = "show_add_host_modal";
 export const CLOSE_ADD_HOST_MODAL = "close_add_host_modal";
 export const SHOW_CONFIRMATION_MODAL = "show_confirmation_modal";
 export const CLOSE_CONFIRMATION_MODAL = "close_confirmation_modal";
+export const SHOW_CONTACT_DETAILS_MODAL = "show_contact_details_modal";
+export const CLOSE_CONTACT_DETAILS_MODAL = "close_contact_details_modal";
 // contacts
 export const ADD_CONTACT = "add_contact";
 export const ADD_CONTACTS = "add_contacts";

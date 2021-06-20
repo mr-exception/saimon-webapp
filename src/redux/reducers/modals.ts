@@ -10,6 +10,17 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
     case Actions.CLOSE_ADD_CONTACT_MODAL:
       state.modals.add_contact.show = false;
       return state;
+    case Actions.SHOW_CONTACT_DETAILS_MODAL:
+      if (!!action.contact) {
+        state.modals.contact_details = {
+          show: true,
+          contact: action.contact,
+        };
+      }
+      return state;
+    case Actions.CLOSE_CONTACT_DETAILS_MODAL:
+      state.modals.contact_details = { show: false };
+      return state;
     case Actions.SHOW_ADD_HOST_MODAL:
       state.modals.add_host.show = true;
       return state;

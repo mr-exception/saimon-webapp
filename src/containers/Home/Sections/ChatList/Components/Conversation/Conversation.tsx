@@ -1,13 +1,17 @@
 import React from "react";
 import "./styles.css";
 import DefaultAvatar from "img/avatar.svg";
+import Actions from "img/menu.svg";
+import { useDispatch } from "react-redux";
+import { showContactDetailsModal } from "redux/actions/modals";
+import { IConversationProps } from "./def";
 const Conversation: React.FC<IConversationProps> = ({
-  name,
   last_message,
-  avatar,
   selected = () => {},
   is_selected,
+  contact,
 }: IConversationProps) => {
+  const dispatch = useDispatch();
   return (
     <div
       onClick={selected}
@@ -22,13 +26,23 @@ const Conversation: React.FC<IConversationProps> = ({
       </div>
       <div className="conversation_content">
         <div className="conversation_content_name flex flex-col justify-end items-start">
-          <label>{name}</label>
+          <label>{`${contact.first_name} ${contact.last_name}`}</label>
         </div>
         <div className="flex-1 flex flex-col justify-start items-start">
           <label className="last-message">{last_message}</label>
         </div>
       </div>
-      <div className="conversation_actions"></div>
+      <div className="conversation_actions">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            dispatch(showContactDetailsModal(contact));
+          }}
+          className="flex flex-1"
+        >
+          <img src={Actions} alt="actions" />
+        </button>
+      </div>
     </div>
   );
 };

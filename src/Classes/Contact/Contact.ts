@@ -19,6 +19,11 @@ export default class Contact extends Entity<IContact> {
       `-----BEGIN PUBLIC KEY-----${this.public_key}-----END PUBLIC KEY-----`
     );
   }
+  public updateKey(): void {
+    this.key = Key.generateKeyByPublicKey(
+      `-----BEGIN PUBLIC KEY-----${this.public_key}-----END PUBLIC KEY-----`
+    );
+  }
   /**
    * returns the object of entity based on entity interface
    */

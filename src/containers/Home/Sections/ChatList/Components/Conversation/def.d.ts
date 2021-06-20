@@ -1,7 +1,8 @@
-interface IConversationProps {
-  name: string;
+import Contact from "Classes/Contact/Contact";
+
+export interface IConversationProps {
   last_message: string;
-  avatar?: File;
+  contact: Contact;
   selected: () => void;
   is_selected: boolean;
 }

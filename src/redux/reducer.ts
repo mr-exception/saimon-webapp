@@ -14,6 +14,7 @@ export const initialState: IInitialState = {
   storage: new Storage(),
   modals: {
     add_contact: { show: false },
+    contact_details: { show: false },
     add_host: { show: false },
     confirmation: { show: false, message: "", callback: (result) => {} },
   },

@@ -4,6 +4,7 @@ import {
   ADD_CONTACT,
   ADD_CONTACTS,
   EDIT_CONTACT,
+  REMOVE_CONTACT,
 } from "redux/types/actions";
 
 export const addContact = (contact: Contact): ActionType => {
@@ -16,4 +17,8 @@ export const addContacts = (contacts: Contact[]): ActionType => {
 
 export const updateContact = (contact: Contact): ActionType => {
   return { type: EDIT_CONTACT, contact };
+};
+
+export const removeContact = (contact: Contact): ActionType => {
+  return { type: REMOVE_CONTACT, contact };
 };

@@ -31,7 +31,7 @@ const ChatList = () => {
           }}
           is_selected={selected_contact_id === contact.id}
           key={index}
-          name={`${contact.first_name} ${contact.last_name}`}
+          contact={contact}
           last_message="no message"
         />
       ))}

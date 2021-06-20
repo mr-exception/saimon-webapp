@@ -1,9 +1,6 @@
 .chat-detail {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  @apply flex flex-1 flex-col;
 }
 .chat-detail__message-list {
-  flex: 1;
-  overflow-y: auto;
+  @apply flex-1 overflow-y-auto;
 }

@@ -1,10 +1,12 @@
 .chat-detail-header {
+  @apply flex flex-row;
   flex: 1;
   max-height: 80px;
   border-bottom: 1px solid #555;
 }
 
 .chat-detail-header__avatar {
+  @applt flex flex-col justify-center align-center items-center;
   width: 20%;
 }
 
@@ -14,17 +16,21 @@
 }
 
 .chat-detail-header__content {
+  @apply flex flex-col;
   width: 60%;
 }
 
 .chat-detail-header__content__name {
+  @apply flex justify-start items-center;
   flex: 1;
 }
 
 .chat-detail-header__content__last_online {
+  @apply flex justify-start items-center;
   flex: 1;
 }
 
 .chat-detail-header__info {
+  @apply flex flex-col;
   width: 20%;
 }

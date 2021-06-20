@@ -11,23 +11,23 @@ const Header: React.FC<IHeaderProps> = ({
     return `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
   };
   return (
-    <div className="chat-detail-header flex flex-row">
-      <div className="chat-detail-header__avatar flex flex-col justify-center align-center items-center">
+    <div className="chat-detail-header">
+      <div className="chat-detail-header__avatar">
         <img
           src={avatar ? DefaultAvatar : DefaultAvatar}
           className="chat-detail-header__avatar__image"
           alt="avatar"
         />
       </div>
-      <div className="chat-detail-header__content flex flex-col">
-        <div className="chat-detail-header__content__name flex justify-start items-center">
+      <div className="chat-detail-header__content">
+        <div className="chat-detail-header__content__name">
           <label>{name}</label>
         </div>
-        <div className="chat-detail-header__content__last_online flex justify-start items-center">
+        <div className="chat-detail-header__content__last_online">
           <label>{generateLastOnlineDateText()}</label>
         </div>
       </div>
-      <div className="chat-detail-header__info flex flex-col">info</div>
+      <div className="chat-detail-header__info">info</div>
     </div>
   );
 };
