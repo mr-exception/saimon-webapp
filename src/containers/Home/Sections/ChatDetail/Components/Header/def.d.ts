@@ -1,5 +1,6 @@
-interface IHeaderProps {
-  name: string;
+import Contact from "Classes/Contact/Contact";
+
+export interface IHeaderProps {
   last_online: number;
-  avatar?: File;
+  contact: Contact;
 }

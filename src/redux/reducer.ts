@@ -8,7 +8,11 @@ import conversationsReducers from "./reducers/conversations";
 import othersReducers from "./reducers/others";
 import clientReducers from "./reducers/clients";
 import Queue from "Classes/Queue/Queue";
-import { IAdvertiserRequest, IStorageRequest } from "Classes/Queue/def";
+import {
+  IAdvertiserRequest,
+  IRelayRequest,
+  IStorageRequest,
+} from "Classes/Queue/def";
 
 export const initialState: IInitialState = {
   storage: new Storage(),
@@ -31,6 +35,7 @@ export const initialState: IInitialState = {
 
   advertiser_queue: new Queue<IAdvertiserRequest>(),
   storage_queue: new Queue<IStorageRequest>(),
+  relay_queue: new Queue<IRelayRequest>(),
 };
 
 const reducer = (

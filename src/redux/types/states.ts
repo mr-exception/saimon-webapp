@@ -1,10 +1,15 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
+import RelayHost from "Classes/Host/RelayHost";
 import Message, {
   IIncomingMessagePackets,
   IMessageState,
 } from "Classes/Message/Message";
-import { IAdvertiserRequest, IStorageRequest } from "Classes/Queue/def";
+import {
+  IAdvertiserRequest,
+  IRelayRequest,
+  IStorageRequest,
+} from "Classes/Queue/def";
 import Queue from "Classes/Queue/Queue";
 import Client from "core/Client/Client";
 import { ConnectionStatus } from "core/Connection/def";
@@ -55,6 +60,7 @@ export interface IInitialState {
   // request queues
   advertiser_queue: Queue<IAdvertiserRequest>;
   storage_queue: Queue<IStorageRequest>;
+  relay_queue: Queue<IRelayRequest>;
 }
 /**
  * this state is when user is logged into the account

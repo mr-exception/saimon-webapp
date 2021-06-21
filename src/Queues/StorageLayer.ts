@@ -1,4 +1,5 @@
 import StorageHost from "Classes/Host/StorageHost";
+import configs from "confg";
 import { storeConnectionState } from "redux/actions/client";
 import store from "redux/store";
 let interval: NodeJS.Timeout;
@@ -46,7 +47,7 @@ export const start = () => {
     //   await handleFetchProfile(job.host, job.contact);
     //   queue.push(job);
     // }
-  }, 2500);
+  }, configs.layer_intervals.storage_host);
 };
 
 export const finish = () => {

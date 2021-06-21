@@ -2,15 +2,6 @@ import axios, { AxiosError } from "axios";
 import Key from "core/Key/Key";
 import Host from "./Host";
 export default class AdvertiserHost extends Host {
-  public async isLive(): Promise<boolean> {
-    try {
-      await axios.get("/heart-beat", { baseURL: this.address });
-      return true;
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-  }
   public async fetchClient(address: string): Promise<IFetchClientResponse> {
     try {
       const response = await axios.get<IFetchClientResponse>("/fetch", {

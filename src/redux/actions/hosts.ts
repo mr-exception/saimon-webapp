@@ -3,6 +3,7 @@ import {
   ActionType,
   ADD_HOST,
   ADD_HOSTS,
+  EDIT_HOST,
   REMOVE_HOST,
   RESET_HOSTS,
 } from "redux/types/actions";
@@ -18,4 +19,7 @@ export const resetHosts = (hosts: Host[]): ActionType => {
 };
 export const removeHost = (host: Host): ActionType => {
   return { type: REMOVE_HOST, host };
+};
+export const editHost = (host: Host): ActionType => {
+  return { type: EDIT_HOST, host };
 };

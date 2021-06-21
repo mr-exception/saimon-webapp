@@ -1,5 +1,5 @@
 import AdvertiserHost from "Classes/Host/AdvertiserHost";
-import Host from "Classes/Host/Host";
+import Host, { IHost } from "Classes/Host/Host";
 import RelayHost from "Classes/Host/RelayHost";
 import StorageHost from "Classes/Host/StorageHost";
 import Key from "core/Key/Key";
@@ -15,6 +15,19 @@ const load = async (
   dispatch: Dispatch<ActionType>
 ) => {
   const host_records = await storage.getHosts();
+  if (host_records.length === 0) {
+    const relay_host: IHost = {
+      name: "salimon relay host",
+      address: "http://relay.salimon.ir",
+      type: "RELAY",
+      protocl: "LIVE",
+      advertise_period: 5000,
+      score: 100,
+      id: 0,
+    };
+    new RelayHost(relay_host, app_key).store();
+    host_records.push(relay_host);
+  }
   const hosts = await Promise.all(
     host_records.map(
       (rec) =>
@@ -22,6 +35,11 @@ const load = async (
           if (rec.type === "RELAY") {
             const host = new RelayHost(rec, app_key);
             host.connect();
+            const queue = store.getState().relay_queue;
+            queue.push({
+              type: "HEART_BEAT",
+              host,
+            });
             resolve(host);
           }
           if (rec.type === "ADVERTISER") {

@@ -29,6 +29,10 @@ import {
   finish as finihsStorageLayer,
 } from "Queues/StorageLayer";
 import {
+  start as startRelayLayer,
+  finish as finihsRelayLayer,
+} from "Queues/RelayLayer";
+import {
   checkDeliverStatus,
   checkIncomingPackets,
 } from "redux/utils/check_packet";
@@ -41,6 +45,7 @@ const Routes = () => {
   const contact_id = useSelector(
     (state: IInitialState) => state.selected_contact_id
   );
+
   const dispatch = useDispatch();
 
   const incoming_messages = useSelector(
@@ -110,9 +115,12 @@ const Routes = () => {
   useEffect(() => {
     startAdvertiserLayer();
     startStorageLayer();
+    startRelayLayer();
+
     return () => {
       finihsAdvertiserLayer();
       finihsStorageLayer();
+      finihsRelayLayer();
     };
   }, []);
 

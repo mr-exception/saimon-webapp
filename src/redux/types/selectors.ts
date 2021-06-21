@@ -6,6 +6,12 @@ export const selectStorage = (state: IInitialState) => state.storage;
 export const selectAppKey = (state: ILogedState) => state.app_key;
 export const selectHosts = (state: IInitialState) => state.hosts;
 export const selectContacts = (state: IInitialState) => state.contacts;
+// queue selectors
+export const selectRelayHostLayer = (state: IInitialState) => state.relay_queue;
+export const selectAdvertiserHostLayer = (state: IInitialState) =>
+  state.advertiser_queue;
+export const selectStorageHostLayer = (state: IInitialState) =>
+  state.storage_queue;
 // secondary selectors
 export const selectHostConnectionStates = (state: IInitialState) =>
   state.host_connections;

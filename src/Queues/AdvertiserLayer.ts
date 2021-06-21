@@ -1,5 +1,6 @@
 import Contact from "Classes/Contact/Contact";
 import AdvertiserHost from "Classes/Host/AdvertiserHost";
+import configs from "confg";
 import { storeConnectionState } from "redux/actions/client";
 import { updateContact } from "redux/actions/contacts";
 import store from "redux/store";
@@ -56,7 +57,7 @@ export const start = () => {
       await handleFetchProfile(job.host, job.contact);
       queue.push(job);
     }
-  }, 2500);
+  }, configs.layer_intervals.advertiser_host);
 };
 
 export const finish = () => {

@@ -1,5 +1,10 @@
+import axios from "axios";
 import Entity from "Classes/Entity/Entity";
 import Key from "core/Key/Key";
+import store from "redux/store";
+import {} from "redux/";
+import { editHost } from "redux/actions/hosts";
+import { hostname } from "node:os";
 export default class Host extends Entity<IHost> {
   public name: string;
   public address: string;
@@ -41,6 +46,23 @@ export default class Host extends Entity<IHost> {
       return `${(this.advertise_period / 1000).toFixed(2)}KB`;
     }
     return `${this.advertise_period}B`;
+  }
+
+  public async isLive(): Promise<boolean> {
+    try {
+      const response = await axios.get("/heart-beat", {
+        baseURL: this.address,
+      });
+      const service_information = response.data.service;
+      this.name = service_information.name;
+      this.advertise_period = service_information.ad_price;
+      this.update();
+      store.dispatch(editHost(this));
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 }
 

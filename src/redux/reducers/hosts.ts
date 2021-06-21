@@ -19,7 +19,7 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
     case Actions.REMOVE_HOST:
       state.hosts = state.hosts.filter((host) => {
         if (action.host) {
-          if (host.isEqual(action.host)) return null;
+          if (host.id === action.host.id) return null;
           else return host;
         } else {
           return host;
@@ -29,7 +29,7 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
     case Actions.EDIT_HOST:
       state.hosts = state.hosts.map((host) => {
         if (action.host) {
-          if (host.name === action.host.name) return host;
+          if (host.id === action.host.id) return host;
           else return host;
         } else {
           return host;

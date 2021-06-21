@@ -44,10 +44,7 @@ const ChatDetail = () => {
 
   return (
     <div className="chat-detail">
-      <Header
-        name={`${selected_contact.first_name} ${selected_contact.last_name}`}
-        last_online={Date.now()}
-      />
+      <Header contact={selected_contact} last_online={Date.now()} />
       {messages.length === 0 && <NoMessage />}
       {messages.length > 0 && (
         <div className="chat-detail__message-list">{renderMessageList()}</div>

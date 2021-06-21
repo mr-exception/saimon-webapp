@@ -6,7 +6,7 @@
 }
 
 .chat-detail-header__avatar {
-  @applt flex flex-col justify-center align-center items-center;
+  @apply flex flex-col justify-center items-center;
   width: 20%;
 }
 
@@ -31,6 +31,10 @@
 }
 
 .chat-detail-header__info {
-  @apply flex flex-col;
+  @apply flex flex-col justify-center items-end p-4;
   width: 20%;
+}
+
+.btn-actions {
+  max-width: 25px;
 }
