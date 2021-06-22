@@ -4,7 +4,6 @@ import Key from "core/Key/Key";
 import store from "redux/store";
 import {} from "redux/";
 import { editHost } from "redux/actions/hosts";
-import { hostname } from "node:os";
 export default class Host extends Entity<IHost> {
   public name: string;
   public address: string;

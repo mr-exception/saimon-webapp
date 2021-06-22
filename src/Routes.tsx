@@ -124,6 +124,24 @@ const Routes = () => {
     };
   }, []);
 
+  /**
+   * request permission for push notifications
+   */
+  useEffect(() => {
+    Notification.requestPermission(async (status) => {
+      console.debug(`notification permission status: `, status);
+      // if (status === "granted") {
+      //   try {
+      //     const reg = await navigator.serviceWorker.getRegistration();
+      //     if (!reg) throw new Error("not registered");
+      //     reg.showNotification("some title", { body: "some body!" });
+      //   } catch (error) {
+      //     console.error(error);
+      //   }
+      // }
+    });
+  }, []);
+
   if (!contacts_loaded || !hosts_loaded || !client_loaded)
     return <div>loading...</div>;
   else
