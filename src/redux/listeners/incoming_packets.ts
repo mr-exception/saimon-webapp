@@ -1,55 +1,10 @@
 import Contact from "Classes/Contact/Contact";
-import Message, {
-  IIncomingMessagePackets,
-  IMessageState,
-} from "Classes/Message/Message";
+import Message, { IIncomingMessagePackets } from "Classes/Message/Message";
 import Key from "core/Key/Key";
-import { Dispatch } from "react";
 import { resetIncomingPackets } from "redux/actions/client";
 import { addContact } from "redux/actions/contacts";
-import { addMessage, updateMessageStatus } from "redux/actions/conversations";
-import { ActionType } from "redux/types/actions";
+import { addMessage } from "redux/actions/conversations";
 import store from "redux/store";
-
-const checkDeliveringMessageState = (
-  message: IMessageState,
-  dispatch: Dispatch<ActionType>
-) => {
-  let hasDelivered = false;
-  let hasError = false;
-  let hasReserved = false;
-  message.packets.forEach((status) => {
-    switch (status.status) {
-      case "DELIVERED":
-        hasDelivered = true;
-        break;
-      case "FAILED":
-        hasError = true;
-        break;
-      case "RESERVED":
-        hasReserved = true;
-        break;
-    }
-  });
-  if (hasError) {
-    dispatch(updateMessageStatus(message.id, "FAILED"));
-  }
-  if (hasReserved) {
-    dispatch(updateMessageStatus(message.id, "SENT"));
-  }
-  if (hasDelivered) {
-    dispatch(updateMessageStatus(message.id, "DELIVERED"));
-  }
-};
-
-export const checkDeliverStatus = (
-  messages: IMessageState[],
-  dispach: Dispatch<ActionType>
-): void => {
-  messages.forEach((message) => {
-    checkDeliveringMessageState(message, dispach);
-  });
-};
 
 /**
  * checks if there is any contact with this address in the storage and store
