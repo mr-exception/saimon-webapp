@@ -13,6 +13,7 @@ import {
 } from "redux/types/selectors";
 // listerner
 import inc_pck_listener from "redux/listeners/incoming_packets";
+import delivering_packets_listener from "redux/listeners/delivering_packets";
 // syncers
 import hostsSyncer from "redux/syncers/hosts";
 // loaders
@@ -33,7 +34,6 @@ import {
   start as startRelayLayer,
   finish as finihsRelayLayer,
 } from "Queues/RelayLayer";
-import { checkDeliverStatus } from "redux/utils/check_packet";
 
 const Routes = () => {
   const storage = useSelector(selectStorage);
@@ -58,7 +58,7 @@ const Routes = () => {
     (state: IInitialState) => state.deliver_message_state
   );
   useEffect(() => {
-    checkDeliverStatus(delivering_messages, dispatch);
+    delivering_packets_listener(delivering_messages, dispatch);
   }, [delivering_messages, dispatch]);
 
   const [contacts_loaded, set_contacts_loaded] = useState(false);
