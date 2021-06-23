@@ -14,6 +14,7 @@ import {
   STORE_CONNECTION_STATE,
   STORE_DELIVERING_PACKET_STATUS,
   STORE_INCOMING_PACKET,
+  UPDATE_INCOMING_MESSAGE,
 } from "redux/types/actions";
 
 export const storeClient = (client: Client): ActionType => {
@@ -36,6 +37,11 @@ export const storeConnectionState = (
 
 export const storeIncomingPacket = (packet: IPacket): ActionType => {
   return { type: STORE_INCOMING_PACKET, packet };
+};
+export const updateIncomingMessage = (
+  incoming_message: IIncomingMessagePackets
+): ActionType => {
+  return { type: UPDATE_INCOMING_MESSAGE, incoming_message };
 };
 export const resetIncomingPackets = (
   incoming_messages: IIncomingMessagePackets[]

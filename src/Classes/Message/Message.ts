@@ -43,6 +43,7 @@ export interface IMessageState {
 export interface IIncomingMessagePackets {
   id: string;
   contact_id: number;
+  address: string;
   count: number;
   packets: IPacket[];
 }

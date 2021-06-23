@@ -6,7 +6,6 @@ import {
   IMessageState,
 } from "Classes/Message/Message";
 import Key from "core/Key/Key";
-import Contact from "Classes/Contact/Contact";
 
 const reducer = (state: IInitialState, action: ActionType): IInitialState => {
   const loged_state = state as ILogedState;
@@ -53,26 +52,34 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
           if (!action.packet) return false;
           return contact.public_key === Key.normalizeKey(action.packet.src);
         });
-        if (!contact) {
-          contact = new Contact({
-            id: 0,
-            first_name: "unknow",
-            last_name: "unknow",
-            public_key: Key.normalizeKey(action.packet.src),
-            advertiser_host_ids: [],
-            relay_host_ids: [],
-          });
-          contact.store(state.storage);
-          state.contacts.push(contact);
-        }
+        let contact_id = 0;
+        if (!!contact) contact_id = contact.id;
         const incoming_message: IIncomingMessagePackets = {
           id: action.packet.id,
           count: action.packet.count,
-          contact_id: contact.id,
+          contact_id,
+          address: action.packet.src,
           packets: [action.packet],
         };
         state.incoming_messages_packets.push(incoming_message);
       }
+      return state;
+    /**
+     * updates an incoming message object in incoming_message_packets array
+     * if it had the equal id with incoming_message object in action
+     */
+    case Actions.UPDATE_INCOMING_MESSAGE:
+      state.incoming_messages_packets = state.incoming_messages_packets.map(
+        (message) => {
+          if (!action.incoming_message) {
+            return message;
+          }
+          if (action.incoming_message.id === message.id) {
+            return action.incoming_message;
+          }
+          return message;
+        }
+      );
       return state;
     case Actions.STORE_DELIVERING_PACKET_STATUS:
       found = false;

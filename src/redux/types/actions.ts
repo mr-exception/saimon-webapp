@@ -39,6 +39,7 @@ export const STORE_CLIENT = "store_client";
 export const STORE_CONNECTION_STATE = "store_connection_state";
 export const STORE_APP_KEY = "store_app_key";
 export const STORE_INCOMING_PACKET = "store_incoming_packet";
+export const UPDATE_INCOMING_MESSAGE = "update_imcoming_message";
 export const RESET_INCOMING_PACKETS = "reset_incoming_packets";
 export const STORE_DELIVERING_PACKET_STATUS = "store_delivering_packet_status";
 // conversations
@@ -83,6 +84,7 @@ export type ActionType = {
 
   packet?: IPacket;
   incoming_messages?: IIncomingMessagePackets[];
+  incoming_message?: IIncomingMessagePackets;
 
   packet_deliver_status?: {
     id: string;

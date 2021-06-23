@@ -9,10 +9,12 @@ const load = async (
   storage: Storage,
   dispatch: Dispatch<ActionType>
 ) => {
+  console.log(contact_id);
   const message_records = await storage.getMessages(contact_id);
   const messages = message_records.map((record) => {
     return new Message(record);
   });
+  console.log(messages);
   dispatch(resetMessages(messages));
 };
 

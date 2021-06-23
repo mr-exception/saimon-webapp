@@ -8,10 +8,11 @@ import Home from "containers/Home/Home";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectAppKey,
-  selectContacts,
   selectHosts,
   selectStorage,
 } from "redux/types/selectors";
+// listerner
+import inc_pck_listener from "redux/listeners/incoming_packets";
 // syncers
 import hostsSyncer from "redux/syncers/hosts";
 // loaders
@@ -32,34 +33,26 @@ import {
   start as startRelayLayer,
   finish as finihsRelayLayer,
 } from "Queues/RelayLayer";
-import {
-  checkDeliverStatus,
-  checkIncomingPackets,
-} from "redux/utils/check_packet";
+import { checkDeliverStatus } from "redux/utils/check_packet";
 
 const Routes = () => {
   const storage = useSelector(selectStorage);
   const app_key = useSelector(selectAppKey);
   const hosts = useSelector(selectHosts);
-  const contacts = useSelector(selectContacts);
   const contact_id = useSelector(
     (state: IInitialState) => state.selected_contact_id
   );
 
   const dispatch = useDispatch();
 
-  const incoming_messages = useSelector(
+  const incoming_packets = useSelector(
     (state: IInitialState) => state.incoming_messages_packets
   );
+
+  // call listeners
   useEffect(() => {
-    checkIncomingPackets(
-      incoming_messages,
-      app_key,
-      contacts,
-      storage,
-      dispatch
-    );
-  }, [incoming_messages, app_key, contacts, storage, dispatch]);
+    inc_pck_listener(incoming_packets);
+  }, [incoming_packets]);
 
   const delivering_messages = useSelector(
     (state: IInitialState) => state.deliver_message_state
@@ -123,7 +116,6 @@ const Routes = () => {
       finihsRelayLayer();
     };
   }, []);
-
   /**
    * request permission for push notifications
    */

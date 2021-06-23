@@ -1,18 +1,3 @@
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
-import { io, Socket } from "socket.io-client";
-import Client from "../Client/Client";
-import { v4 as uuidV4 } from "uuid";
-import Key from "../Key/Key";
-import {
-  ConnectionStatus,
-  IClientState,
-  IPacket,
-  IPacketGot,
-  IPacketTTD,
-  PacketSendStatus,
-} from "./def";
-
 export default class Connection {
   // // props
   // private _id: string;

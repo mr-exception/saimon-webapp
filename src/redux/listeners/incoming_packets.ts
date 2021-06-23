@@ -6,9 +6,10 @@ import Message, {
 import Key from "core/Key/Key";
 import { Dispatch } from "react";
 import { resetIncomingPackets } from "redux/actions/client";
+import { addContact } from "redux/actions/contacts";
 import { addMessage, updateMessageStatus } from "redux/actions/conversations";
 import { ActionType } from "redux/types/actions";
-import Storage from "storage/Storage";
+import store from "redux/store";
 
 const checkDeliveringMessageState = (
   message: IMessageState,
@@ -50,22 +51,47 @@ export const checkDeliverStatus = (
   });
 };
 
-const checkIncomingMessage = (
-  incoming_packet_list: IIncomingMessagePackets,
-  app_key: Key,
-  contacts: Contact[],
-  storage: Storage,
-  dispatch: Dispatch<ActionType>
-): boolean => {
+/**
+ * checks if there is any contact with this address in the storage and store
+ * if it does not exists then we create a new unknown contact with the
+ * given address
+ * if it exists then we return the found contact
+ */
+const checkForContact = async (address: string): Promise<Contact> => {
+  const { contacts } = store.getState();
+  let contact = contacts.find((contact) => contact.public_key === address);
+  if (!contact) {
+    contact = new Contact({
+      id: 0,
+      first_name: "unknown",
+      last_name: "unknown",
+      public_key: Key.normalizeKey(address),
+      advertiser_host_ids: [],
+      relay_host_ids: [],
+    });
+    await contact.store();
+    store.dispatch(addContact(contact));
+  }
+  return contact;
+};
+/**
+ * checks for an incoming message object in store. it all packets are recevied,
+ * then creates a message object and puts in storage, then returns true
+ * otherwise just returns false
+ */
+const checkIncomingMessage = async (
+  incoming_packet_list: IIncomingMessagePackets
+): Promise<boolean> => {
+  const { app_key, storage } = store.getState();
+  if (!app_key) {
+    return false;
+  }
   if (incoming_packet_list.packets.length === incoming_packet_list.count) {
-    const contact = contacts.find(
-      (contact) => contact.id === incoming_packet_list.contact_id
-    );
-    if (!contact) return false;
+    const contact = await checkForContact(incoming_packet_list.address);
+
     const source_key = contact.key;
     const content = incoming_packet_list.packets
       .map((packet) => {
-        console.log(packet.payload.toString());
         return source_key.decryptPublic(
           app_key.decryptPrivate(packet.payload).toString()
         );
@@ -74,7 +100,7 @@ const checkIncomingMessage = (
     const message = new Message({
       id: 0,
       network_id: incoming_packet_list.id,
-      contact_id: incoming_packet_list.contact_id,
+      contact_id: contact.id,
       public_key: contact.public_key,
       box_type: "RECEIVED",
       status: "DELIVERED",
@@ -82,33 +108,24 @@ const checkIncomingMessage = (
       content,
     });
     message.store(storage);
-    dispatch(addMessage(message));
+    store.dispatch(addMessage(message));
     return true;
   }
   return false;
 };
 
 /**
- * checks all incoming packets for
- * a new complete message
+ * checks if a message is received, first of all
+ * gathers all packets and checks if there a
+ * enough packet to create a message
  */
-export const checkIncomingPackets = (
-  messages: IIncomingMessagePackets[],
-  app_key: Key,
-  contacts: Contact[],
-  storage: Storage,
-  dispach: Dispatch<ActionType>
-): void => {
+const handle = async (messages: IIncomingMessagePackets[]) => {
   const count = messages.length;
-  messages = messages.filter((message) => {
-    const result = checkIncomingMessage(
-      message,
-      app_key,
-      contacts,
-      storage,
-      dispach
-    );
+  console.log("handle");
+  messages = messages.filter(async (message) => {
+    const result = await checkIncomingMessage(message);
     return result ? null : message;
   });
-  if (count !== messages.length) dispach(resetIncomingPackets(messages));
+  if (count !== messages.length) store.dispatch(resetIncomingPackets(messages));
 };
+export default handle;
