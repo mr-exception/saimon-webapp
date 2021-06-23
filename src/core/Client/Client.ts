@@ -9,6 +9,10 @@ import {
 import RelayHost from "Classes/Host/RelayHost";
 
 export default class Client {
+  /**
+   * updates the status of delivering packets
+   * whos is pending to be delivered
+   */
   public static updateDeliverPendingPacket(
     id: string,
     position: number,
@@ -17,6 +21,9 @@ export default class Client {
   ) {
     store.dispatch(storeDeliveringPacketStatus(id, position, status, count));
   }
+  /**
+   * listens to any packet is received
+   */
   public static packetReceived(packet: IPacket) {
     store.dispatch(storeIncomingPacket(packet));
   }
