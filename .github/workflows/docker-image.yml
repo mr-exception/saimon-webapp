@@ -7,20 +7,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      # installing and building the project
       - name: install packages
         run: yarn
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v1
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
-      # - name: Login to DockerHub
-      #   uses: docker/login-action@v1
-      #   with:
-      #     username: salimondev
-      #     password: ${{ secrets.DOCKER_TOKEN }}
-      # - name: Build and push Docker images
-      #   uses: docker/build-push-action@v2.5.0
-      #   with:
-      #     push: true
-      #     tags: salimondev/relay-live
-      #     github-token: ${{ github.token }}
+      - name: build the project
+        run: yarn run build
+      # initializing the docker
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: salimondev
+          password: ${{ secrets.DOCKER_TOKEN }}
+      # create an image from build files and
+      # push it into docker registery
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v2.5.0
+        with:
+          push: true
+          tags: salimondev/relay-live
+          github-token: ${{ github.token }}
