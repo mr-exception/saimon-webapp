@@ -1,5 +1,11 @@
+.profile-container {
+  @apply flex flex-row h-full justify-center items-center;
+}
+.general-information {
+  @apply flex flex-col;
+}
 .address-box {
-  flex: 1;
+  @apply flex-1;
   max-width: 50%;
   min-height: 150px;
   word-wrap: break-word;
