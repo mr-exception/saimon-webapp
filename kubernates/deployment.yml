@@ -24,12 +24,12 @@ spec:
               protocol: TCP
           resources:
             limits:
-              cpu: 200m
-              ephemeral-storage: 400M
-              memory: 200M
+              cpu: 100m
+              ephemeral-storage: 200M
+              memory: 100M
             requests:
-              cpu: 200m
-              ephemeral-storage: 400M
-              memory: 200M
+              cpu: 100m
+              ephemeral-storage: 200M
+              memory: 100M
       imagePullSecrets:
         - name: regcred
