@@ -7,6 +7,7 @@ import hostsReducers from "./reducers/hosts";
 import conversationsReducers from "./reducers/conversations";
 import othersReducers from "./reducers/others";
 import clientReducers from "./reducers/clients";
+import profileReducers from "./reducers/profile";
 import Queue from "Classes/Queue/Queue";
 import {
   IAdvertiserRequest,
@@ -15,6 +16,11 @@ import {
 } from "Classes/Queue/def";
 
 export const initialState: IInitialState = {
+  profile: {
+    first_name: localStorage.getItem("first_name") || "",
+    last_name: localStorage.getItem("last_name") || "",
+  },
+
   storage: new Storage(),
   modals: {
     add_contact: { show: false },
@@ -48,6 +54,7 @@ const reducer = (
   state = conversationsReducers(state, action);
   state = clientReducers(state, action);
   state = othersReducers(state, action);
+  state = profileReducers(state, action);
   return state;
 };
 

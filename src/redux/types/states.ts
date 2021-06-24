@@ -19,6 +19,11 @@ import Storage from "storage/Storage";
  * this state is when user just has opened the webapp
  */
 export interface IInitialState {
+  profile: {
+    first_name: string;
+    last_name: string;
+  };
+
   app_key?: Key;
   storage: Storage;
   modals: {

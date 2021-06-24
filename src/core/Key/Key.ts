@@ -75,6 +75,12 @@ export default class Key {
   public getPrivateKeyNormalized(): string {
     return this._private_key_normalized;
   }
+  /**
+   * retunrs the address of client based on public key
+   */
+  public getAddress(): string {
+    return this.getPublicKeyNormalized();
+  }
   // key normalization methods
   public static normalizeKey(key: string): string {
     key = key.replace(/\n/g, "");

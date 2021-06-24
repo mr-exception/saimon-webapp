@@ -1,14 +1,11 @@
 .app {
-  display: flex;
-  flex-direction: row;
+  @apply flex flex-row items-center content-center justify-center;
   height: 100vh;
   background-image: url("img/background.svg");
   background-size: cover;
-  align-items: center;
-  align-content: center;
-  justify-content: center;
 }
 .app__container {
+  @apply flex flex-row;
   max-width: 1500px;
   max-height: 850px;
   width: calc(100vw - 2px);
@@ -18,12 +15,9 @@
   border-style: solid;
   border-color: #2f988a;
   border-radius: 3px;
-  display: flex;
-  flex-direction: row;
 }
 .app__container__toolbar {
-  flex: 1;
-  background-color: #2f988a;
+  @apply flex bg-white flex-1;
   max-width: 5%;
   min-width: 70px;
 
@@ -33,6 +27,6 @@
   padding-top: 20px;
 }
 .app__container__children {
-  flex: 1;
+  @apply flex-1 overflow-auto;
   max-width: 95%;
 }

@@ -1,6 +1,6 @@
 interface ITextFieldProps {
   value: string;
-  onChange: (string) => void;
+  onChange: (value: string) => void;
   label: string;
   placeHolder: string;
   onFocus?: () => void;

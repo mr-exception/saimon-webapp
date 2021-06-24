@@ -1,5 +1,10 @@
 import { IInitialState, ILogedState } from "./states";
 
+// profile
+export const selectProfile = (state: IInitialState) => state.profile;
+export const selectFirstName = (state: IInitialState) =>
+  state.profile.first_name;
+export const selectLastName = (state: IInitialState) => state.profile.last_name;
 // first selectors
 export const selectClient = (state: ILogedState) => state.client;
 export const selectStorage = (state: IInitialState) => state.storage;

@@ -1,7 +1,14 @@
 import React from "react";
 import "./styles.css";
-import { useSelector } from "react-redux";
-import { selectAppKey } from "redux/types/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectAppKey,
+  selectFirstName,
+  selectLastName,
+} from "redux/types/selectors";
+import CopyIcon from "img/copy.svg";
+import TextField from "ui-kit/Form/FormField/TextField";
+import { updateFirstName, updateLastName } from "redux/actions/profile";
 /**
  * profile features:
  * edit the account information
@@ -11,15 +18,49 @@ import { selectAppKey } from "redux/types/selectors";
  */
 const Profile = () => {
   const app_key = useSelector(selectAppKey);
+  const first_name = useSelector(selectFirstName);
+  const last_name = useSelector(selectLastName);
+
+  const dispatch = useDispatch();
+
+  const copyAddress = async () => {
+    const permission = await navigator.permissions.query({
+      name: "clipboard-write",
+    });
+    if (permission.state === "granted") {
+      navigator.clipboard.writeText(app_key.getAddress());
+    }
+  };
   return (
     <div className="profile-container">
       <div className="general-information">
         <div className="first-name">
-          
+          <TextField
+            label="first name"
+            placeHolder="jasmine"
+            value={first_name}
+            onChange={(value: string) => {
+              dispatch(updateFirstName(value));
+            }}
+          />
+          <TextField
+            label="last name"
+            placeHolder="nikara"
+            value={last_name}
+            onChange={(value: string) => {
+              dispatch(updateLastName(value));
+            }}
+          />
         </div>
       </div>
-      <div className="address-box bg-base border-2 border-secondary rounded-lg p-8 flex flex-row justify-center items-center">
-        <span className="w-full">{app_key.getPublicKeyNormalized()}</span>
+      <div className="address-box">
+        <span className="w-full">{app_key.getAddress()}</span>
+        <button
+          onClick={copyAddress}
+          className="absolute bottom-2 right-2 b-2 border-secondary bg-secondary hover:bg-primary hover:border-primary rounded-md text-white p-2 "
+        >
+          <img className="copy-icon" src={CopyIcon} alt="copy icon" />
+        </button>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 .text_field {
-  width: 90%;
+  @apply w-full px-4;
 }
 .text_field__label {
   min-height: 30px;

@@ -12,6 +12,10 @@ import {
 } from "core/Connection/def";
 import Key from "core/Key/Key";
 
+// profile
+export const UPDATE_FIRST_NAME = "update_first_name";
+export const UPDATE_LAST_NAME = "update_last_name";
+export const UPDATE_PROFILE = "update_profile";
 // modals
 export const SHOW_ADD_CONTACT_MODAL = "show_add_contact_modal";
 export const CLOSE_ADD_CONTACT_MODAL = "close_add_contact_modal";
@@ -53,6 +57,9 @@ export const CLEAR_ALL = "clear_all";
 
 export type ActionType = {
   type: string;
+
+  first_name?: string;
+  last_name?: string;
 
   contact?: Contact;
   contacts?: Contact[];
