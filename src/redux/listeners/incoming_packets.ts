@@ -76,7 +76,6 @@ const checkIncomingMessage = async (
  */
 const handle = async (messages: IIncomingMessagePackets[]) => {
   const count = messages.length;
-  console.log("handle");
   messages = messages.filter(async (message) => {
     const result = await checkIncomingMessage(message);
     return result ? null : message;
