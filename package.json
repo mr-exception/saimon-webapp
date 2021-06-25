@@ -30,6 +30,7 @@
     "react-scripts": "4.0.3",
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
+    "replace-in-file": "^6.2.0",
     "rxjs": "^6.6.7",
     "socket.io-client": "^4.0.1",
     "stylelint-config-recommended": "^5.0.0",
@@ -40,15 +41,9 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "build": "node craco build",
     "test": "craco test",
-    "eject": "react-scripts eject",
-    "prepare": "is-ci || husky install"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "echo \"[Husky] pre-commit here\""
-    }
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
