@@ -38,7 +38,7 @@ self.addEventListener("fetch", (event) => {
         }
         const responseToCache = response.clone();
         caches.open(CACHE_NAME).then(function (cache) {
-          console.log(`cashed ${event.request.url}`);
+          console.debug(`cashed ${event.request.url}`);
           cache.put(event.request, responseToCache);
         });
         return response;

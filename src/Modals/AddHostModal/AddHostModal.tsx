@@ -168,7 +168,7 @@ const AddHostModal = () => {
         <div key={index} className="flex w-full p-2">
           <input
             style={{ flex: 1 }}
-            placeholder="http://relay.salimon.ir"
+            placeholder="https://relay.salimon.ir"
             value={record.address}
             onChange={(e) => {
               set_records(

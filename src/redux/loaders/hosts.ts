@@ -18,7 +18,7 @@ const load = async (
   if (host_records.length === 0) {
     const relay_host: IHost = {
       name: "salimon relay host",
-      address: "http://relay.salimon.ir",
+      address: "https://relay.salimon.ir",
       type: "RELAY",
       protocl: "LIVE",
       advertise_period: 5000,
