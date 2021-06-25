@@ -29,5 +29,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: salimondev/webapp:${{ GITHUB_SHA }}
+          tags: salimondev/webapp:${{ github.sha }}
           github-token: ${{ github.token }}
