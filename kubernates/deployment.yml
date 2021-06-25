@@ -25,11 +25,11 @@ spec:
           resources:
             limits:
               cpu: 100m
-              ephemeral-storage: 200M
+              ephemeral-storage: 100M
               memory: 100M
             requests:
               cpu: 100m
-              ephemeral-storage: 200M
+              ephemeral-storage: 100M
               memory: 100M
       imagePullSecrets:
         - name: regcred
