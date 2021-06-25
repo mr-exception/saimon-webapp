@@ -44,6 +44,11 @@
     "test": "craco test",
     "eject": "react-scripts eject"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "echo \"[Husky] pre-commit here\""
+    }
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -61,11 +66,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "echo \"[Husky] pre-commit here\""
-    }
   },
   "devDependencies": {
     "@svgr/cli": "^5.5.0",
