@@ -12,6 +12,10 @@ jobs:
         run: yarn
       - name: build the project
         run: yarn run build
+  push:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       # initializing the docker
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -31,3 +35,10 @@ jobs:
           push: true
           tags: salimondev/webapp:${{ github.sha }}
           github-token: ${{ github.token }}
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get deployment script
+        run: wget https://napi.arvancloud.com/paas/v1/regions/ir-thr-mn1/downloads/cli/linux/arvan
+      - name: login into kbs service
+        run: echo "login!"
