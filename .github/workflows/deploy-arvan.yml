@@ -38,5 +38,7 @@ jobs:
         run: chmod +x arvan
       - name: login into kbs service
         run: echo "${{ secrets.ARVAN_TOKEN }}" | ./arvan login
+      - name: change image name in deployment.yml
+        run: sed -i 's/salimondev\/webapp/salimondev\/webapp:${{ github.sha }}/g' kubernates/deployment.yml
       - name: deploy into kbs service
         run: ./arvan paas apply -f kubernates/deployment.yml
