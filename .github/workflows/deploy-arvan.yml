@@ -39,4 +39,4 @@ jobs:
       - name: login into kbs service
         run: echo "${{ secrets.ARVAN_TOKEN }}" | ./arvan login
       - name: deploy into kbs service
-        run: ./arvan apply -f kubernates/deployment.yml
+        run: ./arvan paas apply -f kubernates/deployment.yml
