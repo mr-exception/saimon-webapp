@@ -10,8 +10,6 @@ jobs:
       # installing and building the project
       - name: install packages
         run: yarn
-      - name: update service worker version number
-        run: node pre-build.js
       - name: build the project
         run: yarn run build
       # initializing the docker

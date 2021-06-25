@@ -1,4 +1,4 @@
-const CACHE_NAME = "salimon-VERSION_NUMBER";
+const CACHE_NAME = "salimon-1624650884870";
 /**
  * install step caches chunk and maps to load in
  * from here later
