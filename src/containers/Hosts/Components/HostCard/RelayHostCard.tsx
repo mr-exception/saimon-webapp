@@ -91,7 +91,6 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
                 showConfirmationModal(
                   "are you sure to delete this host?",
                   (result) => {
-                    console.log(result);
                     if (!result) return;
                     host.delete();
                     dispatch(removeHost(host));

@@ -28,7 +28,6 @@ export default class Message {
       this.parts.map((part) => {
         return new Promise<string>((resolve) => {
           resolve(key.encryptPrivate(part));
-          console.log("done!");
         });
       })
     );

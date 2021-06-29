@@ -53,7 +53,6 @@ const handle = async (job: IReportRequest) => {
   }
   relay_hosts.forEach(async (host) => {
     const result = await host.sendReportMessage(reports, contact.key);
-    console.log(result);
   });
 
   // add this job to the queue again
