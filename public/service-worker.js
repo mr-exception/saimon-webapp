@@ -23,7 +23,12 @@ self.addEventListener("fetch", (event) => {
       }
       // otherwise, fetch the url
       return fetch(event.request).then(function (response) {
+        // if request was not ok
         if (!response || response.status !== 200 || response.type !== "basic") {
+          return response;
+        }
+        // if it's localhost
+        if (location.hostname.startsWith("localhost")) {
           return response;
         }
         // if url origin was not internal then don't cache it

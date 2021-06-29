@@ -7,7 +7,9 @@ import Message, {
 } from "Classes/Message/Message";
 import {
   IAdvertiserRequest,
+  IPacketDeliverRequest,
   IRelayRequest,
+  IReportRequest,
   IStorageRequest,
 } from "Classes/Queue/def";
 import Queue from "Classes/Queue/Queue";
@@ -66,6 +68,8 @@ export interface IInitialState {
   advertiser_queue: Queue<IAdvertiserRequest>;
   storage_queue: Queue<IStorageRequest>;
   relay_queue: Queue<IRelayRequest>;
+  packet_queue: Queue<IPacketDeliverRequest>;
+  report_queue: Queue<IReportRequest>;
 }
 /**
  * this state is when user is logged into the account

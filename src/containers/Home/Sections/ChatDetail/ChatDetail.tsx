@@ -1,3 +1,4 @@
+import { IMessageContent } from "Classes/Message/Message";
 import React from "react";
 import { useSelector } from "react-redux";
 import {
@@ -20,11 +21,12 @@ const ChatDetail = () => {
 
   const renderMessageList = () =>
     messages.map((message, index) => {
+      if (message.getMessageType() !== "TEXT") return null;
       if (message.box_type === "RECEIVED") {
         return (
           <ReceivedMessageRow
             key={index}
-            text={message.content.toString()}
+            text={message.text}
             sent_at={message.date}
           />
         );
@@ -33,7 +35,7 @@ const ChatDetail = () => {
         return (
           <SentMessageRow
             key={index}
-            text={message.content.toString()}
+            text={message.text}
             sent_at={message.date}
             status={message.status}
           />

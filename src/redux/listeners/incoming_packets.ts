@@ -45,13 +45,14 @@ const checkIncomingMessage = async (
     const contact = await checkForContact(incoming_packet_list.address);
 
     const source_key = contact.key;
-    const content = incoming_packet_list.packets
+    const buffer = incoming_packet_list.packets
       .map((packet) => {
         return source_key.decryptPublic(
           app_key.decryptPrivate(packet.payload).toString()
         );
       })
       .reduce((prev, cur) => Buffer.concat([prev, cur]));
+    const content = buffer.toString();
     const message = new Message({
       id: 0,
       network_id: incoming_packet_list.id,
@@ -60,7 +61,7 @@ const checkIncomingMessage = async (
       box_type: "RECEIVED",
       status: "DELIVERED",
       date: Date.now(),
-      content,
+      content: content,
     });
     message.store(storage);
     store.dispatch(addMessage(message));

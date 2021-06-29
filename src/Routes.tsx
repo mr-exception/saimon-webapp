@@ -22,18 +22,7 @@ import messageLoader from "redux/loaders/messages";
 import contactLoader from "redux/loaders/contacts";
 import clientLoader from "redux/loaders/clients";
 import { IInitialState } from "redux/types/states";
-import {
-  start as startAdvertiserLayer,
-  finish as finihsAdvertiserLayer,
-} from "Queues/AdvertiserLayer";
-import {
-  start as startStorageLayer,
-  finish as finihsStorageLayer,
-} from "Queues/StorageLayer";
-import {
-  start as startRelayLayer,
-  finish as finihsRelayLayer,
-} from "Queues/RelayLayer";
+import { start as startQueueHandler } from "Queues/handler";
 
 const Routes = () => {
   const storage = useSelector(selectStorage);
@@ -106,15 +95,7 @@ const Routes = () => {
    * register layer handlers
    */
   useEffect(() => {
-    startAdvertiserLayer();
-    startStorageLayer();
-    startRelayLayer();
-
-    return () => {
-      finihsAdvertiserLayer();
-      finihsStorageLayer();
-      finihsRelayLayer();
-    };
+    startQueueHandler();
   }, []);
   /**
    * request permission for push notifications

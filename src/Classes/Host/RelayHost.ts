@@ -15,6 +15,8 @@ import Message from "Classes/Message/Message";
 import store from "redux/store";
 import { storeConnectionState } from "redux/actions/client";
 import Host, { HostProtocol, HostType } from "./Host";
+import { IReportMessage } from "Classes/Queue/def";
+import { v4 as uuidV4 } from "uuid";
 export default class RelayHost extends Host {
   // props
   private _socket?: Socket;
@@ -175,12 +177,13 @@ export default class RelayHost extends Host {
    * send message to a client by address
    */
   public async sendMessageToClient(message: Message, dest_key: Key) {
-    const length = message.content.length;
+    const content = Buffer.from(JSON.stringify(message.content));
+    const length = content.length;
     const packet_count = Math.ceil(length / configs.packet_length);
     const data_parts: Buffer[] = [];
     for (let i = 0; i < packet_count; i++) {
       data_parts.push(
-        message.content.slice(
+        content.slice(
           i * configs.packet_length,
           (i + 1) * configs.packet_length
         )
@@ -252,6 +255,25 @@ export default class RelayHost extends Host {
         resolve("FAILED");
       }, 3000);
     });
+  }
+
+  public async sendReportMessage(
+    message: IReportMessage,
+    dest_key: Key
+  ): Promise<PacketSendStatus> {
+    const cipher = dest_key.encryptPublic(
+      this.client_key.encryptPrivate(JSON.stringify(message))
+    );
+    const packet: IPacket = {
+      id: uuidV4(),
+      payload: cipher,
+      position: 0,
+      count: 1,
+      dst: dest_key.getPublicKey(),
+      src: this.client_key.getPublicKey(),
+    };
+    const result = await this.sendPacket(packet);
+    return result;
   }
 }
 

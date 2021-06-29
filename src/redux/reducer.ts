@@ -11,7 +11,9 @@ import profileReducers from "./reducers/profile";
 import Queue from "Classes/Queue/Queue";
 import {
   IAdvertiserRequest,
+  IPacketDeliverRequest,
   IRelayRequest,
+  IReportRequest,
   IStorageRequest,
 } from "Classes/Queue/def";
 
@@ -42,6 +44,8 @@ export const initialState: IInitialState = {
   advertiser_queue: new Queue<IAdvertiserRequest>(),
   storage_queue: new Queue<IStorageRequest>(),
   relay_queue: new Queue<IRelayRequest>(),
+  packet_queue: new Queue<IPacketDeliverRequest>(),
+  report_queue: new Queue<IReportRequest>(),
 };
 
 const reducer = (

@@ -1,11 +1,12 @@
 import Entity from "Classes/Entity/Entity";
+import { IReportMessage } from "Classes/Queue/def";
 import { IPacket, PacketSendStatus } from "core/Connection/def";
 
 export default class Message extends Entity<IMessage> {
   public network_id: string;
   public contact_id: number;
   public public_key: string;
-  public content: Buffer;
+  public content: string;
   public box_type: BoxType;
   public date: number;
   public status: MessageSentState;
@@ -34,6 +35,32 @@ export default class Message extends Entity<IMessage> {
     };
     return data;
   }
+
+  /**
+   * returns the messae content
+   */
+  public getContent(): IMessageContent {
+    let content = JSON.parse(this.content);
+    while (typeof content === "string") {
+      content = JSON.parse(content);
+    }
+    return content as IMessageContent;
+  }
+  /**
+   * returns message type
+   */
+  public getMessageType(): MessageType {
+    return this.getContent().type;
+  }
+
+  get text(): string {
+    const content = this.getContent();
+    if (content.type === "TEXT") {
+      return this.getContent().payload as string;
+    } else {
+      return "";
+    }
+  }
 }
 export interface IMessageState {
   id: string;
@@ -52,10 +79,23 @@ export interface IMessage {
   network_id: string;
   contact_id: number;
   public_key: string;
-  content: Buffer;
+  content: string;
   box_type: BoxType;
   date: number;
   status: MessageSentState;
 }
+
+export interface IMessageContent {
+  type: MessageType;
+  payload: string | IReportMessage;
+}
+
 export type MessageSentState = "SENT" | "DELIVERED" | "SENDING" | "FAILED";
 export type BoxType = "SENT" | "RECEIVED";
+export type MessageType =
+  | "TEXT"
+  | "IMAGE"
+  | "AUDIO"
+  | "MOVIE"
+  | "FILE"
+  | "REPORT";

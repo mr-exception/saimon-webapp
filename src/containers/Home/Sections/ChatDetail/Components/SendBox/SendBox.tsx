@@ -21,7 +21,7 @@ const SendBox: React.FC<ISendBoxProps> = () => {
       id: 0,
       contact_id: selected_contact.id,
       public_key: selected_contact.public_key,
-      content: Buffer.from(content),
+      content: JSON.stringify({ type: "TEXT", payload: content }),
       status: "SENDING",
       date: Date.now(),
       box_type: "SENT",
