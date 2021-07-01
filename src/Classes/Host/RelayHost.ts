@@ -16,6 +16,7 @@ import store from "redux/store";
 import { storeConnectionState } from "redux/actions/client";
 import Host, { HostProtocol, HostType } from "./Host";
 import { IReportMessage } from "Classes/Queue/def";
+import Queue from "Classes/Queue/Queue";
 import { v4 as uuidV4 } from "uuid";
 export default class RelayHost extends Host {
   // props
@@ -25,6 +26,8 @@ export default class RelayHost extends Host {
   // observables
   private _finished$ = new Subject<void>();
   private _onPacketGot$ = new Subject<IPacketTTD>();
+  // sending packets queues
+  private _sending_packet_queue = new Queue<IPacket>();
 
   // event listeners
   public connectionStatusChanged(state: ConnectionStatus): void {
@@ -99,6 +102,7 @@ export default class RelayHost extends Host {
         resolve(true);
         this.connectionStatusChanged("CONNECTED");
         this.startListeningToHost();
+        this._continueQueue();
         clearTimeout(timeout);
       });
       // VF: waits if host refused the verification
@@ -207,13 +211,7 @@ export default class RelayHost extends Host {
         dst: dest_key.getPublicKey(),
         src: this.client_key.getPublicKey(),
       };
-      const result = await this.sendPacket(packet);
-      Client.updateDeliverPendingPacket(
-        packet.id,
-        packet.position,
-        packet_count,
-        result
-      );
+      this.addPacketToSendingQueue(packet);
     });
   }
   /**
@@ -256,11 +254,10 @@ export default class RelayHost extends Host {
       }, 3000);
     });
   }
-
-  public async sendReportMessage(
-    message: IReportMessage,
-    dest_key: Key
-  ): Promise<PacketSendStatus> {
+  /**
+   * sends the report message to a destination
+   */
+  public sendReportMessage(message: IReportMessage, dest_key: Key): void {
     const cipher = dest_key.encryptPublic(
       this.client_key.encryptPrivate(JSON.stringify(message))
     );
@@ -272,8 +269,35 @@ export default class RelayHost extends Host {
       dst: dest_key.getPublicKey(),
       src: this.client_key.getPublicKey(),
     };
-    const result = await this.sendPacket(packet);
-    return result;
+    this.addPacketToSendingQueue(packet);
+    // const result = await this.sendPacket(packet);
+    // return result;
+  }
+  /**
+   * this function adds another packet to sending packet queue
+   * the sending queue will handle the packet sendings itself
+   */
+  public addPacketToSendingQueue(packet: IPacket): void {
+    this._sending_packet_queue.push(packet);
+    this._continueQueue();
+  }
+  /**
+   * this methods gets a job from sending packet queue
+   * if there was any job remaning in queue the packet
+   * sends it otherwise ignores
+   */
+  private async _continueQueue(): Promise<void> {
+    const packet = this._sending_packet_queue.pull();
+    if (!!packet) {
+      const result = await this.sendPacket(packet);
+      Client.updateDeliverPendingPacket(
+        packet.id,
+        packet.position,
+        packet.count,
+        result
+      );
+      this._continueQueue();
+    }
   }
 }
 
