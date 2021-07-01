@@ -53,6 +53,7 @@ const handle = async (job: IReportRequest) => {
   }
   relay_hosts.forEach(async (host) => {
     const result = await host.sendReportMessage(reports, contact.key);
+    console.log(result);
   });
 
   // add this job to the queue again
@@ -64,11 +65,11 @@ let interval: NodeJS.Timeout;
 const ReportLayer = {
   start: () => {
     const { report_queue, packet_queue } = store.getState();
-    interval = setInterval(() => {
-      if (!packet_queue.isEmpty()) return; // higher layer (zues)
-      const job = report_queue.pull();
-      if (!!job) handle(job);
-    }, configs.layer_intervals.reports);
+    // interval = setInterval(() => {
+    //   if (!packet_queue.isEmpty()) return; // higher layer (zues)
+    //   const job = report_queue.pull();
+    //   if (!!job) handle(job);
+    // }, configs.layer_intervals.reports);
   },
   finish: () => {
     clearInterval(interval);
