@@ -1,4 +1,3 @@
-import { IMessageContent } from "Classes/Message/Message";
 import React from "react";
 import { useSelector } from "react-redux";
 import {

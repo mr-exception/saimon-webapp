@@ -65,11 +65,11 @@ let interval: NodeJS.Timeout;
 const ReportLayer = {
   start: () => {
     const { report_queue, packet_queue } = store.getState();
-    // interval = setInterval(() => {
-    //   if (!packet_queue.isEmpty()) return; // higher layer (zues)
-    //   const job = report_queue.pull();
-    //   if (!!job) handle(job);
-    // }, configs.layer_intervals.reports);
+    interval = setInterval(() => {
+      if (!packet_queue.isEmpty()) return; // higher layer (zues)
+      const job = report_queue.pull();
+      if (!!job) handle(job);
+    }, configs.layer_intervals.reports);
   },
   finish: () => {
     clearInterval(interval);
