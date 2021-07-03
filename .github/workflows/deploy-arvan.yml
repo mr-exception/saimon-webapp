@@ -33,7 +33,7 @@ jobs:
           github-token: ${{ github.token }}
       # deploy to aravan kubernates service
       - name: get deployment script
-        run: wget https://napi.arvancloud.com/paas/v1/regions/ir-thr-mn1/downloads/cli/linux/arvan
+        run: wget -q https://napi.arvancloud.com/paas/v1/regions/ir-thr-mn1/downloads/cli/linux/arvan
       - name: make the script executable
         run: chmod +x arvan
       - name: login into kbs service

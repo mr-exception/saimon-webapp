@@ -1,4 +1,4 @@
-const CACHE_NAME = "salimon-1624650884870";
+const CACHE_NAME = "salimon-1625318423575";
 /**
  * install step caches chunk and maps to load in
  * from here later
@@ -28,9 +28,9 @@ self.addEventListener("fetch", (event) => {
           return response;
         }
         // if it's localhost
-        if (location.hostname.startsWith("localhost")) {
-          return response;
-        }
+        // if (location.hostname.startsWith("localhost")) {
+        //   return response;
+        // }
         // if url origin was not internal then don't cache it
         if (!event.request.url.startsWith(location.origin)) {
           return response;
@@ -60,6 +60,7 @@ self.addEventListener("activate", function (event) {
             return cacheName !== CACHE_NAME;
           })
           .map(function (cacheName) {
+            console.log("deleting " + cacheName);
             return caches.delete(cacheName);
           })
       );
