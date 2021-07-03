@@ -5,29 +5,29 @@ import store from "redux/store";
 export const checkDeliveringMessageState = (
   message: IDeliveringMessageState
 ) => {
-  let hasDelivered = false;
-  let hasError = false;
-  let hasReserved = false;
+  let errors = 0;
+  let reservs = 0;
+  let delivers = 0;
   message.packets.forEach((status) => {
     switch (status.status) {
       case "DELIVERED":
-        hasDelivered = true;
+        errors++;
         break;
       case "FAILED":
-        hasError = true;
+        reservs++;
         break;
       case "RESERVED":
-        hasReserved = true;
+        delivers++;
         break;
     }
   });
-  if (hasError) {
+  if (errors > 0) {
     store.dispatch(updateMessageStatus(message.id, "FAILED"));
   }
-  if (hasReserved) {
+  if (reservs > 0) {
     store.dispatch(updateMessageStatus(message.id, "SENT"));
   }
-  if (hasDelivered) {
+  if (delivers > 0) {
     store.dispatch(updateMessageStatus(message.id, "DELIVERED"));
   }
   return message.count === message.packets.length;
