@@ -1,11 +1,6 @@
 import { ActionType } from "redux/types/actions";
 import { IInitialState, ILogedState } from "redux/types/states";
 import * as Actions from "redux/types/actions";
-import {
-  IIncomingMessagePackets,
-  IMessageState,
-} from "Classes/Message/Message";
-import Key from "core/Key/Key";
 
 const reducer = (state: IInitialState, action: ActionType): IInitialState => {
   const loged_state = state as ILogedState;
@@ -34,88 +29,6 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
       if (!action.app_key) return state;
       loged_state.app_key = action.app_key;
       return loged_state;
-    case Actions.STORE_INCOMING_PACKET:
-      if (!action.packet) return state;
-      found = false;
-      state.incoming_messages_packets = state.incoming_messages_packets.map(
-        (incoming_message) => {
-          if (!action.packet) return incoming_message;
-          if (incoming_message.id === action.packet.id) {
-            incoming_message.packets.push(action.packet);
-            found = true;
-          }
-          return incoming_message;
-        }
-      );
-      if (!found && action.packet !== undefined) {
-        let contact = state.contacts.find((contact) => {
-          if (!action.packet) return false;
-          return contact.public_key === Key.normalizeKey(action.packet.src);
-        });
-        let contact_id = 0;
-        if (!!contact) contact_id = contact.id;
-        const incoming_message: IIncomingMessagePackets = {
-          id: action.packet.id,
-          count: action.packet.count,
-          contact_id,
-          address: action.packet.src,
-          packets: [action.packet],
-        };
-        state.incoming_messages_packets.push(incoming_message);
-      }
-      return state;
-    /**
-     * updates an incoming message object in incoming_message_packets array
-     * if it had the equal id with incoming_message object in action
-     */
-    case Actions.UPDATE_INCOMING_MESSAGE:
-      state.incoming_messages_packets = state.incoming_messages_packets.map(
-        (message) => {
-          if (!action.incoming_message) {
-            return message;
-          }
-          if (action.incoming_message.id === message.id) {
-            return action.incoming_message;
-          }
-          return message;
-        }
-      );
-      return state;
-    case Actions.STORE_DELIVERING_PACKET_STATUS:
-      found = false;
-      if (!action.packet_deliver_status) return state;
-      let message_state: IMessageState;
-      state.deliver_message_state = state.deliver_message_state.map(
-        (message_state) => {
-          if (!action.packet_deliver_status) return message_state;
-          if (message_state.id === action.packet_deliver_status.id) {
-            message_state.packets.push({
-              position: action.packet_deliver_status.position,
-              status: action.packet_deliver_status.status,
-            });
-            found = true;
-          }
-          return message_state;
-        }
-      );
-      if (!found) {
-        message_state = {
-          id: action.packet_deliver_status.id,
-          count: action.packet_deliver_status.count,
-          packets: [
-            {
-              position: action.packet_deliver_status.position,
-              status: action.packet_deliver_status.status,
-            },
-          ],
-        };
-        state.deliver_message_state.push(message_state);
-        return state;
-      }
-      return state;
-    case Actions.RESET_INCOMING_PACKETS:
-      state.incoming_messages_packets = action.incoming_messages || [];
-      return state;
     default:
       return state;
   }

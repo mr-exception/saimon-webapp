@@ -38,9 +38,6 @@ export const initialState: IInitialState = {
 
   selected_conversation_messages: [],
 
-  incoming_messages_packets: [],
-  deliver_message_state: [],
-
   advertiser_queue: new Queue<IAdvertiserRequest>(),
   storage_queue: new Queue<IStorageRequest>(),
   relay_queue: new Queue<IRelayRequest>(),

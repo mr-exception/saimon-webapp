@@ -55,7 +55,9 @@ export default class RelayHost extends Host {
    */
   public async connect(): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
-      this._socket = io(this.address);
+      this._socket = io(this.address, {
+        transports: ["polling"],
+      });
       this._socket.on("connect_error", (error) => {
         this.connectionStatusChanged("NETWORK_ERROR");
         reject("connection error");
@@ -75,7 +77,7 @@ export default class RelayHost extends Host {
       // set time out for connection progrss
       const timeout = setTimeout(() => {
         reject("timeout");
-      }, 3000);
+      }, 30000);
 
       this.connectionStatusChanged("HK");
       // got HK, creates the host key
@@ -200,7 +202,6 @@ export default class RelayHost extends Host {
         });
       })
     );
-
     parts_cipher.forEach(async (part, position) => {
       if (!this._socket) throw new Error("connection is dead");
       const packet: IPacket = {
@@ -270,8 +271,6 @@ export default class RelayHost extends Host {
       src: this.client_key.getPublicKey(),
     };
     this.addPacketToSendingQueue(packet);
-    // const result = await this.sendPacket(packet);
-    // return result;
   }
   /**
    * this function adds another packet to sending packet queue

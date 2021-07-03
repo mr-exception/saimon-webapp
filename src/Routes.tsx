@@ -11,9 +11,6 @@ import {
   selectHosts,
   selectStorage,
 } from "redux/types/selectors";
-// listerner
-import inc_pck_listener from "redux/listeners/incoming_packets";
-import delivering_packets_listener from "redux/listeners/delivering_packets";
 // syncers
 import hostsSyncer from "redux/syncers/hosts";
 // loaders
@@ -33,22 +30,6 @@ const Routes = () => {
   );
 
   const dispatch = useDispatch();
-
-  const incoming_packets = useSelector(
-    (state: IInitialState) => state.incoming_messages_packets
-  );
-
-  // call listeners
-  useEffect(() => {
-    inc_pck_listener(incoming_packets);
-  }, [incoming_packets]);
-
-  const delivering_messages = useSelector(
-    (state: IInitialState) => state.deliver_message_state
-  );
-  useEffect(() => {
-    delivering_packets_listener(delivering_messages, dispatch);
-  }, [delivering_messages, dispatch]);
 
   const [contacts_loaded, set_contacts_loaded] = useState(false);
   const [hosts_loaded, set_hosts_loaded] = useState(false);

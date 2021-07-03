@@ -1,14 +1,17 @@
 import Key from "../Key/Key";
 import store from "redux/store";
 import { IPacket, PacketSendStatus } from "core/Connection/def";
-import Message from "Classes/Message/Message";
-import {
-  storeDeliveringPacketStatus,
-  storeIncomingPacket,
-} from "redux/actions/client";
+import Message, {
+  IIncomingMessagePackets,
+  IDeliveringMessageState,
+} from "Classes/Message/Message";
 import RelayHost from "Classes/Host/RelayHost";
+import { checkIncomingMessage } from "./incoming_packets";
+import { checkDeliveringMessageState } from "./delivering_packets";
 
 export default class Client {
+  private static _recieving_messages: IIncomingMessagePackets[] = [];
+  private static _delivering_packets_status: IDeliveringMessageState[] = [];
   /**
    * updates the status of delivering packets
    * whos is pending to be delivered
@@ -19,13 +22,76 @@ export default class Client {
     count: number,
     status: PacketSendStatus
   ) {
-    store.dispatch(storeDeliveringPacketStatus(id, position, status, count));
+    // check if the delivering packet belongs to any message state
+    // if true, appends the packet state to message state
+    // otherwise creates a new message state and appends the packet
+    // to it
+    let delivering_state = this._delivering_packets_status.find(
+      (record) => record.id === id
+    );
+    if (!delivering_state) {
+      delivering_state = {
+        id,
+        count,
+        packets: [{ position, status }],
+      };
+      const result = checkDeliveringMessageState(delivering_state);
+      // if result = false, then all packets send results are not
+      // received. so we push the state to delivering packets status
+      // and wait for other packets result to be recevied
+      if (!result) {
+        this._delivering_packets_status.push(delivering_state);
+      }
+    } else {
+      delivering_state.packets.push({ position, status });
+      const result = checkDeliveringMessageState(delivering_state);
+      // if result = true, then the message status is approved and we
+      // won't receive any packet status from hosts
+      if (result) {
+        this._delivering_packets_status =
+          this._delivering_packets_status.filter((record) => {
+            if (!delivering_state) return record;
+            if (delivering_state.id === record.id) return null;
+            return record;
+          });
+      }
+    }
   }
   /**
    * listens to any packet is received
    */
-  public static packetReceived(packet: IPacket) {
-    store.dispatch(storeIncomingPacket(packet));
+  public static async packetReceived(packet: IPacket) {
+    // check if packet belongs to any incoming message, append it to that
+    // message, otherwise creates a new incoming message and appends it
+    // to the new message
+    let incoming_message = this._recieving_messages.find(
+      (record) => packet.id === record.id
+    );
+    if (!incoming_message) {
+      incoming_message = {
+        id: packet.id,
+        count: packet.count,
+        address: Key.normalizeKey(packet.src),
+        packets: [packet],
+      };
+      // checks if message is completely received, if true, stores the message
+      // and prevents from pushing it to the receiving list (it was a single packet message)
+      const result = await checkIncomingMessage(incoming_message);
+      if (!result) {
+        this._recieving_messages.push(incoming_message);
+      }
+    } else {
+      // pushes the packet into found receiving message
+      incoming_message.packets.push(packet);
+      const result = await checkIncomingMessage(incoming_message);
+      if (result) {
+        this._recieving_messages = this._recieving_messages.filter((record) => {
+          if (!incoming_message) return record;
+          if (incoming_message.id === record.id) return null;
+          return record;
+        });
+      }
+    }
   }
   /**
    * send message to a client node

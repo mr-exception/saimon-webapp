@@ -36,6 +36,10 @@ export default class Contact extends Entity<IContact> {
       relay_host_ids: this.relay_host_ids,
     };
   }
+
+  public getAddress(): string {
+    return this.key.getPublicKeyNormalized();
+  }
 }
 
 export interface IContact {

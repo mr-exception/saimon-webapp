@@ -31,7 +31,7 @@ const handle = async (job: IReportRequest) => {
       ad_price: host.advertise_period,
     })),
     contacts: contacts.map((contact) => ({
-      address: contact.key.getAddress(),
+      address: contact.getAddress(),
       first_name: contact.first_name,
       last_name: contact.last_name,
     })),
@@ -40,7 +40,7 @@ const handle = async (job: IReportRequest) => {
   console.debug(
     "%c[Report]",
     "color: red",
-    ` to ${contact.key.getAddress().substr(0, 32)}...`
+    ` to ${contact.getAddress().substr(0, 32)}...`
   );
 
   let relay_hosts = hosts.filter(

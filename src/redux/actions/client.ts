@@ -1,19 +1,12 @@
 import { IIncomingMessagePackets } from "Classes/Message/Message";
 import Client from "core/Client/Client";
-import {
-  ConnectionStatus,
-  IPacket,
-  PacketSendStatus,
-} from "core/Connection/def";
+import { ConnectionStatus } from "core/Connection/def";
 import Key from "core/Key/Key";
 import {
   ActionType,
-  RESET_INCOMING_PACKETS,
   STORE_APP_KEY,
   STORE_CLIENT,
   STORE_CONNECTION_STATE,
-  STORE_DELIVERING_PACKET_STATUS,
-  STORE_INCOMING_PACKET,
   UPDATE_INCOMING_MESSAGE,
 } from "redux/types/actions";
 
@@ -34,29 +27,8 @@ export const storeConnectionState = (
     host_connection_state: { connection_id, state },
   };
 };
-
-export const storeIncomingPacket = (packet: IPacket): ActionType => {
-  return { type: STORE_INCOMING_PACKET, packet };
-};
 export const updateIncomingMessage = (
   incoming_message: IIncomingMessagePackets
 ): ActionType => {
   return { type: UPDATE_INCOMING_MESSAGE, incoming_message };
-};
-export const resetIncomingPackets = (
-  incoming_messages: IIncomingMessagePackets[]
-): ActionType => {
-  return { type: RESET_INCOMING_PACKETS, incoming_messages };
-};
-
-export const storeDeliveringPacketStatus = (
-  id: string,
-  position: number,
-  status: PacketSendStatus,
-  count: number
-): ActionType => {
-  return {
-    type: STORE_DELIVERING_PACKET_STATUS,
-    packet_deliver_status: { id, position, status, count },
-  };
 };

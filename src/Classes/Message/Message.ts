@@ -62,14 +62,13 @@ export default class Message extends Entity<IMessage> {
     }
   }
 }
-export interface IMessageState {
+export interface IDeliveringMessageState {
   id: string;
   count: number;
   packets: { position: number; status: PacketSendStatus }[];
 }
 export interface IIncomingMessagePackets {
   id: string;
-  contact_id: number;
   address: string;
   count: number;
   packets: IPacket[];

@@ -1,7 +1,6 @@
 import Contact from "Classes/Contact/Contact";
 import Message, { IIncomingMessagePackets } from "Classes/Message/Message";
 import Key from "core/Key/Key";
-import { resetIncomingPackets } from "redux/actions/client";
 import { addContact } from "redux/actions/contacts";
 import { addMessage } from "redux/actions/conversations";
 import store from "redux/store";
@@ -14,7 +13,10 @@ import store from "redux/store";
  */
 const checkForContact = async (address: string): Promise<Contact> => {
   const { contacts } = store.getState();
-  let contact = contacts.find((contact) => contact.public_key === address);
+  console.log(contacts);
+  let contact = contacts.find((contact) => {
+    return contact.getAddress() === address;
+  });
   if (!contact) {
     contact = new Contact({
       id: 0,
@@ -34,7 +36,7 @@ const checkForContact = async (address: string): Promise<Contact> => {
  * then creates a message object and puts in storage, then returns true
  * otherwise just returns false
  */
-const checkIncomingMessage = async (
+export const checkIncomingMessage = async (
   incoming_packet_list: IIncomingMessagePackets
 ): Promise<boolean> => {
   const { app_key, storage } = store.getState();
@@ -69,18 +71,3 @@ const checkIncomingMessage = async (
   }
   return false;
 };
-
-/**
- * checks if a message is received, first of all
- * gathers all packets and checks if there a
- * enough packet to create a message
- */
-const handle = async (messages: IIncomingMessagePackets[]) => {
-  const count = messages.length;
-  messages = messages.filter(async (message) => {
-    const result = await checkIncomingMessage(message);
-    return result ? null : message;
-  });
-  if (count !== messages.length) store.dispatch(resetIncomingPackets(messages));
-};
-export default handle;

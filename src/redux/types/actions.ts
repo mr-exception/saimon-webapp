@@ -42,10 +42,7 @@ export const DISCONNECT_HOST = "disconnect_host";
 export const STORE_CLIENT = "store_client";
 export const STORE_CONNECTION_STATE = "store_connection_state";
 export const STORE_APP_KEY = "store_app_key";
-export const STORE_INCOMING_PACKET = "store_incoming_packet";
 export const UPDATE_INCOMING_MESSAGE = "update_imcoming_message";
-export const RESET_INCOMING_PACKETS = "reset_incoming_packets";
-export const STORE_DELIVERING_PACKET_STATUS = "store_delivering_packet_status";
 // conversations
 export const SELECT_CONVERSATION = "select_conversation";
 export const ADD_MESSAGE = "add_message";

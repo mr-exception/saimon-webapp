@@ -3,7 +3,7 @@ import Host from "Classes/Host/Host";
 import RelayHost from "Classes/Host/RelayHost";
 import Message, {
   IIncomingMessagePackets,
-  IMessageState,
+  IDeliveringMessageState,
 } from "Classes/Message/Message";
 import {
   IAdvertiserRequest,
@@ -60,9 +60,6 @@ export interface IInitialState {
 
   selected_contact_id?: number;
   selected_conversation_messages: Message[];
-
-  incoming_messages_packets: IIncomingMessagePackets[];
-  deliver_message_state: IMessageState[];
 
   // request queues
   advertiser_queue: Queue<IAdvertiserRequest>;
