@@ -51,15 +51,17 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
-self.addEventListener("activate", (event) => {
+self.addEventListener("activate", function (event) {
   event.waitUntil(
-    caches.keys().then((keyList) => {
+    caches.keys().then(function (cacheNames) {
       return Promise.all(
-        keyList.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
-        })
+        cacheNames
+          .filter(function (cacheName) {
+            return cacheName !== CACHE_NAME;
+          })
+          .map(function (cacheName) {
+            return caches.delete(cacheName);
+          })
       );
     })
   );
