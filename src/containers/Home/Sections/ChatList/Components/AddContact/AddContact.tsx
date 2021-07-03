@@ -12,7 +12,7 @@ const AddContact: React.FC<IAddContactProps> = () => {
         }}
         className="add-contact__button rounded-lg bg-secondary border-secondary text-white border-2 p-2 hover:bg-primary hover:border-primary"
       >
-        add new contact!
+        add new contact
       </button>
     </div>
   );
