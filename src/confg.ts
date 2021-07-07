@@ -1,5 +1,6 @@
 const configs = {
   packet_length: 16,
+  packet_ack_timeout: 9000,
   layer_intervals: {
     relay_host: 90000,
     storage_host: 90000,

@@ -28,6 +28,7 @@ export interface IInitialState {
 
   app_key?: Key;
   storage: Storage;
+  client: Client;
   modals: {
     add_contact: {
       show: boolean;

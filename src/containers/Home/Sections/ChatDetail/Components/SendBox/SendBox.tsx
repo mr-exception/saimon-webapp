@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import "./styles.css";
 import SendIcon from "img/send.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { selectedContact } from "redux/types/selectors";
+import { selectClient, selectedContact } from "redux/types/selectors";
 import Key from "core/Key/Key";
 import { addMessage } from "redux/actions/conversations";
 import Message from "Classes/Message/Message";
-import Client from "core/Client/Client";
 import { v4 as uuidV4 } from "uuid";
 const SendBox: React.FC<ISendBoxProps> = () => {
   const selected_contact = useSelector(selectedContact);
   const [content, set_content] = useState("");
+  const client = useSelector(selectClient);
   const dispatch = useDispatch();
   if (!selected_contact) {
     return null;
@@ -29,7 +29,7 @@ const SendBox: React.FC<ISendBoxProps> = () => {
     });
     await message.store();
     dispatch(addMessage(message));
-    Client.sendMessage(message, dst_key);
+    client.sendMessage(message, dst_key);
     set_content("");
   };
   return (

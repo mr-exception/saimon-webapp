@@ -1,5 +1,4 @@
 import configs from "confg";
-import Client from "core/Client/Client";
 import {
   ConnectionStatus,
   IClientState,
@@ -134,7 +133,8 @@ export default class RelayHost extends Host {
     this._socket.on("pck", (packet_cipher: string, ackCallback) => {
       const packet_buffer = this.client_key.decryptPrivate(packet_cipher);
       const packet = JSON.parse(packet_buffer.toString()) as IPacket;
-      Client.packetReceived(packet);
+      console.log("got a packet and sending deliver ack");
+      store.getState().client.packetReceived(packet);
       ackCallback("got");
     });
     // listen to packet got event from host node
@@ -209,8 +209,8 @@ export default class RelayHost extends Host {
         payload: part,
         position,
         count: packet_count,
-        dst: dest_key.getPublicKey(),
-        src: this.client_key.getPublicKey(),
+        dst: dest_key.getAddress(),
+        src: this.client_key.getAddress(),
       };
       this.addPacketToSendingQueue(packet);
     });
@@ -247,12 +247,13 @@ export default class RelayHost extends Host {
           // this._ttr_avg =
           //   (this._ttr_avg * this._ttr_count + ttr) / (this._ttr_count + 1);
           // this._ttr_count++;
+          console.log(ack_data);
           resolve(ack_data);
         }
       );
       setTimeout(() => {
         resolve("FAILED");
-      }, 3000);
+      }, configs.packet_ack_timeout);
     });
   }
   /**
@@ -267,8 +268,8 @@ export default class RelayHost extends Host {
       payload: cipher,
       position: 0,
       count: 1,
-      dst: dest_key.getPublicKey(),
-      src: this.client_key.getPublicKey(),
+      dst: dest_key.getAddress(),
+      src: this.client_key.getAddress(),
     };
     this.addPacketToSendingQueue(packet);
   }
@@ -289,12 +290,14 @@ export default class RelayHost extends Host {
     const packet = this._sending_packet_queue.pull();
     if (!!packet) {
       const result = await this.sendPacket(packet);
-      Client.updateDeliverPendingPacket(
-        packet.id,
-        packet.position,
-        packet.count,
-        result
-      );
+      store
+        .getState()
+        .client.updateDeliverPendingPacket(
+          packet.id,
+          packet.position,
+          packet.count,
+          result
+        );
       this._continueQueue();
     }
   }

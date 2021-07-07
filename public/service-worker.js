@@ -28,9 +28,9 @@ self.addEventListener("fetch", (event) => {
           return response;
         }
         // if it's localhost
-        // if (location.hostname.startsWith("localhost")) {
-        //   return response;
-        // }
+        if (location.hostname.startsWith("localhost")) {
+          return response;
+        }
         // if url origin was not internal then don't cache it
         if (!event.request.url.startsWith(location.origin)) {
           return response;

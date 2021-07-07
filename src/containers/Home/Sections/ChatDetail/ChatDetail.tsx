@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -17,6 +18,12 @@ const ChatDetail = () => {
   const messages = useSelector(selectConversationMessages);
 
   const messageList = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!!messageList.current) {
+      messageList.current.scrollTo(0, messageList.current.scrollHeight);
+    }
+  }, [messages]);
+
   if (selected_contact === undefined) {
     return <NoConversationSelected />;
   }
@@ -46,9 +53,6 @@ const ChatDetail = () => {
       return null;
     });
   };
-  if (!!messageList.current) {
-    messageList.current.scrollTo({ top: 999999 });
-  }
   return (
     <div className="chat-detail">
       <Header contact={selected_contact} last_online={Date.now()} />

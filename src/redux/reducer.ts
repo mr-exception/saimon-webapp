@@ -16,6 +16,7 @@ import {
   IReportRequest,
   IStorageRequest,
 } from "Classes/Queue/def";
+import Client from "core/Client/Client";
 
 export const initialState: IInitialState = {
   profile: {
@@ -24,6 +25,7 @@ export const initialState: IInitialState = {
   },
 
   storage: new Storage(),
+  client: new Client(),
   modals: {
     add_contact: { show: false },
     contact_details: { show: false },
