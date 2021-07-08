@@ -1,6 +1,5 @@
 import Entity from "Classes/Entity/Entity";
 import { IReportMessage } from "Classes/Queue/def";
-import { IPacket, PacketSendStatus } from "core/Connection/def";
 
 export default class Message extends Entity<IMessage> {
   public network_id: string;
@@ -61,17 +60,6 @@ export default class Message extends Entity<IMessage> {
       return "";
     }
   }
-}
-export interface IDeliveringMessageState {
-  id: string;
-  count: number;
-  packets: { position: number; status: PacketSendStatus }[];
-}
-export interface IIncomingMessagePackets {
-  id: string;
-  address: string;
-  count: number;
-  packets: IPacket[];
 }
 export interface IMessage {
   id: number;

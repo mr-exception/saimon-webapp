@@ -1,10 +1,6 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
-import RelayHost from "Classes/Host/RelayHost";
-import Message, {
-  IIncomingMessagePackets,
-  IDeliveringMessageState,
-} from "Classes/Message/Message";
+import Message from "Classes/Message/Message";
 import {
   IAdvertiserRequest,
   IPacketDeliverRequest,
@@ -21,6 +17,8 @@ import Storage from "storage/Storage";
  * this state is when user just has opened the webapp
  */
 export interface IInitialState {
+  is_online: boolean;
+
   profile: {
     first_name: string;
     last_name: string;

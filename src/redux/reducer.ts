@@ -19,6 +19,8 @@ import {
 import Client from "core/Client/Client";
 
 export const initialState: IInitialState = {
+  is_online: false,
+
   profile: {
     first_name: localStorage.getItem("first_name") || "",
     last_name: localStorage.getItem("last_name") || "",

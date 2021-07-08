@@ -20,6 +20,8 @@ import contactLoader from "redux/loaders/contacts";
 import clientLoader from "redux/loaders/clients";
 import { IInitialState } from "redux/types/states";
 import { start as startQueueHandler } from "Queues/handler";
+import { setConnectionStatus } from "redux/actions/others";
+import { autoConnect } from "core/Connection/auto-connect";
 
 const Routes = () => {
   const storage = useSelector(selectStorage);
@@ -95,6 +97,17 @@ const Routes = () => {
       // }
     });
   }, []);
+
+  useEffect(() => {
+    dispatch(setConnectionStatus(window.navigator.onLine));
+    window.addEventListener("online", () => {
+      dispatch(setConnectionStatus(true));
+      autoConnect(hosts);
+    });
+    window.addEventListener("offline", () => {
+      dispatch(setConnectionStatus(false));
+    });
+  }, [dispatch, hosts]);
 
   if (!contacts_loaded || !hosts_loaded || !client_loaded)
     return <div>loading...</div>;

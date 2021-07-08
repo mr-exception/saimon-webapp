@@ -11,6 +11,12 @@ export default class Host extends Entity<IHost> {
   public type: HostType;
   public protocl: HostProtocol;
   public advertise_period: number;
+  /**
+   * disabled can be toggled by user interaction. for example when user disconnects
+   * a host, it means this host must be offline and not be used in future connections.
+   * helps the client to decide which host need auto-connect progress on network
+   * issues or startup
+   */
   public disabled: boolean;
 
   constructor(host_record: IHost, public client_key: Key) {

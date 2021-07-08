@@ -1,4 +1,3 @@
-import { IIncomingMessagePackets } from "Classes/Message/Message";
 import Client from "core/Client/Client";
 import { ConnectionStatus } from "core/Connection/def";
 import Key from "core/Key/Key";
@@ -7,7 +6,6 @@ import {
   STORE_APP_KEY,
   STORE_CLIENT,
   STORE_CONNECTION_STATE,
-  UPDATE_INCOMING_MESSAGE,
 } from "redux/types/actions";
 
 export const storeClient = (client: Client): ActionType => {
@@ -26,9 +24,4 @@ export const storeConnectionState = (
     type: STORE_CONNECTION_STATE,
     host_connection_state: { connection_id, state },
   };
-};
-export const updateIncomingMessage = (
-  incoming_message: IIncomingMessagePackets
-): ActionType => {
-  return { type: UPDATE_INCOMING_MESSAGE, incoming_message };
 };

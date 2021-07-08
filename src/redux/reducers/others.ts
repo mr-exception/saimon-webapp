@@ -12,6 +12,9 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
       state.selected_conversation_messages = [];
       state.host_connections = [];
       return state;
+    case Actions.SET_CONNECTION_STATUS:
+      state.is_online = action.is_online === true;
+      return state;
     default:
       return state;
   }

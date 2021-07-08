@@ -1,9 +1,6 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
-import Message, {
-  IIncomingMessagePackets,
-  MessageSentState,
-} from "Classes/Message/Message";
+import Message, { MessageSentState } from "Classes/Message/Message";
 import Client from "core/Client/Client";
 import {
   ConnectionStatus,
@@ -51,9 +48,12 @@ export const RESET_MESSAGES = "reset_messages";
 export const UPDATE_MESSAGE_STATUS = "update_message_status";
 // others
 export const CLEAR_ALL = "clear_all";
+export const SET_CONNECTION_STATUS = "set_connection_status";
 
 export type ActionType = {
   type: string;
+
+  is_online?: boolean;
 
   first_name?: string;
   last_name?: string;
@@ -87,8 +87,6 @@ export type ActionType = {
   contact_id?: number;
 
   packet?: IPacket;
-  incoming_messages?: IIncomingMessagePackets[];
-  incoming_message?: IIncomingMessagePackets;
 
   packet_deliver_status?: {
     id: string;
