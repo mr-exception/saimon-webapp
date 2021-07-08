@@ -1,7 +1,4 @@
 import React, { useCallback } from "react";
-import DeleteIcon from "img/delete.svg";
-import DisconnectIcon from "img/disconnect.svg";
-import ConnectIcon from "img/connect.svg";
 import "./styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import { showConfirmationModal } from "redux/actions/modals";
@@ -100,20 +97,20 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
                 )
               );
             }}
-            icon={DeleteIcon}
+            icon="/img/delete.svg"
           />
           {canDisconnect && (
             <ActionItem
               onClick={disconnect}
               caption="disconnect"
-              icon={DisconnectIcon}
+              icon="/img/disconnect.svg"
             />
           )}
           {canConnect && (
             <ActionItem
               onClick={connect}
               caption="connect"
-              icon={ConnectIcon}
+              icon="/img/connect.svg"
             />
           )}
         </div>

@@ -1,7 +1,5 @@
 import React from "react";
 import "./styles.css";
-import DefaultAvatar from "img/avatar.svg";
-import Actions from "img/menu.svg";
 import { useDispatch } from "react-redux";
 import { showContactDetailsModal } from "redux/actions/modals";
 import { IConversationProps } from "./def";
@@ -19,7 +17,7 @@ const Conversation: React.FC<IConversationProps> = ({
     >
       <div className="conversation__icon">
         <img
-          src={DefaultAvatar}
+          src="/img/avatar.svg"
           className="conversation__icon__image"
           alt="avatar"
         />
@@ -40,7 +38,7 @@ const Conversation: React.FC<IConversationProps> = ({
           }}
           className="flex flex-1"
         >
-          <img src={Actions} alt="actions" />
+          <img src="/img/menu.svg" alt="actions" />
         </button>
       </div>
     </div>

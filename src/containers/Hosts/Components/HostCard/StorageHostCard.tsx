@@ -1,5 +1,4 @@
 import React from "react";
-import DeleteIcon from "img/delete.svg";
 import "./styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import { showConfirmationModal } from "redux/actions/modals";
@@ -67,7 +66,7 @@ const StorageHostCard: React.FC<IStorageHostCardProps> = ({
                 )
               );
             }}
-            icon={DeleteIcon}
+            icon="/img/delete.svg"
           />
         </div>
       </div>

@@ -1,6 +1,4 @@
 import React from "react";
-import DefaultAvatar from "img/avatar.svg";
-import Actions from "img/menu.svg";
 import "./styles.css";
 import { showContactDetailsModal } from "redux/actions/modals";
 import { IHeaderProps } from "./def";
@@ -18,7 +16,7 @@ const Header: React.FC<IHeaderProps> = ({
     <div className="chat-detail-header">
       <div className="chat-detail-header__avatar">
         <img
-          src={DefaultAvatar}
+          src="/img/avatar.svg"
           className="chat-detail-header__avatar__image"
           alt="avatar"
         />
@@ -34,7 +32,7 @@ const Header: React.FC<IHeaderProps> = ({
       <div className="chat-detail-header__info">
         <button className="btn-actions">
           <img
-            src={Actions}
+            src="/img/menu.svg"
             alt="actions"
             onClick={() => {
               dispatch(showContactDetailsModal(contact));

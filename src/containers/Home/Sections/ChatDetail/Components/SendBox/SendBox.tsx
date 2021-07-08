@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./styles.css";
-import SendIcon from "img/send.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { selectClient, selectedContact } from "redux/types/selectors";
 import Key from "core/Key/Key";
@@ -48,12 +47,22 @@ const SendBox: React.FC<ISendBoxProps> = () => {
       </div>
       <div className="chat-detail-send-box__send flex flex-row py-4 justify-center">
         <button
-          className="chat-detail-send-box__send__button bg-secondary border-2 border-secondary rounded-xl flex justify-center items-center"
+          className="chat-detail-send-box__send__button bg-secondary border-2 border-secondary flex justify-center items-center"
           onClick={send}
         >
           <img
             className="chat-detail-send-box__send__button__icon"
-            src={SendIcon}
+            src="/img/send.svg"
+            alt="send"
+          />
+        </button>
+        <button
+          className="chat-detail-send-box__send__button bg-secondary border-2 border-secondary flex justify-center items-center"
+          onClick={send}
+        >
+          <img
+            className="chat-detail-send-box__send__button__icon"
+            src="/img/attach.svg"
             alt="send"
           />
         </button>

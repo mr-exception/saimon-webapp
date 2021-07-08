@@ -6,7 +6,6 @@ import {
   selectFirstName,
   selectLastName,
 } from "redux/types/selectors";
-import CopyIcon from "img/copy.svg";
 import TextField from "ui-kit/Form/FormField/TextField";
 import { updateFirstName, updateLastName } from "redux/actions/profile";
 /**
@@ -59,7 +58,7 @@ const Profile = () => {
           onClick={copyAddress}
           className="absolute bottom-2 right-2 b-2 border-secondary bg-secondary hover:bg-primary hover:border-primary rounded-md text-white p-2 "
         >
-          <img className="copy-icon" src={CopyIcon} alt="copy icon" />
+          <img className="copy-icon" src="/img/copy.svg" alt="copy icon" />
         </button>
       </div>
     </div>

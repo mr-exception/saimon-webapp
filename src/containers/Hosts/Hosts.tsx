@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./styles.css";
-import AddIcon from "img/add.svg";
 import { IInitialState } from "redux/types/states";
 import { useDispatch, useSelector } from "react-redux";
 import { showAddHostModal } from "redux/actions/modals";
@@ -30,7 +29,7 @@ const Hosts = () => {
             dispatch(showAddHostModal());
           }}
         >
-          <img alt="add" className="search__add__icon" src={AddIcon} />
+          <img alt="add" className="search__add__icon" src="/img/add.svg" />
         </button>
       </div>
       {hosts
