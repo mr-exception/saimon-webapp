@@ -24,6 +24,7 @@ const load = async (
       advertise_period: 5000,
       score: 100,
       id: 0,
+      disabled: false,
     };
     new RelayHost(relay_host, app_key).store();
     host_records.push(relay_host);
@@ -34,7 +35,7 @@ const load = async (
         new Promise<Host>(async (resolve, reject) => {
           if (rec.type === "RELAY") {
             const host = new RelayHost(rec, app_key);
-            host.connect();
+            if (!host.disabled) host.connect();
             const queue = store.getState().relay_queue;
             queue.push({
               type: "HEART_BEAT",

@@ -44,6 +44,7 @@ const AddHostModal = () => {
             protocl: record.service.protocol,
             advertise_period: parseInt(record.service.ad_price),
             score: 0,
+            disabled: false,
           },
           app_key
         );
@@ -59,6 +60,7 @@ const AddHostModal = () => {
             protocl: record.service.protocol,
             advertise_period: parseInt(record.service.ad_price),
             score: 0,
+            disabled: false,
           },
           app_key
         );
@@ -73,6 +75,7 @@ const AddHostModal = () => {
             protocl: record.service.protocol,
             advertise_period: parseInt(record.service.ad_price),
             score: 0,
+            disabled: false,
           },
           app_key
         );

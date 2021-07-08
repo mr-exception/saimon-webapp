@@ -120,7 +120,6 @@ export default class RelayHost extends Host {
       this._socket.disconnect();
       this._socket.close();
     }
-    this._finished$.next();
   }
   /**
    * start listening host node events

@@ -11,6 +11,7 @@ export default class Host extends Entity<IHost> {
   public type: HostType;
   public protocl: HostProtocol;
   public advertise_period: number;
+  public disabled: boolean;
 
   constructor(host_record: IHost, public client_key: Key) {
     super("hosts", host_record.id);
@@ -20,6 +21,7 @@ export default class Host extends Entity<IHost> {
     this.type = host_record.type;
     this.protocl = host_record.protocl;
     this.advertise_period = host_record.advertise_period;
+    this.disabled = host_record.disabled;
   }
   /**
    * returns the object of entity based on entity interface
@@ -32,6 +34,7 @@ export default class Host extends Entity<IHost> {
       type: this.type,
       protocl: this.protocl,
       advertise_period: this.advertise_period,
+      disabled: this.disabled,
     };
   }
   public getAdvertisePeriod(): string {
@@ -59,7 +62,31 @@ export default class Host extends Entity<IHost> {
       store.dispatch(editHost(this));
       return true;
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      return false;
+    }
+  }
+
+  public async disable(): Promise<boolean> {
+    try {
+      this.disabled = true;
+      this.update();
+      store.dispatch(editHost(this));
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+
+  public async enable(): Promise<boolean> {
+    try {
+      this.disabled = false;
+      this.update();
+      store.dispatch(editHost(this));
+      return true;
+    } catch (error) {
+      console.error(error);
       return false;
     }
   }
@@ -73,6 +100,7 @@ export interface IHost {
   name: string;
   score: number;
   advertise_period: number;
+  disabled: boolean;
 }
 
 export type HostType = "RELAY" | "STORAGE" | "ADVERTISER";

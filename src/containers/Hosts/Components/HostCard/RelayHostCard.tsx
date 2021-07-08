@@ -58,13 +58,15 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
   const connect = useCallback(async () => {
     if (!canConnect) return;
     try {
-      await host.connect();
+      host.enable();
+      host.connect();
     } catch (error) {
       console.log(error);
     }
   }, [host, canConnect]);
 
   const disconnect = async () => {
+    host.disable();
     host.close();
   };
   return (
