@@ -27,7 +27,7 @@ const handle = async (job: IReportRequest) => {
       name: host.name,
       score: host.score,
       type: host.type,
-      protocol: host.protocl,
+      protocol: host.protocol,
       ad_price: host.advertise_period,
     })),
     contacts: contacts.map((contact) => ({

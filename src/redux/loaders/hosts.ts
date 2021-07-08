@@ -20,7 +20,7 @@ const load = async (
       name: "salimon relay host",
       address: "https://relay.salimon.ir",
       type: "RELAY",
-      protocl: "LIVE",
+      protocol: "LIVE",
       advertise_period: 5000,
       score: 100,
       id: 0,

@@ -9,7 +9,7 @@ export default class Host extends Entity<IHost> {
   public address: string;
   public score: number;
   public type: HostType;
-  public protocl: HostProtocol;
+  public protocol: HostProtocol;
   public advertise_period: number;
   /**
    * disabled can be toggled by user interaction. for example when user disconnects
@@ -25,7 +25,7 @@ export default class Host extends Entity<IHost> {
     this.address = host_record.address;
     this.score = host_record.score;
     this.type = host_record.type;
-    this.protocl = host_record.protocl;
+    this.protocol = host_record.protocol;
     this.advertise_period = host_record.advertise_period;
     this.disabled = host_record.disabled;
   }
@@ -38,7 +38,7 @@ export default class Host extends Entity<IHost> {
       address: this.address,
       score: this.score,
       type: this.type,
-      protocl: this.protocl,
+      protocol: this.protocol,
       advertise_period: this.advertise_period,
       disabled: this.disabled,
     };
@@ -102,7 +102,7 @@ export interface IHost {
   id: number;
   address: string;
   type: HostType;
-  protocl: HostProtocol;
+  protocol: HostProtocol;
   name: string;
   score: number;
   advertise_period: number;

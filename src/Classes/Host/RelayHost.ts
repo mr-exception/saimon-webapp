@@ -306,7 +306,7 @@ export interface IHost {
   id: number;
   address: string;
   type: HostType;
-  protocl: HostProtocol;
+  protocol: HostProtocol;
   name: string;
   score: number;
   advertise_period: number;

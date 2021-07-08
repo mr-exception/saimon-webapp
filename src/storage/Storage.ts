@@ -10,7 +10,7 @@ export default class Storage {
   constructor() {
     this._db = new Dexie("salimon");
     this._db.version(1).stores({
-      hosts: "++id,name,address,type,protocl,advertise_period,score",
+      hosts: "++id,name,address,type,protocol,advertise_period,score",
       contacts:
         "++id,first_name,last_name,public_key,Advertiser_host_ids,relay_host_ids",
       messages: "++id,network_id,contact_id,content,public_key,box_type,date",
