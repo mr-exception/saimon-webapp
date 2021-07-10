@@ -1,14 +1,14 @@
-.message-row {
+.messageRow {
   @apply flex flex-col justify-start items-end p-8;
   word-wrap: break-word;
   min-height: 80px;
 }
-.message-row__content {
-  @apply p-4 border-2 border-base rounded-xl rounded-tr-none;
+.content {
+  @apply p-4 border-2 border-base rounded-xl rounded-tr-none flex flex-row;
   flex: 1;
   max-width: 500px;
 }
-.message-row__date {
+.date {
   @apply text-xs;
   flex: 1;
 }

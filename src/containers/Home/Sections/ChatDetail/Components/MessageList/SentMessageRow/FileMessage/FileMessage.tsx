@@ -2,7 +2,7 @@ import DownloadIcon from "img/DownloadIcon";
 import React from "react";
 import { useMemo } from "react";
 import { IFileMessageProps } from "./def";
-import "./styles.css";
+import Styles from "./styles.module.css";
 const TextMessage: React.FC<IFileMessageProps> = ({
   sent_at,
   status,
@@ -33,16 +33,16 @@ const TextMessage: React.FC<IFileMessageProps> = ({
     element.remove();
   };
   return (
-    <div className="message-row">
-      <div className="message-row__content flex flex-row">
-        <div className="download" onClick={download}>
+    <div className={Styles.messageRow}>
+      <div className={Styles.content}>
+        <div className={Styles.download} onClick={download}>
           <DownloadIcon />
         </div>
-        <div className="name">
+        <div className={Styles.name}>
           {name} ({sizeText})
         </div>
       </div>
-      <div className="message-row__date">
+      <div className={Styles.date}>
         {generateSentAtDateString()} ( {status} )
       </div>
     </div>

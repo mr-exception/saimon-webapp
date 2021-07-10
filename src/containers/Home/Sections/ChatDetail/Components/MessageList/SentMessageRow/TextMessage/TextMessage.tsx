@@ -1,6 +1,6 @@
 import React from "react";
 import { ITextMessageProps } from "./def";
-import "./styles.css";
+import Styles from "./styles.module.css";
 const TextMessage: React.FC<ITextMessageProps> = ({
   text,
   sent_at,
@@ -11,11 +11,9 @@ const TextMessage: React.FC<ITextMessageProps> = ({
     return `${date.getHours()}:${date.getMinutes()}`;
   };
   return (
-    <div className="message-row flex flex-col justify-start items-end p-8">
-      <div className="message-row__content p-4 border-2 border-base rounded-xl rounded-tr-none">
-        {text}
-      </div>
-      <div className="message-row__date text-xs">
+    <div className={Styles.messageRow}>
+      <div className={Styles.content}>{text}</div>
+      <div className={Styles.date}>
         {generateSentAtDateString()} ( {status} )
       </div>
     </div>
