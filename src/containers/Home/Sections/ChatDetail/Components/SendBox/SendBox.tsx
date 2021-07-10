@@ -4,16 +4,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectClient, selectedContact } from "redux/types/selectors";
 import Key from "core/Key/Key";
 import { addMessage } from "redux/actions/conversations";
-import Message from "Classes/Message/Message";
+import Message, { IMessageContent } from "Classes/Message/Message";
 import { v4 as uuidV4 } from "uuid";
+import { useRef } from "react";
 const SendBox: React.FC<ISendBoxProps> = () => {
   const selected_contact = useSelector(selectedContact);
   const [content, set_content] = useState("");
   const client = useSelector(selectClient);
   const dispatch = useDispatch();
+  const fileInput = useRef<HTMLInputElement>(null);
+
   if (!selected_contact) {
     return null;
   }
+
   const send = async () => {
     const dst_key = Key.generateKeyByPublicKey(selected_contact.public_key);
     const message = new Message({
@@ -31,9 +35,43 @@ const SendBox: React.FC<ISendBoxProps> = () => {
     client.sendMessage(message, dst_key);
     set_content("");
   };
+
+  const selectFiles = (files: FileList) => {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64 = reader.result as string;
+        const content: IMessageContent = {
+          type: "FILE",
+          name: file.name,
+          size: file.size,
+          payload: base64,
+        };
+
+        const dst_key = Key.generateKeyByPublicKey(selected_contact.public_key);
+        const message = new Message({
+          id: 0,
+          contact_id: selected_contact.id,
+          public_key: selected_contact.public_key,
+          content: JSON.stringify(content),
+          status: "SENDING",
+          date: Date.now(),
+          box_type: "SENT",
+          network_id: uuidV4(),
+        });
+        await message.store();
+        dispatch(addMessage(message));
+        client.sendMessage(message, dst_key);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
   return (
-    <div className="chat-detail-send-box flex flex-row border-t-2 border-base">
-      <div className="chat-detail-send-box__content flex flex-col p-2">
+    <div className="send-box flex flex-row border-t-2 border-base">
+      <div className="send-box__content flex flex-col p-2">
         <textarea
           onKeyUp={(event) => {
             if (event.ctrlKey && event.key === "Enter") {
@@ -42,27 +80,39 @@ const SendBox: React.FC<ISendBoxProps> = () => {
           }}
           value={content}
           onChange={(e) => set_content(e.target.value)}
-          className="chat-detail-send-box__content__input rounded-lg border-2 border-base"
+          className="send-box__content__input rounded-lg border-2 border-base"
         ></textarea>
       </div>
-      <div className="chat-detail-send-box__send flex flex-row py-4 justify-center">
+      <div className="send-box__send flex flex-row py-4 justify-center">
         <button
-          className="chat-detail-send-box__send__button bg-secondary border-2 border-secondary flex justify-center items-center"
-          onClick={send}
+          className="send-box__send__button flex justify-center items-center"
+          onClick={() => {
+            fileInput.current?.click();
+          }}
         >
           <img
-            className="chat-detail-send-box__send__button__icon"
-            src="/img/send.svg"
+            className="send-box__send__button__icon"
+            src="/img/attach.svg"
             alt="send"
+          />
+          <input
+            type="file"
+            ref={fileInput}
+            hidden
+            onChange={(event) => {
+              if (event.target.files) {
+                selectFiles(event.target.files);
+              }
+            }}
           />
         </button>
         <button
-          className="chat-detail-send-box__send__button bg-secondary border-2 border-secondary flex justify-center items-center"
+          className="send-box__send__button bg-secondary border-2 border-secondary rounded-xl flex justify-center items-center"
           onClick={send}
         >
           <img
-            className="chat-detail-send-box__send__button__icon"
-            src="/img/attach.svg"
+            className="send-box__send__button__icon"
+            src="/img/send.svg"
             alt="send"
           />
         </button>

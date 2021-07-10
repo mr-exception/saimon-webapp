@@ -288,7 +288,9 @@ export default class RelayHost extends Host {
   private async _continueQueue(): Promise<void> {
     const packet = this._sending_packet_queue.pull();
     if (!!packet) {
+      console.log("sending a packet");
       await this.sendPacket(packet);
+      console.log("finished sending the packet");
       // store
       //   .getState()
       //   .client.updateDeliverPendingPacket(

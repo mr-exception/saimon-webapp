@@ -1,0 +1,11 @@
+.message-row {
+  word-wrap: break-word;
+  min-height: 80px;
+}
+.message-row__content {
+  flex: 1;
+  max-width: 500px;
+}
+.message-row__send {
+  flex: 1;
+}

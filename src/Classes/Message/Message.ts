@@ -1,5 +1,4 @@
 import Entity from "Classes/Entity/Entity";
-import { IReportMessage } from "Classes/Queue/def";
 
 export default class Message extends Entity<IMessage> {
   public network_id: string;
@@ -52,13 +51,37 @@ export default class Message extends Entity<IMessage> {
     return this.getContent().type;
   }
 
-  get text(): string {
+  public getText(): string {
     const content = this.getContent();
     if (content.type === "TEXT") {
-      return this.getContent().payload as string;
+      return content.payload;
     } else {
       return "";
     }
+  }
+  public async getfile(): Promise<Blob | undefined> {
+    const content = this.getContent();
+    if (content.type === "FILE") {
+      const blob = await (await fetch(content.payload)).blob();
+      return blob;
+    }
+  }
+
+  public getBase64File(): string {
+    const content = this.getContent();
+    if (content.type === "FILE") {
+      return content.payload;
+    }
+    return "";
+  }
+
+  public getSize(): number {
+    const content = this.getContent();
+    return content.size || 0;
+  }
+  public getName(): string {
+    const content = this.getContent();
+    return content.name || "no-name";
   }
 }
 export interface IMessage {
@@ -74,7 +97,9 @@ export interface IMessage {
 
 export interface IMessageContent {
   type: MessageType;
-  payload: string | IReportMessage;
+  payload: string;
+  name?: string;
+  size?: number;
 }
 
 export type MessageSentState = "SENT" | "DELIVERED" | "SENDING" | "FAILED";

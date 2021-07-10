@@ -1,27 +1,27 @@
-.chat-detail-send-box {
+.send-box {
   flex: 1;
   max-height: 80px;
 }
 
-.chat-detail-send-box__content {
+.send-box__content {
   flex: 5;
 }
 
-.chat-detail-send-box__content__input {
+.send-box__content__input {
   align-self: stretch;
   height: 100%;
   resize: none;
 }
 
-.chat-detail-send-box__send {
+.send-box__send {
   flex: 1;
-  max-width: 80px;
+  min-width: 100px;
 }
 
-.chat-detail-send-box__send__button {
+.send-box__send__button {
   width: 60px;
 }
 
-.chat-detail-send-box__send__button__icon {
+.send-box__send__button__icon {
   width: 25px;
 }
