@@ -1,0 +1,38 @@
+.container {
+  @apply flex flex-row border-t-2 border-base;
+  flex: 1;
+  max-height: 80px;
+}
+
+.content {
+  @apply flex flex-col p-2;
+  flex: 5;
+}
+
+.input {
+  @apply rounded-lg border-2 border-base self-stretch h-full resize-none;
+}
+
+.send {
+  @apply flex flex-row py-4 justify-center;
+  flex: 1;
+  min-width: 100px;
+}
+
+.button {
+  @apply flex justify-center items-center;
+  width: 60px;
+}
+
+.buttonIcon {
+  width: 25px;
+}
+
+.attachButton {
+  @apply button;
+  @apply bg-secondary border-2 border-secondary rounded-xl flex justify-center items-center button;
+}
+
+.sendButton {
+  @apply button;
+}

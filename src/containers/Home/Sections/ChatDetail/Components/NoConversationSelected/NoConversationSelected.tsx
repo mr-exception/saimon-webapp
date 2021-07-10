@@ -1,11 +1,9 @@
 import React from "react";
-import "./styles.css";
+import Styles from "./styles.module.css";
 const NoConversationSelected: React.FC<INoConversationSelectedProps> = () => {
   return (
-    <div className="no-conversation-selected">
-      <div className="no-conversation-selected__content">
-        no conversation is selected
-      </div>
+    <div className={Styles.container}>
+      <div className={Styles.content}>no conversation is selected</div>
     </div>
   );
 };

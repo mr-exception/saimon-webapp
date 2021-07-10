@@ -1,0 +1,40 @@
+.container {
+  @apply flex flex-row;
+  flex: 1;
+  max-height: 80px;
+  border-bottom: 1px solid #555;
+}
+
+.avatar {
+  @apply flex flex-col justify-center items-center;
+  width: 20%;
+}
+
+.avatarImage {
+  max-height: 70%;
+  width: auto;
+}
+
+.content {
+  @apply flex flex-col;
+  width: 60%;
+}
+
+.name {
+  @apply flex justify-start items-center;
+  flex: 1;
+}
+
+.lastOnline {
+  @apply flex justify-start items-center;
+  flex: 1;
+}
+
+.headerInfo {
+  @apply flex flex-col justify-center items-end p-4;
+  width: 20%;
+}
+
+.actions {
+  max-width: 25px;
+}

@@ -1,9 +1,0 @@
-.no-message {
-  @apply flex flex-1 flex-col justify-center items-center;
-}
-.no-message__content {
-  @apply flex-1 flex justify-center items-center bg-base rounded-xl;
-  max-height: 80px;
-  max-width: 70%;
-  min-width: 350px;
-}

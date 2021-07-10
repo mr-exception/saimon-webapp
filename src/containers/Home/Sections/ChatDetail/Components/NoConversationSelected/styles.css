@@ -1,9 +1,0 @@
-.no-conversation-selected {
-  @apply flex flex-col justify-center items-center flex-1;
-}
-.no-conversation-selected__content {
-  @apply flex-1 flex justify-center items-center bg-base rounded-xl;
-  max-height: 80px;
-  max-width: 70%;
-  min-width: 350px;
-}

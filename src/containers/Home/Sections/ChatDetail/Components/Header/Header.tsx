@@ -1,5 +1,5 @@
 import React from "react";
-import "./styles.css";
+import Styles from "./styles.module.css";
 import { showContactDetailsModal } from "redux/actions/modals";
 import { IHeaderProps } from "./def";
 import { useDispatch } from "react-redux";
@@ -13,24 +13,24 @@ const Header: React.FC<IHeaderProps> = ({
     return `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
   };
   return (
-    <div className="chat-detail-header">
-      <div className="chat-detail-header__avatar">
+    <div className={Styles.container}>
+      <div className={Styles.avatar}>
         <img
           src="/img/avatar.svg"
-          className="chat-detail-header__avatar__image"
+          className={Styles.avatarImage}
           alt="avatar"
         />
       </div>
-      <div className="chat-detail-header__content">
-        <div className="chat-detail-header__content__name">
+      <div className={Styles.content}>
+        <div className={Styles.name}>
           <label>{`${contact.first_name} ${contact.last_name}`}</label>
         </div>
-        <div className="chat-detail-header__content__last_online">
+        <div className={Styles.lastOnline}>
           <label>{generateLastOnlineDateText()}</label>
         </div>
       </div>
-      <div className="chat-detail-header__info">
-        <button className="btn-actions">
+      <div className={Styles.headerInfo}>
+        <button className={Styles.actions}>
           <img
             src="/img/menu.svg"
             alt="actions"

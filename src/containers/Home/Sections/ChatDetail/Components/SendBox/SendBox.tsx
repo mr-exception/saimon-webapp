@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./styles.css";
+import Styles from "./styles.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { selectClient, selectedContact } from "redux/types/selectors";
 import Key from "core/Key/Key";
@@ -70,8 +70,8 @@ const SendBox: React.FC<ISendBoxProps> = () => {
     }
   };
   return (
-    <div className="send-box flex flex-row border-t-2 border-base">
-      <div className="send-box__content flex flex-col p-2">
+    <div className={Styles.container}>
+      <div className={Styles.content}>
         <textarea
           onKeyUp={(event) => {
             if (event.ctrlKey && event.key === "Enter") {
@@ -80,21 +80,17 @@ const SendBox: React.FC<ISendBoxProps> = () => {
           }}
           value={content}
           onChange={(e) => set_content(e.target.value)}
-          className="send-box__content__input rounded-lg border-2 border-base"
+          className={Styles.input}
         ></textarea>
       </div>
-      <div className="send-box__send flex flex-row py-4 justify-center">
+      <div className={Styles.send}>
         <button
-          className="send-box__send__button flex justify-center items-center"
+          className={Styles.sendButton}
           onClick={() => {
             fileInput.current?.click();
           }}
         >
-          <img
-            className="send-box__send__button__icon"
-            src="/img/attach.svg"
-            alt="send"
-          />
+          <img className={Styles.buttonIcon} src="/img/attach.svg" alt="send" />
           <input
             type="file"
             ref={fileInput}
@@ -106,15 +102,8 @@ const SendBox: React.FC<ISendBoxProps> = () => {
             }}
           />
         </button>
-        <button
-          className="send-box__send__button bg-secondary border-2 border-secondary rounded-xl flex justify-center items-center"
-          onClick={send}
-        >
-          <img
-            className="send-box__send__button__icon"
-            src="/img/send.svg"
-            alt="send"
-          />
+        <button className={Styles.attachButton} onClick={send}>
+          <img className={Styles.buttonIcon} src="/img/send.svg" alt="send" />
         </button>
       </div>
     </div>
