@@ -137,21 +137,23 @@ export default class RelayHost extends Host {
       ackCallback("got");
     });
     // listen to packet got event from host node
-    this._socket.on("pck_got", (packet_got_chiper: string, ackCallback) => {
-      const packet_got_buffer =
-        this.client_key.decryptPrivate(packet_got_chiper);
-      const packet_got: IPacketGot = JSON.parse(packet_got_buffer.toString());
-      const packet_tdd = this.getPacketTTD(packet_got.id, packet_got.position);
-      if (packet_tdd) {
-        this._onPacketGot$.next({
-          id: packet_got.id,
-          position: packet_got.position,
-          time: Date.now() - packet_tdd.time,
-        });
-        this.removePacketTTD(packet_got.id, packet_got.position);
+    this._socket.on(
+      "pck_got",
+      async (packet_got_chiper: string, ackCallback) => {
+        const packet_got_buffer =
+          this.client_key.decryptPrivate(packet_got_chiper);
+        const packet_got: IPacketGot = JSON.parse(packet_got_buffer.toString());
+
+        const storage = store.getState().storage;
+        const message = await storage.getMessageByNetworkId(packet_got.id);
+        if (!message) {
+          ackCallback("got");
+          return;
+        }
+        message.setPacketDeliverState(packet_got.position, "DELIVERED");
+        ackCallback("got");
       }
-      ackCallback("got");
-    });
+    );
     // listen to any client state changed through this connection
     this._socket.on("status_update", (cipher: string, ackCallback) => {
       if (!this._socket) return;
@@ -185,6 +187,10 @@ export default class RelayHost extends Host {
     const content = Buffer.from(JSON.stringify(message.content));
     const length = content.length;
     const packet_count = Math.ceil(length / configs.packet_length);
+    // updateing packet count for message entity
+    message.packets_count = packet_count;
+    message.update();
+    // slicing buffer into packets
     const data_parts: Buffer[] = [];
     for (let i = 0; i < packet_count; i++) {
       data_parts.push(
@@ -194,6 +200,7 @@ export default class RelayHost extends Host {
         )
       );
     }
+    // encrypting packets
     const parts_cipher = await Promise.all(
       data_parts.map((part) => {
         return new Promise<string>((resolve) => {
@@ -201,6 +208,7 @@ export default class RelayHost extends Host {
         });
       })
     );
+    // adding packets into sending queue
     parts_cipher.forEach(async (part, position) => {
       if (!this._socket) throw new Error("connection is dead");
       const packet: IPacket = {
@@ -246,7 +254,6 @@ export default class RelayHost extends Host {
           // this._ttr_avg =
           //   (this._ttr_avg * this._ttr_count + ttr) / (this._ttr_count + 1);
           // this._ttr_count++;
-          console.log(ack_data);
           resolve(ack_data);
         }
       );
@@ -289,16 +296,7 @@ export default class RelayHost extends Host {
     const packet = this._sending_packet_queue.pull();
     if (!!packet) {
       console.log("sending a packet");
-      await this.sendPacket(packet);
       console.log("finished sending the packet");
-      // store
-      //   .getState()
-      //   .client.updateDeliverPendingPacket(
-      //     packet.id,
-      //     packet.position,
-      //     packet.count,
-      //     result
-      //   );
       this._continueQueue();
     }
   }

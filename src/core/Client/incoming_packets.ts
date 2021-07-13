@@ -66,6 +66,7 @@ export const checkIncomingMessage = async (id: string): Promise<boolean> => {
     status: "DELIVERED",
     date: Date.now(),
     content: content,
+    packets: "[]",
   });
   client.removeReservedPacketsById(id);
   message.store(storage);

@@ -29,6 +29,7 @@ const SendBox: React.FC<ISendBoxProps> = () => {
       date: Date.now(),
       box_type: "SENT",
       network_id: uuidV4(),
+      packets: "[]",
     });
     await message.store();
     dispatch(addMessage(message));
@@ -60,6 +61,7 @@ const SendBox: React.FC<ISendBoxProps> = () => {
           date: Date.now(),
           box_type: "SENT",
           network_id: uuidV4(),
+          packets: "[]",
         });
         await message.store();
         dispatch(addMessage(message));

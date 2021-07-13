@@ -1,10 +1,10 @@
-import Message, { MessageSentState } from "Classes/Message/Message";
+import Message from "Classes/Message/Message";
 import {
   ActionType,
   ADD_MESSAGE,
   RESET_MESSAGES,
   SELECT_CONVERSATION,
-  UPDATE_MESSAGE_STATUS,
+  UPDATE_MESSAGE,
 } from "redux/types/actions";
 
 export const selectConversation = (contact_id: number): ActionType => {
@@ -13,13 +13,10 @@ export const selectConversation = (contact_id: number): ActionType => {
 export const addMessage = (message: Message): ActionType => {
   return { type: ADD_MESSAGE, message };
 };
-export const updateMessageStatus = (
-  message_id: string,
-  status: MessageSentState
-): ActionType => {
+export const updateMessage = (message: Message): ActionType => {
   return {
-    type: UPDATE_MESSAGE_STATUS,
-    message_status: { message_id, status },
+    type: UPDATE_MESSAGE,
+    message,
   };
 };
 export const resetMessages = (messages: Message[]): ActionType => {

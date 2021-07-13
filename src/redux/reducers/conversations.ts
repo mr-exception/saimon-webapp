@@ -17,13 +17,12 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
         ...[action.message],
       ];
       return state;
-    case Actions.UPDATE_MESSAGE_STATUS:
+    case Actions.UPDATE_MESSAGE:
       state.selected_conversation_messages =
         state.selected_conversation_messages.map((message) => {
-          if (!action.message_status) return message;
-          if (message.network_id === action.message_status.message_id) {
-            message.status = action.message_status.status;
-            message.update(state.storage);
+          if (!action.message) return message;
+          if (message.network_id === action.message.network_id) {
+            return action.message;
           }
           return message;
         });

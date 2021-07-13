@@ -1,6 +1,6 @@
 import { IContact } from "Classes/Contact/Contact";
 import { IHost } from "Classes/Host/Host";
-import { IMessage } from "Classes/Message/Message";
+import Message, { IMessage } from "Classes/Message/Message";
 import Dexie from "dexie";
 export default class Storage {
   private _db: Dexie;
@@ -9,11 +9,12 @@ export default class Storage {
   private _messages: Dexie.Table<IMessage, number>;
   constructor() {
     this._db = new Dexie("salimon");
-    this._db.version(1).stores({
+    this._db.version(3).stores({
       hosts: "++id,name,address,type,protocol,advertise_period,score",
       contacts:
         "++id,first_name,last_name,public_key,Advertiser_host_ids,relay_host_ids",
-      messages: "++id,network_id,contact_id,content,public_key,box_type,date",
+      messages:
+        "++id,network_id,contact_id,content,public_key,box_type,date,packets,packet_count",
     });
     this._hosts = this._db.table("hosts");
     this._contacts = this._db.table("contacts");
@@ -68,5 +69,11 @@ export default class Storage {
           })
       )
     );
+  }
+
+  public async getMessageByNetworkId(network_id: string) {
+    const message_record = await this._messages.get({ network_id });
+    if (!message_record) return undefined;
+    return new Message(message_record);
   }
 }

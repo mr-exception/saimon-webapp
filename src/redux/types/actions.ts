@@ -1,6 +1,6 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
-import Message, { MessageSentState } from "Classes/Message/Message";
+import Message from "Classes/Message/Message";
 import Client from "core/Client/Client";
 import {
   ConnectionStatus,
@@ -45,7 +45,7 @@ export const SELECT_CONVERSATION = "select_conversation";
 export const ADD_MESSAGE = "add_message";
 export const ADD_MESSAGES = "add_messages";
 export const RESET_MESSAGES = "reset_messages";
-export const UPDATE_MESSAGE_STATUS = "update_message_status";
+export const UPDATE_MESSAGE = "update_message";
 // others
 export const CLEAR_ALL = "clear_all";
 export const SET_CONNECTION_STATUS = "set_connection_status";
@@ -66,10 +66,6 @@ export type ActionType = {
 
   message?: Message;
   messages?: Message[];
-  message_status?: {
-    message_id: string;
-    status: MessageSentState;
-  };
 
   confirmation_dialog?: {
     message: string;

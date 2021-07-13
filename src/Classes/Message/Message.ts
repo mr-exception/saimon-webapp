@@ -1,4 +1,7 @@
 import Entity from "Classes/Entity/Entity";
+import { PacketSendStatus } from "core/Connection/def";
+import { updateMessage } from "redux/actions/conversations";
+import store from "redux/store";
 
 export default class Message extends Entity<IMessage> {
   public network_id: string;
@@ -8,6 +11,8 @@ export default class Message extends Entity<IMessage> {
   public box_type: BoxType;
   public date: number;
   public status: MessageSentState;
+  public packets: IPacketDeliverState[];
+  public packets_count?: number;
   constructor(message_record: IMessage) {
     super("messages", message_record.id);
     this.network_id = message_record.network_id;
@@ -17,6 +22,8 @@ export default class Message extends Entity<IMessage> {
     this.box_type = message_record.box_type;
     this.date = message_record.date;
     this.status = message_record.status;
+    this.packets = JSON.parse(message_record.packets) as IPacketDeliverState[];
+    this.packets_count = message_record.packets_count;
   }
   /**
    * returns the object of entity based on entity interface
@@ -30,6 +37,8 @@ export default class Message extends Entity<IMessage> {
       box_type: this.box_type,
       date: this.date,
       status: this.status,
+      packets: JSON.stringify(this.packets),
+      packets_count: this.packets_count,
     };
     return data;
   }
@@ -83,6 +92,38 @@ export default class Message extends Entity<IMessage> {
     const content = this.getContent();
     return content.name || "no-name";
   }
+
+  public getPacketDeliverState(
+    position: number
+  ): IPacketDeliverState | undefined {
+    return this.packets.find((record) => record.position === position);
+  }
+  public setPacketDeliverState(position: number, state: PacketSendStatus) {
+    const record = this.getPacketDeliverState(position);
+    if (record) {
+      record.state = state;
+    } else {
+      this.packets.push({ position, state });
+    }
+    this.updateMessageStateBasedOnPackets();
+    this.update();
+    store.dispatch(updateMessage(this));
+  }
+
+  /**
+   * declare message deliver status based on packet acks
+   * notice: this method won't work till all packet acks are retrived from hosts
+   */
+  public updateMessageStateBasedOnPackets() {
+    console.log(this.packets_count, this.packets);
+    if (!this.packets_count) return;
+    if (this.packets_count !== this.packets.length) return;
+    if (!!this.packets.find((record) => record.state === "FAILED")) {
+      // we have failed packet, so the message delivery is failed
+      this.status = "FAILED";
+    }
+    this.status = "DELIVERED";
+  }
 }
 export interface IMessage {
   id: number;
@@ -93,6 +134,8 @@ export interface IMessage {
   box_type: BoxType;
   date: number;
   status: MessageSentState;
+  packets: string;
+  packets_count?: number;
 }
 
 export interface IMessageContent {
@@ -111,3 +154,8 @@ export type MessageType =
   | "MOVIE"
   | "FILE"
   | "REPORT";
+
+export interface IPacketDeliverState {
+  state: PacketSendStatus;
+  position: number;
+}
