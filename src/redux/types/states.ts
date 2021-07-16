@@ -1,13 +1,7 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
 import Message from "Classes/Message/Message";
-import {
-  IAdvertiserRequest,
-  IPacketDeliverRequest,
-  IRelayRequest,
-  IReportRequest,
-  IStorageRequest,
-} from "Classes/Queue/def";
+import { IReportRequest } from "Classes/Queue/def";
 import Queue from "Classes/Queue/Queue";
 import Client from "core/Client/Client";
 import { ConnectionStatus } from "core/Connection/def";
@@ -61,10 +55,6 @@ export interface IInitialState {
   selected_conversation_messages: Message[];
 
   // request queues
-  advertiser_queue: Queue<IAdvertiserRequest>;
-  storage_queue: Queue<IStorageRequest>;
-  relay_queue: Queue<IRelayRequest>;
-  packet_queue: Queue<IPacketDeliverRequest>;
   report_queue: Queue<IReportRequest>;
 }
 /**

@@ -1,8 +1,11 @@
 import Contact from "Classes/Contact/Contact";
-import Message from "Classes/Message/Message";
+import Host from "Classes/Host/Host";
+import Message, { IMessageContent } from "Classes/Message/Message";
+import { IReportMessage } from "Classes/Queue/def";
 import Key from "core/Key/Key";
 import { addContact } from "redux/actions/contacts";
 import { addMessage } from "redux/actions/conversations";
+import { addHost } from "redux/actions/hosts";
 import store from "redux/store";
 
 /**
@@ -34,7 +37,7 @@ const checkForContact = async (address: string): Promise<Contact> => {
  * otherwise just returns false
  */
 export const checkIncomingMessage = async (id: string): Promise<boolean> => {
-  const { app_key, storage, client } = store.getState();
+  const { app_key, client, hosts } = store.getState();
   if (!app_key) {
     return false;
   }
@@ -57,6 +60,48 @@ export const checkIncomingMessage = async (id: string): Promise<boolean> => {
     .reduce((prev, cur) => Buffer.concat([prev, cur]));
 
   const content = buffer.toString();
+  const contentObject = JSON.parse(content) as IMessageContent;
+  if (contentObject.type === "REPORT") {
+    const report = JSON.parse(
+      JSON.stringify(contentObject.payload)
+    ) as IReportMessage;
+    report.hosts.forEach(async (host_record) => {
+      let host = hosts.find((record) => record.address === host_record.address);
+      if (!host) {
+        host = new Host(
+          {
+            id: 0,
+            address: host_record.address,
+            advertise_period: host_record.ad_price,
+            type: host_record.type,
+            protocol: host_record.protocol,
+            name: host_record.name,
+            score: host_record.score,
+            disabled: true,
+          },
+          app_key
+        );
+        console.log("added new host based on reports");
+        await host.store();
+        store.dispatch(addHost(host));
+      }
+      switch (host.type) {
+        case "RELAY":
+          if (!contact.relay_host_ids.includes(host.id)) {
+            contact.relay_host_ids.push(host.id);
+            await contact.update();
+          }
+          break;
+        case "ADVERTISER":
+          if (!contact.advertiser_host_ids.includes(host.id)) {
+            contact.advertiser_host_ids.push(host.id);
+            await contact.update();
+          }
+          break;
+      }
+    });
+    return true;
+  }
   const message = new Message({
     id: 0,
     network_id: packets[0].id,
@@ -69,7 +114,7 @@ export const checkIncomingMessage = async (id: string): Promise<boolean> => {
     packets: "[]",
   });
   client.removeReservedPacketsById(id);
-  message.store(storage);
+  message.store();
   store.dispatch(addMessage(message));
   return true;
 };

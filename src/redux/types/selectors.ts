@@ -13,11 +13,7 @@ export const selectHosts = (state: IInitialState) => state.hosts;
 export const selectContacts = (state: IInitialState) => state.contacts;
 export const selectConnectionStatus = (state: IInitialState) => state.is_online;
 // queue selectors
-export const selectRelayHostLayer = (state: IInitialState) => state.relay_queue;
-export const selectAdvertiserHostLayer = (state: IInitialState) =>
-  state.advertiser_queue;
-export const selectStorageHostLayer = (state: IInitialState) =>
-  state.storage_queue;
+export const selectReportQueue = (state: IInitialState) => state.report_queue;
 // secondary selectors
 export const selectHostConnectionStates = (state: IInitialState) =>
   state.host_connections;
@@ -35,6 +31,3 @@ export const selectedContact = (state: IInitialState) => {
 };
 export const selectConversationMessages = (state: IInitialState) =>
   state.selected_conversation_messages;
-
-export const selectAdvertiserRequestsQueue = (state: IInitialState) =>
-  state.advertiser_queue;

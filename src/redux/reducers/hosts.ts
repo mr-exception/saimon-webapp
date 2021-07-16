@@ -14,6 +14,7 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
       if (!action.host) {
         return state;
       }
+      console.log("added host in reducer");
       state.hosts = [...state.hosts, action.host];
       return state;
     case Actions.REMOVE_HOST:

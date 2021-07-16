@@ -31,6 +31,7 @@ export interface IPacketDeliverRequest {
 
 export interface IReportRequest {
   contact: Contact;
+  once?: boolean;
 }
 
 // messages in layers

@@ -1,6 +1,6 @@
 import { IContact } from "Classes/Contact/Contact";
 import { IHost } from "Classes/Host/Host";
-import Message, { IMessage } from "Classes/Message/Message";
+import { IMessage } from "Classes/Message/Message";
 import Dexie from "dexie";
 export default class Storage {
   private _db: Dexie;
@@ -72,8 +72,6 @@ export default class Storage {
   }
 
   public async getMessageByNetworkId(network_id: string) {
-    const message_record = await this._messages.get({ network_id });
-    if (!message_record) return undefined;
-    return new Message(message_record);
+    return await this._messages.get({ network_id });
   }
 }

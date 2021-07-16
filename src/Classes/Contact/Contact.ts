@@ -1,7 +1,8 @@
-import Entity from "Classes/Entity/Entity";
+import DBModel from "Classes/DBModel/DBModel";
 import Key from "core/Key/Key";
+import store from "redux/store";
 
-export default class Contact extends Entity<IContact> {
+export default class Contact extends DBModel<IContact> {
   public key: Key;
   public first_name: string;
   public last_name: string;
@@ -9,7 +10,7 @@ export default class Contact extends Entity<IContact> {
   public advertiser_host_ids: number[];
   public relay_host_ids: number[];
   constructor(contact_record: IContact) {
-    super("contacts", contact_record.id);
+    super("contacts", contact_record.id, store.getState().storage);
     this.first_name = contact_record.first_name;
     this.last_name = contact_record.last_name;
     this.public_key = contact_record.public_key;

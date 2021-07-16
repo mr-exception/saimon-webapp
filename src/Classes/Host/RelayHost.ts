@@ -5,10 +5,8 @@ import {
   IPacket,
   IPacketGot,
   IPacketTTD,
-  PacketSendStatus,
 } from "core/Connection/def";
 import Key from "core/Key/Key";
-import { Subject } from "rxjs";
 import { io, Socket } from "socket.io-client";
 import Message from "Classes/Message/Message";
 import store from "redux/store";
@@ -22,11 +20,8 @@ export default class RelayHost extends Host {
   private _socket?: Socket;
   private _host_key?: Key;
   private _pending_ttd_packets: IPacketTTD[] = [];
-  // observables
-  private _finished$ = new Subject<void>();
-  private _onPacketGot$ = new Subject<IPacketTTD>();
   // sending packets queues
-  private _sending_packet_queue = new Queue<IPacket>();
+  private _sending_packet_queue?: Queue<IPacket> = undefined;
 
   // event listeners
   public connectionStatusChanged(state: ConnectionStatus): void {
@@ -103,7 +98,6 @@ export default class RelayHost extends Host {
         resolve(true);
         this.connectionStatusChanged("CONNECTED");
         this.startListeningToHost();
-        this._continueQueue();
         clearTimeout(timeout);
       });
       // VF: waits if host refused the verification
@@ -132,7 +126,6 @@ export default class RelayHost extends Host {
     this._socket.on("pck", (packet_cipher: string, ackCallback) => {
       const packet_buffer = this.client_key.decryptPrivate(packet_cipher);
       const packet = JSON.parse(packet_buffer.toString()) as IPacket;
-      console.log("got a packet and sending deliver ack");
       store.getState().client.packetReceived(packet);
       ackCallback("got");
     });
@@ -145,11 +138,14 @@ export default class RelayHost extends Host {
         const packet_got: IPacketGot = JSON.parse(packet_got_buffer.toString());
 
         const storage = store.getState().storage;
-        const message = await storage.getMessageByNetworkId(packet_got.id);
-        if (!message) {
+        const message_record = await storage.getMessageByNetworkId(
+          packet_got.id
+        );
+        if (!message_record) {
           ackCallback("got");
           return;
         }
+        const message = new Message(message_record);
         message.setPacketDeliverState(packet_got.position, "DELIVERED");
         ackCallback("got");
       }
@@ -163,6 +159,11 @@ export default class RelayHost extends Host {
       // send client state into upper layout
       this.updateClientState(state);
     });
+    this._sending_packet_queue = new Queue<IPacket>(
+      `relay host(${this.id}) sending`,
+      this.sendPacket
+    );
+    this._sending_packet_queue.start();
   }
   /**
    * get the TTD information of a packet
@@ -225,49 +226,37 @@ export default class RelayHost extends Host {
   /**
    * send a single direct packet to host
    */
-  public async sendPacket(packet: IPacket): Promise<PacketSendStatus> {
+  public sendPacket = (packet: IPacket): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       if (!this._socket) {
-        return reject("connection is dead");
+        console.error("connection is dead");
+        return resolve(false);
       }
       if (!this._host_key) {
-        return reject("host key is not valid");
+        console.error("host key is not valid");
+        return resolve(false);
       }
       const packet_string = JSON.stringify(packet);
       const packet_encrypted = this._host_key.encryptPublic(
         Buffer.from(packet_string)
       );
 
-      // add packet ttd object to list
-      this._pending_ttd_packets.push({
-        id: packet.id,
-        position: packet.position,
-        time: Date.now(),
+      this._socket.emit("pck", packet_encrypted, () => {
+        resolve(true);
       });
-
-      // const sending_time = Date.now();
-      this._socket.emit(
-        "pck",
-        packet_encrypted,
-        (ack_data: PacketSendStatus) => {
-          // const ttr = Date.now() - sending_time;
-          // this._ttr_avg =
-          //   (this._ttr_avg * this._ttr_count + ttr) / (this._ttr_count + 1);
-          // this._ttr_count++;
-          resolve(ack_data);
-        }
-      );
       setTimeout(() => {
-        resolve("FAILED");
+        resolve(false);
       }, configs.packet_ack_timeout);
     });
-  }
+  };
   /**
    * sends the report message to a destination
    */
   public sendReportMessage(message: IReportMessage, dest_key: Key): void {
     const cipher = dest_key.encryptPublic(
-      this.client_key.encryptPrivate(JSON.stringify(message))
+      this.client_key.encryptPrivate(
+        JSON.stringify({ type: "REPORT", payload: message })
+      )
     );
     const packet: IPacket = {
       id: uuidV4(),
@@ -284,21 +273,7 @@ export default class RelayHost extends Host {
    * the sending queue will handle the packet sendings itself
    */
   public addPacketToSendingQueue(packet: IPacket): void {
-    this._sending_packet_queue.push(packet);
-    this._continueQueue();
-  }
-  /**
-   * this methods gets a job from sending packet queue
-   * if there was any job remaning in queue the packet
-   * sends it otherwise ignores
-   */
-  private async _continueQueue(): Promise<void> {
-    const packet = this._sending_packet_queue.pull();
-    if (!!packet) {
-      console.log("sending a packet");
-      console.log("finished sending the packet");
-      this._continueQueue();
-    }
+    if (!!this._sending_packet_queue) this._sending_packet_queue.push(packet);
   }
 }
 

@@ -7,16 +7,16 @@
  * on this layer. these information helps the network to know more about nodes and
  * their trust score in connection with other nodes
  */
+import Contact from "Classes/Contact/Contact";
 import RelayHost from "Classes/Host/RelayHost";
 import { IReportMessage, IReportRequest } from "Classes/Queue/def";
-import configs from "confg";
 import store from "redux/store";
 
-const handle = async (job: IReportRequest) => {
+export const handle = async (job: IReportRequest): Promise<boolean> => {
   const contact = job.contact;
   const hosts = store.getState().hosts;
   const app_key = store.getState().app_key;
-  if (!app_key) return;
+  if (!app_key) return false;
   const contacts = store
     .getState()
     .contacts.filter((cnt) => (cnt.id === contact.id ? null : cnt));
@@ -50,30 +50,19 @@ const handle = async (job: IReportRequest) => {
     relay_hosts = relay_hosts.filter((host) =>
       contact.relay_host_ids.includes(host.id) ? host : null
     );
+  } else {
+    relay_hosts.forEach(async (host) => {
+      host.sendReportMessage(reports, contact.key);
+    });
   }
-  relay_hosts.forEach(async (host) => {
-    const result = await host.sendReportMessage(reports, contact.key);
-    console.log(result);
-  });
 
-  // add this job to the queue again
-  const queue = store.getState().report_queue;
-  queue.push(job);
+  setTimeout(() => {
+    // add this job to the queue again
+    if (!job.once) {
+      const queue = store.getState().report_queue;
+      queue.push(job);
+    }
+  }, 5000);
+
+  return true;
 };
-
-let interval: NodeJS.Timeout;
-const ReportLayer = {
-  start: () => {
-    const { report_queue, packet_queue } = store.getState();
-    interval = setInterval(() => {
-      if (!packet_queue.isEmpty()) return; // higher layer (zues)
-      const job = report_queue.pull();
-      if (!!job) handle(job);
-    }, configs.layer_intervals.reports);
-  },
-  finish: () => {
-    clearInterval(interval);
-  },
-};
-
-export default ReportLayer;

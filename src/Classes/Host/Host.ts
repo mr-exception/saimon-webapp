@@ -1,10 +1,9 @@
 import axios from "axios";
-import Entity from "Classes/Entity/Entity";
+import DBModel from "Classes/DBModel/DBModel";
 import Key from "core/Key/Key";
 import store from "redux/store";
-import {} from "redux/";
 import { editHost } from "redux/actions/hosts";
-export default class Host extends Entity<IHost> {
+export default class Host extends DBModel<IHost> {
   public name: string;
   public address: string;
   public score: number;
@@ -20,7 +19,7 @@ export default class Host extends Entity<IHost> {
   public disabled: boolean;
 
   constructor(host_record: IHost, public client_key: Key) {
-    super("hosts", host_record.id);
+    super("hosts", host_record.id, store.getState().storage);
     this.name = host_record.name;
     this.address = host_record.address;
     this.score = host_record.score;

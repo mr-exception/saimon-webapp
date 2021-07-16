@@ -39,16 +39,15 @@ const Hosts = () => {
           return null;
         })
         .map((host, key) => {
-          if (host.type === "RELAY" && host instanceof RelayHost) {
-            return <RelayHostCard key={key} host={host as RelayHost} />;
-          }
-          if (host.type === "ADVERTISER" && host instanceof AdvertiserHost) {
-            return (
-              <AdvertiserHostCard key={key} host={host as AdvertiserHost} />
-            );
-          }
-          if (host.type === "STORAGE" && host instanceof StorageHost) {
-            return <StorageHostCard key={key} host={host as StorageHost} />;
+          switch (host.type) {
+            case "RELAY":
+              return <RelayHostCard key={key} host={host as RelayHost} />;
+            case "ADVERTISER":
+              return (
+                <AdvertiserHostCard key={key} host={host as AdvertiserHost} />
+              );
+            case "STORAGE":
+              return <StorageHostCard key={key} host={host as StorageHost} />;
           }
           return null;
         })}

@@ -7,7 +7,6 @@ import { Dispatch } from "redux";
 import { addHosts } from "redux/actions/hosts";
 import { ActionType } from "redux/types/actions";
 import Storage from "storage/Storage";
-import store from "../store";
 
 const load = async (
   app_key: Key,
@@ -36,29 +35,29 @@ const load = async (
           if (rec.type === "RELAY") {
             const host = new RelayHost(rec, app_key);
             if (!host.disabled) host.connect();
-            const queue = store.getState().relay_queue;
-            queue.push({
-              type: "HEART_BEAT",
-              host,
-            });
+            // const queue = store.getState().relay_queue;
+            // queue.push({
+            //   type: "HEART_BEAT",
+            //   host,
+            // });
             resolve(host);
           }
           if (rec.type === "ADVERTISER") {
             const host = new AdvertiserHost(rec, app_key);
-            const queue = store.getState().advertiser_queue;
-            queue.push({
-              type: "HEART_BEAT",
-              host,
-            });
+            // const queue = store.getState().advertiser_queue;
+            // queue.push({
+            //   type: "HEART_BEAT",
+            //   host,
+            // });
             resolve(host);
           }
           if (rec.type === "STORAGE") {
             const host = new StorageHost(rec, app_key);
-            const queue = store.getState().storage_queue;
-            queue.push({
-              type: "HEART_BEAT",
-              host,
-            });
+            // const queue = store.getState().storage_queue;
+            // queue.push({
+            //   type: "HEART_BEAT",
+            //   host,
+            // });
             resolve(host);
           }
           const host = new Host(rec, app_key);

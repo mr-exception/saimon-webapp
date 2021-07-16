@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectAppKey,
   selectHosts,
+  selectReportQueue,
   selectStorage,
 } from "redux/types/selectors";
 // syncers
@@ -19,7 +20,6 @@ import messageLoader from "redux/loaders/messages";
 import contactLoader from "redux/loaders/contacts";
 import clientLoader from "redux/loaders/clients";
 import { IInitialState } from "redux/types/states";
-import { start as startQueueHandler } from "Queues/handler";
 import { setConnectionStatus } from "redux/actions/others";
 import { autoConnect } from "core/Connection/auto-connect";
 
@@ -36,6 +36,15 @@ const Routes = () => {
   const [contacts_loaded, set_contacts_loaded] = useState(false);
   const [hosts_loaded, set_hosts_loaded] = useState(false);
   const [client_loaded, set_client_loaded] = useState(false);
+
+  /**
+   * in this section we start all the queues
+   */
+  const reportQueue = useSelector(selectReportQueue);
+  useEffect(() => {
+    reportQueue.start();
+  }, [reportQueue]);
+
   /**
    * this methods will run on page load
    * inits all recommended data from stroage APIs
@@ -74,12 +83,6 @@ const Routes = () => {
     hostsSyncer(hosts, dispatch, app_key);
   }, [hosts, dispatch, app_key]);
 
-  /**
-   * register layer handlers
-   */
-  useEffect(() => {
-    startQueueHandler();
-  }, []);
   /**
    * request permission for push notifications
    */

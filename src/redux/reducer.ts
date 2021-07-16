@@ -9,13 +9,8 @@ import othersReducers from "./reducers/others";
 import clientReducers from "./reducers/clients";
 import profileReducers from "./reducers/profile";
 import Queue from "Classes/Queue/Queue";
-import {
-  IAdvertiserRequest,
-  IPacketDeliverRequest,
-  IRelayRequest,
-  IReportRequest,
-  IStorageRequest,
-} from "Classes/Queue/def";
+import { IReportRequest } from "Classes/Queue/def";
+import { handle as handleReportJob } from "Queues/ReportLayer";
 import Client from "core/Client/Client";
 
 export const initialState: IInitialState = {
@@ -41,12 +36,7 @@ export const initialState: IInitialState = {
   contact_connections: [],
 
   selected_conversation_messages: [],
-
-  advertiser_queue: new Queue<IAdvertiserRequest>(),
-  storage_queue: new Queue<IStorageRequest>(),
-  relay_queue: new Queue<IRelayRequest>(),
-  packet_queue: new Queue<IPacketDeliverRequest>(),
-  report_queue: new Queue<IReportRequest>(),
+  report_queue: new Queue<IReportRequest>(`report`, handleReportJob),
 };
 
 const reducer = (

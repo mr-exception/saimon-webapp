@@ -1,9 +1,9 @@
-import Entity from "Classes/Entity/Entity";
+import DBModel from "Classes/DBModel/DBModel";
 import { PacketSendStatus } from "core/Connection/def";
 import { updateMessage } from "redux/actions/conversations";
 import store from "redux/store";
 
-export default class Message extends Entity<IMessage> {
+export default class Message extends DBModel<IMessage> {
   public network_id: string;
   public contact_id: number;
   public public_key: string;
@@ -14,7 +14,7 @@ export default class Message extends Entity<IMessage> {
   public packets: IPacketDeliverState[];
   public packets_count?: number;
   constructor(message_record: IMessage) {
-    super("messages", message_record.id);
+    super("messages", message_record.id, store.getState().storage);
     this.network_id = message_record.network_id;
     this.contact_id = message_record.contact_id;
     this.public_key = message_record.public_key;
@@ -115,7 +115,6 @@ export default class Message extends Entity<IMessage> {
    * notice: this method won't work till all packet acks are retrived from hosts
    */
   public updateMessageStateBasedOnPackets() {
-    console.log(this.packets_count, this.packets);
     if (!this.packets_count) return;
     if (this.packets_count !== this.packets.length) return;
     if (!!this.packets.find((record) => record.state === "FAILED")) {

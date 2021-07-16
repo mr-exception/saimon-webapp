@@ -13,7 +13,8 @@ const load = async (storage: Storage, dispatch: Dispatch<ActionType>) => {
   const contacts = contact_records.map((record) => {
     const contact = new Contact(record);
     // add contact to report queue
-    report_queue.push({ contact });
+    // console.log(`added ${contact.first_name} to report queue`);
+    // report_queue.push({ contact });
     return contact;
   });
 
