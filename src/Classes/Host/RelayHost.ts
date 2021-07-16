@@ -126,6 +126,7 @@ export default class RelayHost extends Host {
     this._socket.on("pck", (packet_cipher: string, ackCallback) => {
       const packet_buffer = this.client_key.decryptPrivate(packet_cipher);
       const packet = JSON.parse(packet_buffer.toString()) as IPacket;
+      packet.host_id = this.id;
       store.getState().client.packetReceived(packet);
       ackCallback("got");
     });

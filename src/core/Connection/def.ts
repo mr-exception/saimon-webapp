@@ -5,6 +5,7 @@ export interface IPacket {
   count: number; // count of packets in sending message
   dst: string; // public key of destination node
   src: string; // public key of source node
+  host_id?: number; // host id that sent this packet
 }
 
 export interface IDeliverPacketStatus {

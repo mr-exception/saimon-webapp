@@ -14,7 +14,10 @@ import store from "redux/store";
  * given address
  * if it exists then we return the found contact
  */
-const checkForContact = async (address: string): Promise<Contact> => {
+const checkForContact = async (
+  address: string,
+  host_ids: number[]
+): Promise<Contact> => {
   const { contacts } = store.getState();
   let contact = contacts.find((contact) => contact.getAddress() === address);
   if (!contact) {
@@ -24,10 +27,18 @@ const checkForContact = async (address: string): Promise<Contact> => {
       last_name: "unknown",
       public_key: Key.normalizeKey(address),
       advertiser_host_ids: [],
-      relay_host_ids: [],
+      relay_host_ids: host_ids,
     });
     await contact.store();
     store.dispatch(addContact(contact));
+  } else {
+    contact.relay_host_ids.forEach((id) => {
+      if (!host_ids.includes(id)) {
+        if (!contact) return;
+        contact.relay_host_ids.push(id);
+      }
+    });
+    contact.update();
   }
   return contact;
 };
@@ -49,7 +60,10 @@ export const checkIncomingMessage = async (id: string): Promise<boolean> => {
   if (packets_actual_count !== packets.length) {
     return false;
   }
-  const contact = await checkForContact(packets[0].src);
+  const host_ids = packets
+    .filter((record) => !!record.host_id)
+    .map((record) => record.host_id) as number[];
+  const contact = await checkForContact(packets[0].src, host_ids);
   const source_key = contact.key;
   const buffer = packets
     .map((packet) => {

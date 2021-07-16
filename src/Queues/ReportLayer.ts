@@ -7,7 +7,6 @@
  * on this layer. these information helps the network to know more about nodes and
  * their trust score in connection with other nodes
  */
-import Contact from "Classes/Contact/Contact";
 import RelayHost from "Classes/Host/RelayHost";
 import { IReportMessage, IReportRequest } from "Classes/Queue/def";
 import store from "redux/store";
