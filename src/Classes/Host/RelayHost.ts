@@ -4,7 +4,6 @@ import {
   IClientState,
   IPacket,
   IPacketGot,
-  IPacketTTD,
 } from "core/Connection/def";
 import Key from "core/Key/Key";
 import { io, Socket } from "socket.io-client";
@@ -19,7 +18,6 @@ export default class RelayHost extends Host {
   // props
   private _socket?: Socket;
   private _host_key?: Key;
-  private _pending_ttd_packets: IPacketTTD[] = [];
   // sending packets queues
   private _sending_packet_queue?: Queue<IPacket> = undefined;
 
@@ -157,14 +155,24 @@ export default class RelayHost extends Host {
       const state = JSON.parse(
         this.client_key.decryptPrivate(cipher).toString()
       ) as IClientState;
-      // send client state into upper layout
-      this.updateClientState(state);
+      const contact = store
+        .getState()
+        .contacts.find((record) => record.getAddress() === state.address);
+      if (contact) {
+        contact.updateStatus(this.id, state.state);
+      }
     });
+    // init and start the sending packet queue
     this._sending_packet_queue = new Queue<IPacket>(
       `relay host(${this.id}) sending`,
       this.sendPacket
     );
     this._sending_packet_queue.start();
+    // subscribe to contacts who are routed through this host
+    console.log(`subscribing to contacts in host ${this.id}`);
+    this.subscribeToContactStatuses().catch((error) => {
+      console.log(`failed to subscribe`, error);
+    });
   }
   /**
    * send message to a client by address
@@ -260,7 +268,9 @@ export default class RelayHost extends Host {
   public addPacketToSendingQueue(packet: IPacket): void {
     if (!!this._sending_packet_queue) this._sending_packet_queue.push(packet);
   }
-
+  /**
+   * get the status of clients connected to this host
+   */
   public async getClientStatusList(
     address_list: string[]
   ): Promise<{ address: string; state: ConnectionStatus }[]> {
@@ -278,6 +288,28 @@ export default class RelayHost extends Host {
         }
       );
     });
+  }
+  public async subscribeToContactStatuses(): Promise<boolean> {
+    if (!this._socket) {
+      throw new Error("connection is dead");
+    }
+    if (!this._host_key) {
+      throw new Error("key not found");
+    }
+    const contacts = store
+      .getState()
+      .contacts.filter((contact) => contact.relay_host_ids.includes(this.id));
+    const addresses = contacts.map((contact) => contact.getAddress()).join(",");
+    this._socket.emit(
+      "sub_status",
+      this._host_key.encryptPublic(addresses),
+      () => {
+        console.log(
+          `subscribed to clients: ${contacts.map((contact) => contact.id)}`
+        );
+      }
+    );
+    return true;
   }
 }
 

@@ -39,7 +39,7 @@ const ChatDetail = () => {
   }
   return (
     <div className="chat-detail">
-      <Header contact={selected_contact} last_online={Date.now()} />
+      <Header contact={selected_contact} />
       {messages.length === 0 && <NoMessage />}
       {messages.length > 0 && <MessageList messages={messages} />}
       <SendBox />

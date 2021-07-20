@@ -1,5 +1,8 @@
 import DBModel from "Classes/DBModel/DBModel";
+import RelayHost from "Classes/Host/RelayHost";
+import { ConnectionStatus } from "core/Connection/def";
 import Key from "core/Key/Key";
+import { updateContact } from "redux/actions/contacts";
 import store from "redux/store";
 
 export default class Contact extends DBModel<IContact> {
@@ -37,9 +40,40 @@ export default class Contact extends DBModel<IContact> {
       relay_host_ids: this.relay_host_ids,
     };
   }
-
   public getAddress(): string {
     return this.key.getPublicKeyNormalized();
+  }
+
+  // status data
+  private status_list: { host_id: number; status: ConnectionStatus }[] = [];
+  public updateStatus(host_id: number, status: ConnectionStatus) {
+    const state_record = this.status_list.find(
+      (record) => record.host_id === host_id
+    );
+    if (state_record) {
+      state_record.status = status;
+    } else {
+      this.status_list.push({ host_id, status });
+    }
+    store.dispatch(updateContact(this));
+  }
+
+  public getStatusStr(): string {
+    if (this.status_list.length === 0) return "no connection found";
+    const has_active_connection = !!this.status_list.find(
+      (record) => record.status === "CONNECTED"
+    );
+    return has_active_connection ? "online" : "offline";
+  }
+
+  public getActiveRelays(): RelayHost[] {
+    const ids = this.status_list
+      .filter((record) => record.status === "CONNECTED")
+      .map((record) => record.host_id);
+    const hosts = store
+      .getState()
+      .hosts.filter((record) => ids.includes(record.id)) as RelayHost[];
+    return hosts;
   }
 }
 

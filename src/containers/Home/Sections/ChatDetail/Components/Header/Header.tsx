@@ -3,15 +3,8 @@ import Styles from "./styles.module.css";
 import { showContactDetailsModal } from "redux/actions/modals";
 import { IHeaderProps } from "./def";
 import { useDispatch } from "react-redux";
-const Header: React.FC<IHeaderProps> = ({
-  contact,
-  last_online,
-}: IHeaderProps) => {
+const Header: React.FC<IHeaderProps> = ({ contact }: IHeaderProps) => {
   const dispatch = useDispatch();
-  const generateLastOnlineDateText = () => {
-    const date = new Date(last_online);
-    return `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
-  };
   return (
     <div className={Styles.container}>
       <div className={Styles.avatar}>
@@ -26,7 +19,15 @@ const Header: React.FC<IHeaderProps> = ({
           <label>{`${contact.first_name} ${contact.last_name}`}</label>
         </div>
         <div className={Styles.lastOnline}>
-          <label>{generateLastOnlineDateText()}</label>
+          <label>{contact.getStatusStr()}</label>
+          <label className="text-xs mt-1 ml-4">
+            (
+            {contact
+              .getActiveRelays()
+              .map((record) => record.name)
+              .join(",")}
+            )
+          </label>
         </div>
       </div>
       <div className={Styles.headerInfo}>
