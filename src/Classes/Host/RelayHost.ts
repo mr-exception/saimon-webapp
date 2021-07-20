@@ -167,22 +167,6 @@ export default class RelayHost extends Host {
     this._sending_packet_queue.start();
   }
   /**
-   * get the TTD information of a packet
-   */
-  public getPacketTTD(id: string, position: number): IPacketTTD | undefined {
-    return this._pending_ttd_packets.find(
-      (packet) => packet.id === id && packet.position === position
-    );
-  }
-  /**
-   * remove the information of a packet TTD
-   */
-  public removePacketTTD(id: string, position: number) {
-    this._pending_ttd_packets = this._pending_ttd_packets.filter((packet) =>
-      packet.id === id && packet.position === position ? null : packet
-    );
-  }
-  /**
    * send message to a client by address
    */
   public async sendMessageToClient(message: Message, dest_key: Key) {
@@ -275,6 +259,25 @@ export default class RelayHost extends Host {
    */
   public addPacketToSendingQueue(packet: IPacket): void {
     if (!!this._sending_packet_queue) this._sending_packet_queue.push(packet);
+  }
+
+  public async getClientStatusList(
+    address_list: string[]
+  ): Promise<{ address: string; state: ConnectionStatus }[]> {
+    return new Promise((resolve, reject) => {
+      if (!this._socket) return reject(new Error("connection is dead"));
+      if (!this._host_key) return reject(new Error("host key not found"));
+      this._socket.emit(
+        "status_list",
+        this._host_key.encryptPublic(Buffer.from(address_list.join(","))),
+        (cipher: string) => {
+          const response = JSON.parse(
+            this.client_key.decryptPrivate(cipher).toString()
+          ) as { address: string; state: ConnectionStatus }[];
+          resolve(response);
+        }
+      );
+    });
   }
 }
 

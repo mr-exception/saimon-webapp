@@ -31,7 +31,8 @@ export type ConnectionStatus =
   | "VF"
   | "NETWORK_ERROR"
   | "CONNECTED"
-  | "DISCONNECTED";
+  | "DISCONNECTED"
+  | "NOT_FOUND";
 
 /**
  * state of a client connection to the host ndoe
