@@ -22,6 +22,7 @@ import clientLoader from "redux/loaders/clients";
 import { IInitialState } from "redux/types/states";
 import { setConnectionStatus } from "redux/actions/others";
 import { autoConnect } from "core/Connection/auto-connect";
+import handleWorkers from "WorkerHandlers";
 
 const Routes = () => {
   const storage = useSelector(selectStorage);
@@ -30,6 +31,9 @@ const Routes = () => {
   const contact_id = useSelector(
     (state: IInitialState) => state.selected_contact_id
   );
+  useEffect(() => {
+    handleWorkers();
+  }, []);
 
   const dispatch = useDispatch();
 

@@ -1,13 +1,13 @@
 import Contact from "Classes/Contact/Contact";
-import Host from "Classes/Host/Host";
+import Key from "core/Key/Key";
+import { IPacket } from "core/Connection/def";
+import store from "redux/store";
+import { addContact } from "redux/actions/contacts";
 import Message, { IMessageContent } from "Classes/Message/Message";
 import { IReportMessage } from "Classes/Queue/def";
-import Key from "core/Key/Key";
-import { addContact } from "redux/actions/contacts";
-import { addMessage } from "redux/actions/conversations";
 import { addHost } from "redux/actions/hosts";
-import store from "redux/store";
-
+import Host from "Classes/Host/Host";
+import { addMessage } from "redux/actions/conversations";
 /**
  * checks if there is any contact with this address in the storage and store
  * if it does not exists then we create a new unknown contact with the
@@ -47,17 +47,9 @@ const checkForContact = async (
  * then creates a message object and puts in storage, then returns true
  * otherwise just returns false
  */
-export const checkIncomingMessage = async (id: string): Promise<boolean> => {
-  const { app_key, client, hosts } = store.getState();
+async function handleNewMessage(packets: IPacket[], id: string) {
+  const { app_key, hosts } = store.getState();
   if (!app_key) {
-    return false;
-  }
-  const packets = client.getReceivingPacketsById(id);
-  if (packets.length === 0) {
-    return false;
-  }
-  const packets_actual_count = packets[0].count;
-  if (packets_actual_count !== packets.length) {
     return false;
   }
   const host_ids = packets
@@ -127,8 +119,15 @@ export const checkIncomingMessage = async (id: string): Promise<boolean> => {
     content: content,
     packets: "[]",
   });
-  client.removeReservedPacketsById(id);
   message.store();
   store.dispatch(addMessage(message));
   return true;
-};
+}
+
+export default function handle() {
+  store.getState().packet_worker.onmessage = function (event) {
+    const packets = event.data.packets as IPacket[];
+    const message_id = event.data.id as string;
+    handleNewMessage(packets, message_id);
+  };
+}

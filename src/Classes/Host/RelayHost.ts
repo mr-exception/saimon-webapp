@@ -125,7 +125,7 @@ export default class RelayHost extends Host {
       const packet_buffer = this.client_key.decryptPrivate(packet_cipher);
       const packet = JSON.parse(packet_buffer.toString()) as IPacket;
       packet.host_id = this.id;
-      store.getState().client.packetReceived(packet);
+      store.getState().packet_worker.postMessage(packet);
       ackCallback("got");
     });
     // listen to packet got event from host node
