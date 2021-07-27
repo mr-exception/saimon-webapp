@@ -125,7 +125,7 @@ async function handleNewMessage(packets: IPacket[], id: string) {
 }
 
 export default function handle() {
-  store.getState().packet_worker.onmessage = function (event) {
+  store.getState().receiving_zeus.onmessage = function (event) {
     const packets = event.data.packets as IPacket[];
     const message_id = event.data.id as string;
     handleNewMessage(packets, message_id);

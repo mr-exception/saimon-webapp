@@ -63,7 +63,8 @@ export interface IInitialState {
    * they're running in background and getting variouse signals
    * and signaling different parts when it's time to signal
    */
-  packet_worker: Worker;
+  receiving_zeus: Worker;
+  sending_zeus: Worker;
 }
 /**
  * this state is when user is logged into the account

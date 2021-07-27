@@ -38,7 +38,8 @@ export const initialState: IInitialState = {
   selected_conversation_messages: [],
   report_queue: new Queue<IReportRequest>(`report`, handleReportJob),
 
-  packet_worker: new Worker("/workers/packets.js"),
+  receiving_zeus: new Worker("/workers/receiving_zeus.js"),
+  sending_zeus: new Worker("/workers/sending_zeus.js"),
 };
 
 const reducer = (
