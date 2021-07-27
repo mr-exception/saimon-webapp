@@ -1,9 +1,9 @@
 import React from "react";
 import "./styles.css";
-import Modal from "ui-kit/Modal/Modal";
-import { IInitialState } from "redux/types/states";
+import Modal from "UI-Kit/Modal/Modal";
+import { IInitialState } from "Redux/types/states";
 import { useDispatch, useSelector } from "react-redux";
-import { closeConfirmationModal } from "redux/actions/modals";
+import { closeConfirmationModal } from "Redux/actions/modals";
 const ConfirmationModal = () => {
   const { show, message, callback } = useSelector(
     (state: IInitialState) => state.modals.confirmation

@@ -1,4 +1,4 @@
-import DownloadIcon from "img/DownloadIcon";
+import DownloadIcon from "Images/DownloadIcon";
 import React from "react";
 import { useMemo } from "react";
 import { IFileMessageProps } from "./def";

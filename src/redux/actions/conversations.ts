@@ -5,7 +5,7 @@ import {
   RESET_MESSAGES,
   SELECT_CONVERSATION,
   UPDATE_MESSAGE,
-} from "redux/types/actions";
+} from "Redux/types/actions";
 
 export const selectConversation = (contact_id: number): ActionType => {
   return { type: SELECT_CONVERSATION, contact_id };

@@ -6,7 +6,7 @@ import {
   selectContacts,
   selectConversationMessages,
   selectedContactId,
-} from "redux/types/selectors";
+} from "Redux/types/selectors";
 import Header from "./Components/Header/Header";
 import MessageList from "./Components/MessageList/MessageList";
 import NoConversationSelected from "./Components/NoConversationSelected/NoConversationSelected";

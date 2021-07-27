@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
 import "./styles.css";
 import { useDispatch, useSelector } from "react-redux";
-import { showConfirmationModal } from "redux/actions/modals";
+import { showConfirmationModal } from "Redux/actions/modals";
 import { IRelayHostCardProps } from "./def";
-import { removeHost } from "redux/actions/hosts";
-import { selectHostConnectionStates } from "redux/types/selectors";
-import { IInitialState } from "redux/types/states";
-import { ConnectionStatus } from "core/Connection/def";
+import { removeHost } from "Redux/actions/hosts";
+import { selectHostConnectionStates } from "Redux/types/selectors";
+import { IInitialState } from "Redux/types/states";
+import { ConnectionStatus } from "Classes/Connection/def";
 import ActionItem from "../ActionItem/ActionItem";
 
 const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
@@ -97,20 +97,20 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
                 )
               );
             }}
-            icon="/img/delete.svg"
+            icon="/Images/delete.svg"
           />
           {canDisconnect && (
             <ActionItem
               onClick={disconnect}
               caption="disconnect"
-              icon="/img/disconnect.svg"
+              icon="/Images/disconnect.svg"
             />
           )}
           {canConnect && (
             <ActionItem
               onClick={connect}
               caption="connect"
-              icon="/img/connect.svg"
+              icon="/Images/connect.svg"
             />
           )}
         </div>

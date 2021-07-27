@@ -3,7 +3,7 @@ import {
   UPDATE_FIRST_NAME,
   UPDATE_LAST_NAME,
   UPDATE_PROFILE,
-} from "redux/types/actions";
+} from "Redux/types/actions";
 
 export const updateProfile = (
   first_name: string,

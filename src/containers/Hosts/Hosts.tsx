@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./styles.css";
-import { IInitialState } from "redux/types/states";
+import { IInitialState } from "Redux/types/states";
 import { useDispatch, useSelector } from "react-redux";
-import { showAddHostModal } from "redux/actions/modals";
+import { showAddHostModal } from "Redux/actions/modals";
 import RelayHost from "Classes/Host/RelayHost";
 import RelayHostCard from "./Components/HostCard/RelayHostCard";
 import AdvertiserHost from "Classes/Host/AdvertiserHost";
@@ -29,7 +29,7 @@ const Hosts = () => {
             dispatch(showAddHostModal());
           }}
         >
-          <img alt="add" className="search__add__icon" src="/img/add.svg" />
+          <img alt="add" className="search__add__icon" src="/Images/add.svg" />
         </button>
       </div>
       {hosts

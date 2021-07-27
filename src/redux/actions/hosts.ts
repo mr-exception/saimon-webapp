@@ -6,7 +6,7 @@ import {
   EDIT_HOST,
   REMOVE_HOST,
   RESET_HOSTS,
-} from "redux/types/actions";
+} from "Redux/types/actions";
 
 export const addHost = (host: Host): ActionType => {
   return { type: ADD_HOST, host };

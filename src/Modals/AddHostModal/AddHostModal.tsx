@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import "./styles.css";
-import Modal from "ui-kit/Modal/Modal";
-import { IInitialState } from "redux/types/states";
+import Modal from "UI-Kit/Modal/Modal";
+import { IInitialState } from "Redux/types/states";
 import { useDispatch, useSelector } from "react-redux";
-import { clsoeAddHostModal } from "redux/actions/modals";
-import Button from "ui-kit/Button/Button";
+import { clsoeAddHostModal } from "Redux/actions/modals";
+import Button from "UI-Kit/Button/Button";
 import { getHeartBeat, IServiceInfo } from "Apis/HeartBeat";
 import Host from "Classes/Host/Host";
 import RelayHost from "Classes/Host/RelayHost";
 import AdvertiserHost from "Classes/Host/AdvertiserHost";
-import { selectAppKey } from "redux/types/selectors";
-import { addHosts } from "redux/actions/hosts";
+import { selectAppKey } from "Redux/types/selectors";
+import { addHosts } from "Redux/actions/hosts";
 import StorageHost from "Classes/Host/StorageHost";
 
 interface IHostRecord {

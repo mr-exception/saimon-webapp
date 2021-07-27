@@ -9,7 +9,7 @@
  */
 import RelayHost from "Classes/Host/RelayHost";
 import { IReportMessage, IReportRequest } from "Classes/Queue/def";
-import store from "redux/store";
+import store from "Redux/store";
 
 export const handle = async (job: IReportRequest): Promise<boolean> => {
   const contact = job.contact;

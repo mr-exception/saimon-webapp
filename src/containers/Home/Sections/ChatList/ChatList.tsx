@@ -1,8 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectConversation } from "redux/actions/conversations";
-import { selectedContactId } from "redux/types/selectors";
-import { IInitialState } from "redux/types/states";
+import { selectConversation } from "Redux/actions/conversations";
+import { selectedContactId } from "Redux/types/selectors";
+import { IInitialState } from "Redux/types/states";
 import AddContact from "./Components/AddContact/AddContact";
 import Conversation from "./Components/Conversation/Conversation";
 import "./styles.css";

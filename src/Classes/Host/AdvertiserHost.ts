@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import Key from "core/Key/Key";
+import Key from "Classes/Key/Key";
 import Host from "./Host";
 export default class AdvertiserHost extends Host {
   public async fetchClient(address: string): Promise<IFetchClientResponse> {

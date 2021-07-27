@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
-import Hosts from "containers/Hosts/Hosts";
-import Profile from "containers/Profile/Profile";
-import Setting from "containers/Setting/Setting";
+import Hosts from "Containers/Hosts/Hosts";
+import Profile from "Containers/Profile/Profile";
+import Setting from "Containers/Setting/Setting";
 import App from "Layout/App/App";
-import Home from "containers/Home/Home";
+import Home from "Containers/Home/Home";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectAppKey,
   selectHosts,
   selectReportQueue,
   selectStorage,
-} from "redux/types/selectors";
+} from "Redux/types/selectors";
 // syncers
-import hostsSyncer from "redux/syncers/hosts";
+import hostsSyncer from "Redux/syncers/hosts";
 // loaders
-import hostLoader from "redux/loaders/hosts";
-import messageLoader from "redux/loaders/messages";
-import contactLoader from "redux/loaders/contacts";
-import clientLoader from "redux/loaders/clients";
-import { IInitialState } from "redux/types/states";
-import { setConnectionStatus } from "redux/actions/others";
-import { autoConnect } from "core/Connection/auto-connect";
+import hostLoader from "Redux/loaders/hosts";
+import messageLoader from "Redux/loaders/messages";
+import contactLoader from "Redux/loaders/contacts";
+import clientLoader from "Redux/loaders/clients";
+import { IInitialState } from "Redux/types/states";
+import { setConnectionStatus } from "Redux/actions/others";
+import { autoConnect } from "Classes/Connection/auto-connect";
 import handleWorkers from "WorkerHandlers";
 
 const Routes = () => {

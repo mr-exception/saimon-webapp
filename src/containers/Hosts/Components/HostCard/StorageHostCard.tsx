@@ -1,11 +1,11 @@
 import React from "react";
 import "./styles.css";
 import { useDispatch, useSelector } from "react-redux";
-import { showConfirmationModal } from "redux/actions/modals";
+import { showConfirmationModal } from "Redux/actions/modals";
 import { IStorageHostCardProps } from "./def";
-import { removeHost } from "redux/actions/hosts";
-import { selectHostConnectionStates } from "redux/types/selectors";
-import { ConnectionStatus } from "core/Connection/def";
+import { removeHost } from "Redux/actions/hosts";
+import { selectHostConnectionStates } from "Redux/types/selectors";
+import { ConnectionStatus } from "Classes/Connection/def";
 import ActionItem from "../ActionItem/ActionItem";
 
 const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
@@ -66,7 +66,7 @@ const StorageHostCard: React.FC<IStorageHostCardProps> = ({
                 )
               );
             }}
-            icon="/img/delete.svg"
+            icon="/Images/delete.svg"
           />
         </div>
       </div>

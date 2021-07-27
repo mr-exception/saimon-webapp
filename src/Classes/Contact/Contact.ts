@@ -1,9 +1,9 @@
 import DBModel from "Classes/DBModel/DBModel";
 import RelayHost from "Classes/Host/RelayHost";
-import { ConnectionStatus } from "core/Connection/def";
-import Key from "core/Key/Key";
-import { updateContact } from "redux/actions/contacts";
-import store from "redux/store";
+import { ConnectionStatus } from "Classes/Connection/def";
+import Key from "Classes/Key/Key";
+import { updateContact } from "Redux/actions/contacts";
+import store from "Redux/store";
 
 export default class Contact extends DBModel<IContact> {
   public key: Key;

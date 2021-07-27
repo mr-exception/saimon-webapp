@@ -5,9 +5,9 @@ import {
   selectAppKey,
   selectFirstName,
   selectLastName,
-} from "redux/types/selectors";
-import TextField from "ui-kit/Form/FormField/TextField";
-import { updateFirstName, updateLastName } from "redux/actions/profile";
+} from "Redux/types/selectors";
+import TextField from "UI-Kit/Form/FormField/TextField";
+import { updateFirstName, updateLastName } from "Redux/actions/profile";
 /**
  * profile features:
  * edit the account information
@@ -58,7 +58,7 @@ const Profile = () => {
           onClick={copyAddress}
           className="absolute bottom-2 right-2 b-2 border-secondary bg-secondary hover:bg-primary hover:border-primary rounded-md text-white p-2 "
         >
-          <img className="copy-icon" src="/img/copy.svg" alt="copy icon" />
+          <img className="copy-icon" src="/Images/copy.svg" alt="copy icon" />
         </button>
       </div>
     </div>

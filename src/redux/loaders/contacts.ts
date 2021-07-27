@@ -1,8 +1,8 @@
 import Contact from "Classes/Contact/Contact";
 import { Dispatch } from "redux";
-import { addContacts } from "redux/actions/contacts";
-import { ActionType } from "redux/types/actions";
-import Storage from "storage/Storage";
+import { addContacts } from "Redux/actions/contacts";
+import { ActionType } from "Redux/types/actions";
+import Storage from "Storage/Storage";
 
 const load = async (storage: Storage, dispatch: Dispatch<ActionType>) => {
   const contact_records = await storage.getContacts();

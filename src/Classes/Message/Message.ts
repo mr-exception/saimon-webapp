@@ -1,7 +1,7 @@
 import DBModel from "Classes/DBModel/DBModel";
-import { PacketSendStatus } from "core/Connection/def";
-import { updateMessage } from "redux/actions/conversations";
-import store from "redux/store";
+import { PacketSendStatus } from "Classes/Connection/def";
+import { updateMessage } from "Redux/actions/conversations";
+import store from "Redux/store";
 
 export default class Message extends DBModel<IMessage> {
   public network_id: string;

@@ -1,4 +1,4 @@
-import Storage from "storage/Storage";
+import Storage from "Storage/Storage";
 export default abstract class DBModel<T> {
   constructor(
     private _table_name: string,

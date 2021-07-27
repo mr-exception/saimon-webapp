@@ -1,12 +1,12 @@
-import Client from "core/Client/Client";
-import { ConnectionStatus } from "core/Connection/def";
-import Key from "core/Key/Key";
+import Client from "Classes/Client/Client";
+import { ConnectionStatus } from "Classes/Connection/def";
+import Key from "Classes/Key/Key";
 import {
   ActionType,
   STORE_APP_KEY,
   STORE_CLIENT,
   STORE_CONNECTION_STATE,
-} from "redux/types/actions";
+} from "Redux/types/actions";
 
 export const storeClient = (client: Client): ActionType => {
   return { type: STORE_CLIENT, client };

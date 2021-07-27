@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { showAddContactModal } from "redux/actions/modals";
+import { showAddContactModal } from "Redux/actions/modals";
 import "./styles.css";
 const AddContact: React.FC<IAddContactProps> = () => {
   const dispatch = useDispatch();

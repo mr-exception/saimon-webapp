@@ -2,7 +2,7 @@ import {
   ActionType,
   CLEAR_ALL,
   SET_CONNECTION_STATUS,
-} from "redux/types/actions";
+} from "Redux/types/actions";
 
 export const clearAll = (): ActionType => {
   return { type: CLEAR_ALL };

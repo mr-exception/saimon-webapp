@@ -3,10 +3,10 @@ import Host from "Classes/Host/Host";
 import Message from "Classes/Message/Message";
 import { IReportRequest } from "Classes/Queue/def";
 import Queue from "Classes/Queue/Queue";
-import Client from "core/Client/Client";
-import { ConnectionStatus } from "core/Connection/def";
-import Key from "core/Key/Key";
-import Storage from "storage/Storage";
+import Client from "Classes/Client/Client";
+import { ConnectionStatus } from "Classes/Connection/def";
+import Key from "Classes/Key/Key";
+import Storage from "Storage/Storage";
 /**
  * this state is when user just has opened the webapp
  */

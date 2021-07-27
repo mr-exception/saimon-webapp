@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeContact, updateContact } from "redux/actions/contacts";
+import { removeContact, updateContact } from "Redux/actions/contacts";
 import {
   closeContactDetailsModal,
   showConfirmationModal,
-} from "redux/actions/modals";
-import { IInitialState } from "redux/types/states";
-import TextField from "ui-kit/Form/FormField/TextField";
-import Modal from "ui-kit/Modal/Modal";
+} from "Redux/actions/modals";
+import { IInitialState } from "Redux/types/states";
+import TextField from "UI-Kit/Form/FormField/TextField";
+import Modal from "UI-Kit/Modal/Modal";
 import "./styles.css";
 const ContactDetailsModal = () => {
   const { show, contact } = useSelector(

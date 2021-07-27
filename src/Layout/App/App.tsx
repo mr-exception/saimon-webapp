@@ -10,28 +10,28 @@ const App: React.FC<IAppProps> = ({ children }: IAppProps) => {
       <div className="app__container border-secondary">
         <div className="app__container__toolbar bg-secondary">
           <MenuItem
-            icon="/img/contact.svg"
+            icon="/Images/contact.svg"
             caption="chats"
             onClick={() => {
               history.push("/");
             }}
           />
           <MenuItem
-            icon="img/hosts.svg"
+            icon="Images/hosts.svg"
             caption="hosts"
             onClick={() => {
               history.push("/hosts");
             }}
           />
           <MenuItem
-            icon="img/profile.svg"
+            icon="Images/profile.svg"
             caption="profile"
             onClick={() => {
               history.push("/profile");
             }}
           />
           <MenuItem
-            icon="/img/setting.svg"
+            icon="/Images/setting.svg"
             caption="setting"
             onClick={() => {
               history.push("/setting");

@@ -1,13 +1,13 @@
 import Contact from "Classes/Contact/Contact";
 import Host from "Classes/Host/Host";
 import Message from "Classes/Message/Message";
-import Client from "core/Client/Client";
+import Client from "Classes/Client/Client";
 import {
   ConnectionStatus,
   IPacket,
   PacketSendStatus,
-} from "core/Connection/def";
-import Key from "core/Key/Key";
+} from "Classes/Connection/def";
+import Key from "Classes/Key/Key";
 
 // profile
 export const UPDATE_FIRST_NAME = "update_first_name";

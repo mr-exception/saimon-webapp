@@ -1,8 +1,8 @@
 import Message from "Classes/Message/Message";
 import { Dispatch } from "redux";
-import { resetMessages } from "redux/actions/conversations";
-import { ActionType } from "redux/types/actions";
-import Storage from "storage/Storage";
+import { resetMessages } from "Redux/actions/conversations";
+import { ActionType } from "Redux/types/actions";
+import Storage from "Storage/Storage";
 
 const load = async (
   contact_id: number,

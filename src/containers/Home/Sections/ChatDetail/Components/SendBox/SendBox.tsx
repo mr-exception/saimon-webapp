@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Styles from "./styles.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { selectClient, selectedContact } from "redux/types/selectors";
-import Key from "core/Key/Key";
-import { addMessage } from "redux/actions/conversations";
+import { selectClient, selectedContact } from "Redux/types/selectors";
+import Key from "Classes/Key/Key";
+import { addMessage } from "Redux/actions/conversations";
 import Message, { IMessageContent } from "Classes/Message/Message";
 import { v4 as uuidV4 } from "uuid";
 import { useRef } from "react";
@@ -92,7 +92,11 @@ const SendBox: React.FC<ISendBoxProps> = () => {
             fileInput.current?.click();
           }}
         >
-          <img className={Styles.buttonIcon} src="/img/attach.svg" alt="send" />
+          <img
+            className={Styles.buttonIcon}
+            src="/Images/attach.svg"
+            alt="send"
+          />
           <input
             type="file"
             ref={fileInput}
@@ -105,7 +109,11 @@ const SendBox: React.FC<ISendBoxProps> = () => {
           />
         </button>
         <button className={Styles.attachButton} onClick={send}>
-          <img className={Styles.buttonIcon} src="/img/send.svg" alt="send" />
+          <img
+            className={Styles.buttonIcon}
+            src="/Images/send.svg"
+            alt="send"
+          />
         </button>
       </div>
     </div>

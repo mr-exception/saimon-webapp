@@ -1,6 +1,6 @@
-import { ActionType } from "redux/types/actions";
-import { IInitialState, ILogedState } from "redux/types/states";
-import * as Actions from "redux/types/actions";
+import { ActionType } from "Redux/types/actions";
+import { IInitialState, ILogedState } from "Redux/types/states";
+import * as Actions from "Redux/types/actions";
 
 const reducer = (state: IInitialState, action: ActionType): IInitialState => {
   const loged_state = state as ILogedState;

@@ -4,12 +4,12 @@ import {
   IClientState,
   IPacket,
   IPacketGot,
-} from "core/Connection/def";
-import Key from "core/Key/Key";
+} from "Classes/Connection/def";
+import Key from "Classes/Key/Key";
 import { io, Socket } from "socket.io-client";
 import Message from "Classes/Message/Message";
-import store from "redux/store";
-import { storeConnectionState } from "redux/actions/client";
+import store from "Redux/store";
+import { storeConnectionState } from "Redux/actions/client";
 import Host, { HostProtocol, HostType } from "./Host";
 import { IReportMessage } from "Classes/Queue/def";
 import Queue from "Classes/Queue/Queue";

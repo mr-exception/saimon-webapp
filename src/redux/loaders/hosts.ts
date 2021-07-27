@@ -2,11 +2,11 @@ import AdvertiserHost from "Classes/Host/AdvertiserHost";
 import Host, { IHost } from "Classes/Host/Host";
 import RelayHost from "Classes/Host/RelayHost";
 import StorageHost from "Classes/Host/StorageHost";
-import Key from "core/Key/Key";
+import Key from "Classes/Key/Key";
 import { Dispatch } from "redux";
-import { addHosts } from "redux/actions/hosts";
-import { ActionType } from "redux/types/actions";
-import Storage from "storage/Storage";
+import { addHosts } from "Redux/actions/hosts";
+import { ActionType } from "Redux/types/actions";
+import Storage from "Storage/Storage";
 
 const load = async (
   app_key: Key,

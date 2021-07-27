@@ -1,7 +1,7 @@
 .app {
   @apply flex flex-row items-center content-center justify-center;
   height: 100vh;
-  background-image: url("img/background.svg");
+  background-image: url("Images/background.svg");
   background-size: cover;
 }
 .app__container {

@@ -1,13 +1,13 @@
 import Contact from "Classes/Contact/Contact";
-import Key from "core/Key/Key";
-import { IPacket } from "core/Connection/def";
-import store from "redux/store";
-import { addContact } from "redux/actions/contacts";
+import Key from "Classes/Key/Key";
+import { IPacket } from "Classes/Connection/def";
+import store from "Redux/store";
+import { addContact } from "Redux/actions/contacts";
 import Message, { IMessageContent } from "Classes/Message/Message";
 import { IReportMessage } from "Classes/Queue/def";
-import { addHost } from "redux/actions/hosts";
+import { addHost } from "Redux/actions/hosts";
 import Host from "Classes/Host/Host";
-import { addMessage } from "redux/actions/conversations";
+import { addMessage } from "Redux/actions/conversations";
 /**
  * checks if there is any contact with this address in the storage and store
  * if it does not exists then we create a new unknown contact with the

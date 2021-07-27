@@ -1,4 +1,4 @@
-import Storage from "storage/Storage";
+import Storage from "Storage/Storage";
 import * as Actions from "./types/actions";
 import { IInitialState } from "./types/states";
 import modalsReducers from "./reducers/modals";
@@ -11,7 +11,7 @@ import profileReducers from "./reducers/profile";
 import Queue from "Classes/Queue/Queue";
 import { IReportRequest } from "Classes/Queue/def";
 import { handle as handleReportJob } from "Queues/ReportLayer";
-import Client from "core/Client/Client";
+import Client from "Classes/Client/Client";
 
 export const initialState: IInitialState = {
   is_online: false,

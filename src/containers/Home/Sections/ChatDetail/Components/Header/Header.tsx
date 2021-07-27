@@ -1,6 +1,6 @@
 import React from "react";
 import Styles from "./styles.module.css";
-import { showContactDetailsModal } from "redux/actions/modals";
+import { showContactDetailsModal } from "Redux/actions/modals";
 import { IHeaderProps } from "./def";
 import { useDispatch } from "react-redux";
 const Header: React.FC<IHeaderProps> = ({ contact }: IHeaderProps) => {
@@ -9,7 +9,7 @@ const Header: React.FC<IHeaderProps> = ({ contact }: IHeaderProps) => {
     <div className={Styles.container}>
       <div className={Styles.avatar}>
         <img
-          src="/img/avatar.svg"
+          src="/Images/avatar.svg"
           className={Styles.avatarImage}
           alt="avatar"
         />
@@ -33,7 +33,7 @@ const Header: React.FC<IHeaderProps> = ({ contact }: IHeaderProps) => {
       <div className={Styles.headerInfo}>
         <button className={Styles.actions}>
           <img
-            src="/img/menu.svg"
+            src="/Images/menu.svg"
             alt="actions"
             onClick={() => {
               dispatch(showContactDetailsModal(contact));

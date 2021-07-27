@@ -1,7 +1,7 @@
-import Key from "core/Key/Key";
+import Key from "Classes/Key/Key";
 import { Dispatch } from "redux";
-import { storeAppKey } from "redux/actions/client";
-import { ActionType } from "redux/types/actions";
+import { storeAppKey } from "Redux/actions/client";
+import { ActionType } from "Redux/types/actions";
 
 const load = async (dispatch: Dispatch<ActionType>) => {
   const private_key = localStorage.getItem("private_key");

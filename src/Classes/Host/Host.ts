@@ -1,8 +1,8 @@
 import axios from "axios";
 import DBModel from "Classes/DBModel/DBModel";
-import Key from "core/Key/Key";
-import store from "redux/store";
-import { editHost } from "redux/actions/hosts";
+import Key from "Classes/Key/Key";
+import store from "Redux/store";
+import { editHost } from "Redux/actions/hosts";
 export default class Host extends DBModel<IHost> {
   public name: string;
   public address: string;

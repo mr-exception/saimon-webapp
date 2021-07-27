@@ -9,7 +9,7 @@ import {
   SHOW_ADD_HOST_MODAL,
   SHOW_CONFIRMATION_MODAL,
   SHOW_CONTACT_DETAILS_MODAL,
-} from "redux/types/actions";
+} from "Redux/types/actions";
 
 export const showAddContactModal = (): ActionType => {
   return { type: SHOW_ADD_CONTACT_MODAL };

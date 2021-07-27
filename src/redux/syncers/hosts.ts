@@ -1,8 +1,8 @@
 import Host from "Classes/Host/Host";
-import Key from "core/Key/Key";
+import Key from "Classes/Key/Key";
 import { Dispatch } from "react";
-import { resetHosts } from "redux/actions/hosts";
-import { ActionType } from "redux/types/actions";
+import { resetHosts } from "Redux/actions/hosts";
+import { ActionType } from "Redux/types/actions";
 
 const syncer = (
   hosts: Host[],

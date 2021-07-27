@@ -1,4 +1,4 @@
-import Key from "core/Key/Key";
+import Key from "Classes/Key/Key";
 import React, { useState } from "react";
 import "./styles.css";
 const TextField: React.FC<ITextFieldProps> = ({
