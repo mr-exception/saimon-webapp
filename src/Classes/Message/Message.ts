@@ -12,7 +12,7 @@ export default class Message extends DBModel<IMessage> {
   public date: number;
   public status: MessageSentState;
   public packets: IPacketDeliverState[];
-  public packets_count?: number;
+  public packets_count: number;
   constructor(message_record: IMessage) {
     super("messages", message_record.id, store.getState().storage);
     this.network_id = message_record.network_id;
@@ -23,7 +23,9 @@ export default class Message extends DBModel<IMessage> {
     this.date = message_record.date;
     this.status = message_record.status;
     this.packets = JSON.parse(message_record.packets) as IPacketDeliverState[];
-    this.packets_count = message_record.packets_count;
+    this.packets_count =
+      message_record.packets_count ||
+      Math.ceil(message_record.content.length / 2000);
   }
   /**
    * returns the object of entity based on entity interface
@@ -115,7 +117,6 @@ export default class Message extends DBModel<IMessage> {
    * notice: this method won't work till all packet acks are retrived from hosts
    */
   public updateMessageStateBasedOnPackets() {
-    if (!this.packets_count) return;
     if (this.packets_count !== this.packets.length) return;
     if (!!this.packets.find((record) => record.state === "FAILED")) {
       // we have failed packet, so the message delivery is failed

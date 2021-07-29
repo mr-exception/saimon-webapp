@@ -13,7 +13,13 @@ onmessage = function (ev) {
     case "packets.send":
       if (!app_key) return;
       const data = payload.data;
-      handlePacketSend(data.content, data.address, data.host_ids, app_key);
+      handlePacketSend(
+        data.content,
+        data.address,
+        data.host_ids,
+        data.id,
+        app_key
+      );
       break;
     case "packets.receive":
       const packet = payload.data as IPacket;

@@ -20,11 +20,12 @@ const SendBox: React.FC<ISendBoxProps> = () => {
 
   const send = async () => {
     const dst_key = Key.generateKeyByPublicKey(selected_contact.public_key);
+    const content_str = JSON.stringify({ type: "TEXT", payload: content });
     const message = new Message({
       id: 0,
       contact_id: selected_contact.id,
       public_key: selected_contact.public_key,
-      content: JSON.stringify({ type: "TEXT", payload: content }),
+      content: content_str,
       status: "SENDING",
       date: Date.now(),
       box_type: "SENT",

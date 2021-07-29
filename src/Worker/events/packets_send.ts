@@ -1,12 +1,12 @@
 import Key from "Classes/Key/Key";
 import { env } from "process";
-import { v4 as uuidV4 } from "uuid";
 
 const PACKET_SIZE = 2000;
 async function handle(
   content: string,
   address: string,
   host_ids: number[],
+  id: string,
   app_key: Key
 ) {
   const dest_key = Key.generateKeyByPublicKey(address);
@@ -27,8 +27,6 @@ async function handle(
     })
   );
 
-  // define an uuid for message
-  const id = uuidV4();
   // each host must send how many packets
   const host_debt = packet_count / host_ids.length;
   for (let i = 0; i < host_ids.length; i++) {

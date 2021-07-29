@@ -19,6 +19,7 @@ export default class Client {
       content: message.content,
       address: address.getPublicKey(),
       host_ids,
+      id: message.network_id,
     });
   }
 }

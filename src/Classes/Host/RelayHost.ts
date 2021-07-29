@@ -142,12 +142,11 @@ export default class RelayHost extends Host {
         packet_got_chiper: string,
         ackCallback: (value: string) => void
       ) => {
-        const state = store.getState() as IInitialState;
+        const state = store.getState();
 
         const packet_got_buffer =
           this.client_key.decryptPrivate(packet_got_chiper);
         const packet_got: IPacketGot = JSON.parse(packet_got_buffer.toString());
-
         const storage = state.storage;
         const message_record = await storage.getMessageByNetworkId(
           packet_got.id
@@ -183,7 +182,6 @@ export default class RelayHost extends Host {
     );
     this._sending_packet_queue.start();
     // subscribe to contacts who are routed through this host
-    console.log(`subscribing to contacts in host ${this.id}`);
     this.subscribeToContactStatuses().catch((error) => {
       console.log(`failed to subscribe`, error);
     });
@@ -301,11 +299,7 @@ export default class RelayHost extends Host {
     this._socket.emit(
       "sub_status",
       this._host_key.encryptPublic(addresses),
-      () => {
-        console.log(
-          `subscribed to clients: ${contacts.map((contact) => contact.id)}`
-        );
-      }
+      () => {}
     );
     return true;
   }
