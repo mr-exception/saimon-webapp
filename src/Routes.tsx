@@ -25,8 +25,16 @@ import { autoConnect } from "Classes/Connection/auto-connect";
 import handleWorkers from "WorkerHandlers";
 
 const Routes = () => {
+  const worker = useSelector((state: IInitialState) => state.worker);
   const storage = useSelector(selectStorage);
+
   const app_key = useSelector(selectAppKey);
+  // syncs application key with worker key
+  useEffect(() => {
+    if (!worker || !app_key) return;
+    worker.emit("key.set", app_key.getPrivateKey());
+  }, [app_key, worker]);
+
   const hosts = useSelector(selectHosts);
   const contact_id = useSelector(
     (state: IInitialState) => state.selected_contact_id

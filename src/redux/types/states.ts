@@ -7,6 +7,7 @@ import Client from "Classes/Client/Client";
 import { ConnectionStatus } from "Classes/Connection/def";
 import Key from "Classes/Key/Key";
 import Storage from "Storage/Storage";
+import WorkerSubscriber from "Worker/WorkerSubscriber";
 /**
  * this state is when user just has opened the webapp
  */
@@ -57,14 +58,8 @@ export interface IInitialState {
   // request queues
   report_queue: Queue<IReportRequest>;
 
-  /**
-   * backgroud workers: these workers are like underground pipes
-   * which connect different parts of the project to each other
-   * they're running in background and getting variouse signals
-   * and signaling different parts when it's time to signal
-   */
-  receiving_zeus: Worker;
-  sending_zeus: Worker;
+  // background thread
+  worker: WorkerSubscriber;
 }
 /**
  * this state is when user is logged into the account

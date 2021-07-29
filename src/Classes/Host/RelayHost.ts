@@ -6,7 +6,7 @@ import {
   IPacketGot,
 } from "Classes/Connection/def";
 import Key from "Classes/Key/Key";
-import { io, Socket } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 import Message from "Classes/Message/Message";
 import store from "Redux/store";
 import { storeConnectionState } from "Redux/actions/client";
@@ -14,6 +14,9 @@ import Host, { HostProtocol, HostType } from "./Host";
 import { IReportMessage } from "Classes/Queue/def";
 import Queue from "Classes/Queue/Queue";
 import { v4 as uuidV4 } from "uuid";
+import Contact from "Classes/Contact/Contact";
+import { IInitialState } from "Redux/types/states";
+import { filter } from "rxjs/operators";
 export default class RelayHost extends Host {
   // props
   private _socket?: Socket;
@@ -121,22 +124,31 @@ export default class RelayHost extends Host {
       throw new Error("connection is dead");
     }
     // listen to packet event from host node
-    this._socket.on("pck", (packet_cipher: string, ackCallback) => {
-      const packet_buffer = this.client_key.decryptPrivate(packet_cipher);
-      const packet = JSON.parse(packet_buffer.toString()) as IPacket;
-      packet.host_id = this.id;
-      store.getState().receiving_zeus.postMessage(packet);
-      ackCallback("got");
-    });
+    this._socket.on(
+      "pck",
+      (packet_cipher: string, ackCallback: (value: string) => void) => {
+        const state = store.getState() as IInitialState;
+        const packet_buffer = this.client_key.decryptPrivate(packet_cipher);
+        const packet = JSON.parse(packet_buffer.toString()) as IPacket;
+        packet.host_id = this.id;
+        state.worker.emit("packets.receive", packet);
+        ackCallback("got");
+      }
+    );
     // listen to packet got event from host node
     this._socket.on(
       "pck_got",
-      async (packet_got_chiper: string, ackCallback) => {
+      async (
+        packet_got_chiper: string,
+        ackCallback: (value: string) => void
+      ) => {
+        const state = store.getState() as IInitialState;
+
         const packet_got_buffer =
           this.client_key.decryptPrivate(packet_got_chiper);
         const packet_got: IPacketGot = JSON.parse(packet_got_buffer.toString());
 
-        const storage = store.getState().storage;
+        const storage = state.storage;
         const message_record = await storage.getMessageByNetworkId(
           packet_got.id
         );
@@ -150,14 +162,16 @@ export default class RelayHost extends Host {
       }
     );
     // listen to any client state changed through this connection
-    this._socket.on("status_update", (cipher: string, ackCallback) => {
+    this._socket.on("status_update", (cipher: string) => {
       if (!this._socket) return;
       const state = JSON.parse(
         this.client_key.decryptPrivate(cipher).toString()
       ) as IClientState;
       const contact = store
         .getState()
-        .contacts.find((record) => record.getAddress() === state.address);
+        .contacts.find(
+          (record: Contact) => record.getAddress() === state.address
+        );
       if (contact) {
         contact.updateStatus(this.id, state.state);
       }
@@ -173,54 +187,38 @@ export default class RelayHost extends Host {
     this.subscribeToContactStatuses().catch((error) => {
       console.log(`failed to subscribe`, error);
     });
-  }
-  /**
-   * send message to a client by address
-   */
-  public async sendMessageToClient(message: Message, dest_key: Key) {
-    const content = Buffer.from(JSON.stringify(message.content));
-    const length = content.length;
-    const packet_count = Math.ceil(length / configs.packet_length);
-    // updateing packet count for message entity
-    message.packets_count = packet_count;
-    message.update();
-    // slicing buffer into packets
-    const data_parts: Buffer[] = [];
-    for (let i = 0; i < packet_count; i++) {
-      data_parts.push(
-        content.slice(
-          i * configs.packet_length,
-          (i + 1) * configs.packet_length
-        )
-      );
-    }
-    // encrypting packets
-    const parts_cipher = await Promise.all(
-      data_parts.map((part) => {
-        return new Promise<string>((resolve) => {
-          resolve(dest_key.encryptPublic(this.client_key.encryptPrivate(part)));
-        });
-      })
-    );
-    // adding packets into sending queue
-    parts_cipher.forEach(async (part, position) => {
-      if (!this._socket) throw new Error("connection is dead");
-      const packet: IPacket = {
-        id: message.network_id,
-        payload: part,
-        position,
-        count: packet_count,
-        dst: dest_key.getAddress(),
-        src: this.client_key.getAddress(),
-      };
-      this.addPacketToSendingQueue(packet);
-    });
+
+    // subscribe to worker packets.send event
+    store
+      .getState()
+      .worker.on<{
+        host_id: number;
+        cipher: string;
+        dst: string;
+        id: string;
+        count: number;
+        position: number;
+      }>("packets.send")
+      .pipe(filter((record) => record.host_id === this.id))
+      .subscribe({
+        next: ({ cipher, dst, id, count, position }) => {
+          const packet: IPacket = {
+            id,
+            payload: cipher,
+            position,
+            count,
+            dst,
+            src: this.client_key.getAddress(),
+          };
+          this.addPacketToSendingQueue(packet);
+        },
+      });
   }
   /**
    * send a single direct packet to host
    */
   public sendPacket = (packet: IPacket): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       if (!this._socket) {
         console.error("connection is dead");
         return resolve(false);
@@ -233,7 +231,6 @@ export default class RelayHost extends Host {
       const packet_encrypted = this._host_key.encryptPublic(
         Buffer.from(packet_string)
       );
-
       this._socket.emit("pck", packet_encrypted, () => {
         resolve(true);
       });
@@ -290,15 +287,16 @@ export default class RelayHost extends Host {
     });
   }
   public async subscribeToContactStatuses(): Promise<boolean> {
+    const state = store.getState() as IInitialState;
     if (!this._socket) {
       throw new Error("connection is dead");
     }
     if (!this._host_key) {
       throw new Error("key not found");
     }
-    const contacts = store
-      .getState()
-      .contacts.filter((contact) => contact.relay_host_ids.includes(this.id));
+    const contacts = state.contacts.filter((contact) =>
+      contact.relay_host_ids.includes(this.id)
+    );
     const addresses = contacts.map((contact) => contact.getAddress()).join(",");
     this._socket.emit(
       "sub_status",

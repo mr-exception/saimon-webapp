@@ -1,5 +1,5 @@
-import handlePacketsWorker from "./packets";
+import handleMessageReceive from "./messages";
 
 export default function handle() {
-  handlePacketsWorker();
+  handleMessageReceive();
 }

@@ -36,14 +36,17 @@
     "socket.io-client": "^4.0.1",
     "stylelint-config-recommended": "^5.0.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "ts-loader": "8.3.0",
     "typescript": "^4.1.2",
     "uuid": "^8.3.2",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "webpack-cli": "^4.7.2"
   },
   "scripts": {
     "start": "craco start",
     "build": "node pre-build.js && craco build",
     "test": "craco test",
+    "worker": "webpack",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

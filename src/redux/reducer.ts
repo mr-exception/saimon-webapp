@@ -12,6 +12,7 @@ import Queue from "Classes/Queue/Queue";
 import { IReportRequest } from "Classes/Queue/def";
 import { handle as handleReportJob } from "Queues/ReportLayer";
 import Client from "Classes/Client/Client";
+import WorkerSubscriber from "Worker/WorkerSubscriber";
 
 export const initialState: IInitialState = {
   is_online: false,
@@ -38,8 +39,7 @@ export const initialState: IInitialState = {
   selected_conversation_messages: [],
   report_queue: new Queue<IReportRequest>(`report`, handleReportJob),
 
-  receiving_zeus: new Worker("/workers/receiving_zeus.js"),
-  sending_zeus: new Worker("/workers/sending_zeus.js"),
+  worker: new WorkerSubscriber("/worker.js"),
 };
 
 const reducer = (
