@@ -112,6 +112,55 @@ export default function handle() {
         });
         message.store();
         store.dispatch(addMessage(message));
+        // send the notification
+        Notification.requestPermission(async (status) => {
+          console.debug(`notification permission status: `, status);
+          if (status === "granted") {
+            try {
+              const reg = await navigator.serviceWorker.getRegistration();
+              if (!reg) throw new Error("not registered");
+              switch (content.type) {
+                case "TEXT":
+                  reg.showNotification(contact.name, {
+                    body: content.payload,
+                    icon: "/logo192.png",
+                    badge: "/logo192.png",
+                  });
+                  break;
+                case "FILE":
+                  reg.showNotification(contact.name, {
+                    body: "file",
+                    icon: "/logo192.png",
+                    badge: "/logo192.png",
+                  });
+                  break;
+                case "IMAGE":
+                  reg.showNotification(contact.name, {
+                    body: "image",
+                    icon: "/logo192.png",
+                    badge: "/logo192.png",
+                  });
+                  break;
+                case "MOVIE":
+                  reg.showNotification(contact.name, {
+                    body: "movie",
+                    icon: "/logo192.png",
+                    badge: "/logo192.png",
+                  });
+                  break;
+                case "AUDIO":
+                  reg.showNotification(contact.name, {
+                    body: "audio",
+                    icon: "/logo192.png",
+                    badge: "/logo192.png",
+                  });
+                  break;
+              }
+            } catch (error) {
+              console.error(error);
+            }
+          }
+        });
       },
     });
 }

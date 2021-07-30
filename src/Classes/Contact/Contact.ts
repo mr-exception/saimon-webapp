@@ -75,6 +75,10 @@ export default class Contact extends DBModel<IContact> {
       .hosts.filter((record) => ids.includes(record.id)) as RelayHost[];
     return hosts;
   }
+
+  public get name(): string {
+    return `${this.first_name} ${this.last_name}`;
+  }
 }
 
 export interface IContact {
