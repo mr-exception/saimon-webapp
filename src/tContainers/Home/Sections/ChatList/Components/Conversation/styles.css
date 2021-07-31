@@ -1,0 +1,42 @@
+.conversation {
+  max-height: 80px;
+  flex: 1;
+  @apply flex flex-row border-b-2 border-base;
+}
+
+.conversation--selected {
+  @apply bg-base;
+}
+
+.conversation__icon {
+  flex: 1;
+  @apply flex flex-col justify-center items-center w-1/4;
+}
+
+.conversation__icon__image {
+  max-height: 70%;
+  width: auto;
+}
+
+.conversation_content {
+  flex: 2;
+  @apply flex flex-col;
+}
+
+.conversation_content_name {
+  flex: 1;
+}
+.conversation_content_name > label {
+  @apply overflow-ellipsis whitespace-nowrap overflow-hidden text-black max-w-full;
+}
+
+.last-message {
+  @apply overflow-ellipsis whitespace-nowrap overflow-hidden text-black max-w-full;
+}
+.conversation_actions {
+  flex: 1;
+  @apply flex justify-center items-center content-center;
+}
+.conversation_actions > button {
+  max-width: 25px;
+}
