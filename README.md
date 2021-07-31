@@ -81,7 +81,7 @@ this direcotry contains all methods and classes about redux. redux is the main s
 
 storage is a unit that hold all information and connections to local data storage of applications. for now, we are using `IndexedDB` as primary local storage in this web application. but It may change in future. but all interfaces in this directory and `Storage` class won't change
 
-### UI-Kit
+### Ui-Kit
 
 this directory contains usefull UI components in project, like buttons, input fields and modals. any component that is gonna be used several times in project must be placed in this directory.
 

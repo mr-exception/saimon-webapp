@@ -7,8 +7,8 @@ import {
   showConfirmationModal,
 } from "Redux/actions/modals";
 import { IInitialState } from "Redux/types/states";
-import TextField from "UI-Kit/Form/FormField/TextField";
-import Modal from "UI-Kit/Modal/Modal";
+import TextField from "Ui-Kit/Form/FormField/TextField";
+import Modal from "Ui-Kit/Modal/Modal";
 import "./styles.css";
 const ContactDetailsModal = () => {
   const { show, contact } = useSelector(

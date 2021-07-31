@@ -3,7 +3,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateContact } from "Redux/actions/contacts";
 import { selectHostConnectionStates, selectHosts } from "Redux/types/selectors";
-import Button from "UI-Kit/Button/Button";
+import Button from "Ui-Kit/Button/Button";
 import { INoRouteProps } from "./def";
 import Styles from "./styles.module.css";
 const NoRoute: React.FC<INoRouteProps> = ({ contact }: INoRouteProps) => {

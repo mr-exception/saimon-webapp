@@ -6,7 +6,7 @@ import {
   selectFirstName,
   selectLastName,
 } from "Redux/types/selectors";
-import TextField from "UI-Kit/Form/FormField/TextField";
+import TextField from "Ui-Kit/Form/FormField/TextField";
 import { updateFirstName, updateLastName } from "Redux/actions/profile";
 /**
  * profile features:

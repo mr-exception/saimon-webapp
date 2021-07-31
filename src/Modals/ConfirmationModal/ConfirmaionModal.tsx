@@ -1,6 +1,6 @@
 import React from "react";
 import "./styles.css";
-import Modal from "UI-Kit/Modal/Modal";
+import Modal from "Ui-Kit/Modal/Modal";
 import { IInitialState } from "Redux/types/states";
 import { useDispatch, useSelector } from "react-redux";
 import { closeConfirmationModal } from "Redux/actions/modals";

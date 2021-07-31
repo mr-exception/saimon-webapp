@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./styles.css";
-import Modal from "UI-Kit/Modal/Modal";
+import Modal from "Ui-Kit/Modal/Modal";
 import { IInitialState } from "Redux/types/states";
 import { useDispatch, useSelector } from "react-redux";
 import { clsoeAddHostModal } from "Redux/actions/modals";
-import Button from "UI-Kit/Button/Button";
+import Button from "Ui-Kit/Button/Button";
 import { getHeartBeat, IServiceInfo } from "Apis/HeartBeat";
 import Host from "Classes/Host/Host";
 import RelayHost from "Classes/Host/RelayHost";
