@@ -18,7 +18,7 @@ module.exports = {
     path: build,
   },
   resolve: {
-    modules: ["node_modules", src + "/Worker"],
+    modules: ["node_modules", src],
     extensions: [".js", ".json", ".jsx", ".ts", ".tsx"],
   },
 
