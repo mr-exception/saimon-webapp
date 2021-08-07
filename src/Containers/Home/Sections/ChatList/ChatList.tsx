@@ -23,7 +23,7 @@ const ChatList = () => {
   // }, [getClientConnectionsMaps]);
   return (
     <div className="chat-list">
-      <AddContact />
+      {/* <AddContact /> */}
       {contacts.map((contact, index) => (
         <Conversation
           selected={() => {

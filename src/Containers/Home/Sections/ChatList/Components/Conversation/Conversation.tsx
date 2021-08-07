@@ -23,14 +23,14 @@ const Conversation: React.FC<IConversationProps> = ({
         />
       </div>
       <div className="conversation_content">
-        <div className="conversation_content_name flex flex-col justify-end items-start">
+        <div className="conversation_content_name">
           <label>{`${contact.first_name} ${contact.last_name}`}</label>
         </div>
         <div className="flex-1 flex flex-col justify-start items-start">
           <label className="last-message">{last_message}</label>
         </div>
       </div>
-      <div className="conversation_actions">
+      {/* <div className="conversation_actions">
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -40,7 +40,7 @@ const Conversation: React.FC<IConversationProps> = ({
         >
           <img src="/Images/menu.svg" alt="actions" />
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,7 +1,22 @@
 .add-contact {
   min-height: 80px;
 }
-.add-contact__button {
+.btn {
   height: 50px;
   min-width: 180px;
+    right: 10px;
+    max-width: 111px;
+    height: 40px;
+    border: none;
+    outline: none;
+    background: #005fff;
+    border-radius: 20px;
+    font-family: Helvetica Neue,sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 18px;
+    color: #fff;
+    cursor: pointer;
+    -webkit-flex: 1 1;
+    flex: 1 1;
 }

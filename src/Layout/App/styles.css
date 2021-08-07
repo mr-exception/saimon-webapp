@@ -1,26 +1,23 @@
 .app {
-  @apply flex flex-row items-center content-center justify-center;
+  @apply flex flex-row items-center content-center justify-center bg-black;
   height: 100vh;
-  background-image: url("Images/background.svg");
-  background-size: cover;
 }
 .app__container {
-  @apply flex flex-row;
+  @apply flex flex-row border-gray-dark;
   max-width: 1500px;
   max-height: 850px;
   width: calc(100vw - 2px);
   height: calc(100vh - 2px);
-  background-color: white;
   border-width: 1px;
   border-style: solid;
-  border-color: #2f988a;
-  border-radius: 3px;
+  border-radius: 10px;
 }
 .app__container__toolbar {
-  @apply flex bg-white flex-1;
+  @apply flex bg-white flex-1 bg-gray-darker;
   max-width: 5%;
   min-width: 70px;
-
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
   display: flex;
   flex-direction: column;
 

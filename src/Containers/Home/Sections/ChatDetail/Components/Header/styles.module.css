@@ -38,3 +38,7 @@
 .actions {
   max-width: 25px;
 }
+
+.chat_info_icon{
+  width:85% !important;
+}
