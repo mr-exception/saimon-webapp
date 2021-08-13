@@ -37,7 +37,7 @@ const AdvertiserHostCard: React.FC<IAdvertiserHostCardProps> = ({
   const dispatch = useDispatch();
 
   return (
-    <div className="m-8 p-4 border-2 rounded-lg border-secondary">
+    <div className="m-8 p-4 border-2 rounded-lg border-secondary text-white">
       <div className="status-bar">
         {translateConnectionState(connectionState?.state)}
       </div>

@@ -67,7 +67,7 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
     host.close();
   };
   return (
-    <div className="m-8 p-4 border-2 rounded-lg border-secondary">
+    <div className="m-8 p-4 border-2 rounded-lg border-secondary text-white">
       <div className="status-bar">
         {translateConnectionState(connectionState?.state)}
       </div>
