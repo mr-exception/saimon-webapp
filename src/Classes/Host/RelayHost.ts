@@ -296,11 +296,25 @@ export default class RelayHost extends Host {
       contact.relay_host_ids.includes(this.id)
     );
     const addresses = contacts.map((contact) => contact.getAddress()).join(",");
-    this._socket.emit(
-      "sub_status",
-      this._host_key.encryptPublic(addresses),
-      () => {}
-    );
+    const cipher = this._host_key.encryptPublic(addresses);
+    // subscribe to addresses
+    this._socket.emit("sub_status", cipher, () => {});
+    // get addresses status for the first time
+    this._socket.emit("status_list", cipher, (response: string) => {
+      const states = JSON.parse(
+        this.client_key.decryptPrivate(response).toString()
+      ) as IClientState[];
+      states.forEach((state) => {
+        const contact = store
+          .getState()
+          .contacts.find(
+            (record: Contact) => record.getAddress() === state.address
+          );
+        if (contact) {
+          contact.updateStatus(this.id, state.state);
+        }
+      });
+    });
     return true;
   }
 }
