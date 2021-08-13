@@ -1,7 +1,5 @@
 import React from "react";
 import "./styles.css";
-import { useDispatch } from "react-redux";
-import { showContactDetailsModal } from "Redux/actions/modals";
 import { IConversationProps } from "./def";
 const Conversation: React.FC<IConversationProps> = ({
   last_message,
@@ -9,7 +7,6 @@ const Conversation: React.FC<IConversationProps> = ({
   is_selected,
   contact,
 }: IConversationProps) => {
-  const dispatch = useDispatch();
   return (
     <div
       onClick={selected}
