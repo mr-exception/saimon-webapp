@@ -7,8 +7,8 @@ const App: React.FC<IAppProps> = ({ children }: IAppProps) => {
   const history = useHistory();
   return (
     <div className="app">
-      <div className="app__container border-secondary">
-        <div className="app__container__toolbar bg-secondary">
+      <div className="app__container">
+        <div className="app__container__toolbar">
           <MenuItem
             icon="/Images/contact.svg"
             caption="chats"

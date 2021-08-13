@@ -5,6 +5,7 @@ import "./styles.css";
 const Home = () => {
   return (
     <div className="home">
+      {/* test */}
       <ChatList />
       <ChatDetail />
     </div>

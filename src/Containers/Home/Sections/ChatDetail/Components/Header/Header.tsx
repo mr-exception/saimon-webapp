@@ -33,8 +33,9 @@ const Header: React.FC<IHeaderProps> = ({ contact }: IHeaderProps) => {
       <div className={Styles.headerInfo}>
         <button className={Styles.actions}>
           <img
-            src="/Images/menu.svg"
+            src="/Images/info.svg"
             alt="actions"
+            className="w-full"
             onClick={() => {
               dispatch(showContactDetailsModal(contact));
             }}
