@@ -7,6 +7,23 @@ import { IReportMessage } from "Classes/Queue/def";
 import { addHost } from "Redux/actions/hosts";
 import Host from "Classes/Host/Host";
 import { addMessage } from "Redux/actions/conversations";
+
+const calculateHostIds = (currentIds: number[], newIds: number[]): number[] => {
+  const results: number[] = [];
+
+  currentIds.forEach((id) => {
+    if (!results.includes(id)) {
+      results.push(id);
+    }
+  });
+  newIds.forEach((id) => {
+    if (!results.includes(id)) {
+      results.push(id);
+    }
+  });
+
+  return results;
+};
 /**
  * checks if there is any contact with this address in the storage and store
  * if it does not exists then we create a new unknown contact with the
@@ -26,17 +43,12 @@ const checkForContact = async (
       last_name: "unknown",
       public_key: Key.normalizeKey(address),
       advertiser_host_ids: [],
-      relay_host_ids: host_ids,
+      relay_host_ids: calculateHostIds([], host_ids),
     });
     await contact.store();
     store.dispatch(addContact(contact));
   } else {
-    contact.relay_host_ids.forEach((id) => {
-      if (!host_ids.includes(id)) {
-        if (!contact) return;
-        contact.relay_host_ids.push(id);
-      }
-    });
+    contact.relay_host_ids = calculateHostIds(contact.relay_host_ids, host_ids);
     contact.update();
   }
   return contact;
