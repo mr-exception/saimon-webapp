@@ -27,7 +27,7 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
         }
       });
       return state;
-    case Actions.EDIT_HOST:
+    case Actions.UPDATE_HOST:
       state.hosts = state.hosts.map((host) => {
         if (action.host) {
           if (host.id === action.host.id) return host;

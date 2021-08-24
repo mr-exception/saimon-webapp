@@ -1,25 +1,14 @@
-import RelayHost from "Classes/Host/RelayHost";
 import React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateContact } from "Redux/actions/contacts";
-import { selectHostConnectionStates, selectHosts } from "Redux/types/selectors";
+import { selectConnectedRelayHosts } from "Redux/types/selectors";
 import Button from "Ui-Kit/Button/Button";
 import { INoRouteProps } from "./def";
 import Styles from "./styles.module.css";
 const NoRoute: React.FC<INoRouteProps> = ({ contact }: INoRouteProps) => {
   const dispatch = useDispatch();
-  const relay_connection_states = useSelector(selectHostConnectionStates);
-  const relay_hosts = useSelector(selectHosts)
-    .filter((host) => host.type === "RELAY")
-    .filter((host) => {
-      const status = relay_connection_states.find(
-        (state) => state.connection_id === host.id
-      );
-      if (!status) return false;
-      return status.state === "CONNECTED";
-    }) as RelayHost[];
-
+  const relay_hosts = useSelector(selectConnectedRelayHosts);
   const [checking, set_checking] = useState(false);
   const checkRoutes = async () => {
     if (relay_hosts.length === 0) {

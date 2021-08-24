@@ -2,7 +2,7 @@ import axios from "axios";
 import DBModel from "Classes/DBModel/DBModel";
 import Key from "Classes/Key/Key";
 import store from "Redux/store";
-import { editHost } from "Redux/actions/hosts";
+import { updateHost } from "Redux/actions/hosts";
 import { ConnectionStatus } from "Classes/Connection/def";
 export default class Host extends DBModel<IHost> {
   public name: string;
@@ -61,6 +61,11 @@ export default class Host extends DBModel<IHost> {
     }
     return `${this.advertise_period}B`;
   }
+  // event listeners
+  public setState(value: ConnectionStatus): void {
+    this.state = value;
+    store.dispatch(updateHost(this));
+  }
 
   public async isLive(): Promise<boolean> {
     try {
@@ -71,7 +76,7 @@ export default class Host extends DBModel<IHost> {
       this.name = service_information.name;
       this.advertise_period = service_information.ad_price;
       this.update();
-      store.dispatch(editHost(this));
+      store.dispatch(updateHost(this));
       return true;
     } catch (error) {
       console.error(error);
@@ -83,7 +88,7 @@ export default class Host extends DBModel<IHost> {
     try {
       this.disabled = true;
       this.update();
-      store.dispatch(editHost(this));
+      store.dispatch(updateHost(this));
       return true;
     } catch (error) {
       console.error(error);
@@ -95,7 +100,7 @@ export default class Host extends DBModel<IHost> {
     try {
       this.disabled = false;
       this.update();
-      store.dispatch(editHost(this));
+      store.dispatch(updateHost(this));
       return true;
     } catch (error) {
       console.error(error);
@@ -107,8 +112,15 @@ export default class Host extends DBModel<IHost> {
     this.tta = value;
   }
 
-  public connected(): boolean {
+  public isConnected(): boolean {
     return this.state === "CONNECTED";
+  }
+  public isDisconnected(): boolean {
+    return (
+      this.state === "DISCONNECTED" ||
+      this.state === "NETWORK_ERROR" ||
+      this.state === "NOT_FOUND"
+    );
   }
 }
 

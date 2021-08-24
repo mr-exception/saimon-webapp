@@ -1,10 +1,9 @@
 import React from "react";
 import "./styles.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { showConfirmationModal } from "Redux/actions/modals";
 import { IStorageHostCardProps } from "./def";
 import { removeHost } from "Redux/actions/hosts";
-import { selectHostConnectionStates } from "Redux/types/selectors";
 import { ConnectionStatus } from "Classes/Connection/def";
 import ActionItem from "../ActionItem/ActionItem";
 
@@ -29,17 +28,10 @@ const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
 const StorageHostCard: React.FC<IStorageHostCardProps> = ({
   host,
 }: IStorageHostCardProps) => {
-  const connections = useSelector(selectHostConnectionStates);
-
-  const connectionState = connections.find(
-    (connection) => connection.connection_id === host.id
-  );
   const dispatch = useDispatch();
   return (
     <div className="m-8 p-4 border-2 rounded-lg border-secondary text-white">
-      <div className="status-bar">
-        {translateConnectionState(connectionState?.state)}
-      </div>
+      <div className="status-bar">{translateConnectionState(host.state)}</div>
       <div className="host-card__info">
         <div className="host-card__general_info">
           <p>name: {host.name}</p>
@@ -49,7 +41,7 @@ const StorageHostCard: React.FC<IStorageHostCardProps> = ({
         <div className="host-card__statics_info">
           <p>protocol: {host.protocol}</p>
           <p>score: {host.score}</p>
-          <p>tta: {host.tta}</p>
+          <p>tta: {host.tta}ms</p>
         </div>
         <div className="host-card__actions">
           <ActionItem

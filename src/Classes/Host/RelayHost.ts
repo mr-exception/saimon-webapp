@@ -9,7 +9,6 @@ import Key from "Classes/Key/Key";
 import { Socket, io } from "socket.io-client";
 import Message from "Classes/Message/Message";
 import store from "Redux/store";
-import { storeConnectionState } from "Redux/actions/client";
 import Host, { HostProtocol, HostType } from "./Host";
 import { IReportMessage } from "Classes/Queue/def";
 import Queue from "Classes/Queue/Queue";
@@ -23,11 +22,6 @@ export default class RelayHost extends Host {
   private _host_key?: Key;
   // sending packets queues
   private _sending_packet_queue?: Queue<IPacket> = undefined;
-
-  // event listeners
-  public connectionStatusChanged(state: ConnectionStatus): void {
-    store.dispatch(storeConnectionState(this.id, state));
-  }
   public updateClientState(state: IClientState): void {
     console.log(state);
   }
@@ -54,15 +48,15 @@ export default class RelayHost extends Host {
         transports: ["polling"],
       });
       this._socket.on("connect_error", (error) => {
-        this.connectionStatusChanged("NETWORK_ERROR");
+        this.setState("NETWORK_ERROR");
         reject("connection error");
         this.close();
       });
       // listen to socket on disconnecting
       this._socket.on("disconnect", () => {
-        this.connectionStatusChanged("DISCONNECTED");
+        this.setState("DISCONNECTED");
       });
-      this.connectionStatusChanged("CONNECTING");
+      this.setState("CONNECTING");
       // HK: waits for host node to send its public key
       const host_public_key = await RelayHost.onAsyncStatic<string>(
         this._socket,
@@ -74,36 +68,36 @@ export default class RelayHost extends Host {
         reject("timeout");
       }, 30000);
 
-      this.connectionStatusChanged("HK");
+      this.setState("HK");
       // got HK, creates the host key
       this._host_key = Key.generateKeyByPublicKey(host_public_key);
       // CK: sends client node public key to host node
       this._socket.emit("CK", this.client_key.getPublicKey());
-      this.connectionStatusChanged("CK");
+      this.setState("CK");
       // VQ: waits for host node to return a verfication question
       // encrypted by client node public key
       const vq_cipher = await RelayHost.onAsyncStatic<string>(
         this._socket,
         "VQ"
       );
-      this.connectionStatusChanged("VQ");
+      this.setState("VQ");
       // decrypts the verification question by client node private key
       const va = this.client_key.decryptPrivate(vq_cipher);
       // encrypts the verifiction answer by host node public key
       const va_cipher = this._host_key.encryptPublic(va);
       // VA: sends the verification answer
       this._socket.emit("VA", va_cipher);
-      this.connectionStatusChanged("VA");
+      this.setState("VA");
       // VS: waits if host accepted the verifictaion
       this._socket.once("VS", () => {
         resolve(true);
-        this.connectionStatusChanged("CONNECTED");
+        this.setState("CONNECTED");
         this.startListeningToHost();
         clearTimeout(timeout);
       });
       // VF: waits if host refused the verification
       this._socket.once("VF", () => {
-        this.connectionStatusChanged("VF");
+        this.setState("VF");
       });
     });
   }

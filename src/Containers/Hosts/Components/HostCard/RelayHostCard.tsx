@@ -1,11 +1,9 @@
 import React, { useCallback } from "react";
 import "./styles.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { showConfirmationModal } from "Redux/actions/modals";
 import { IRelayHostCardProps } from "./def";
 import { removeHost } from "Redux/actions/hosts";
-import { selectHostConnectionStates } from "Redux/types/selectors";
-import { IInitialState } from "Redux/types/states";
 import { ConnectionStatus } from "Classes/Connection/def";
 import ActionItem from "../ActionItem/ActionItem";
 
@@ -36,20 +34,10 @@ const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
 const RelayHostCard: React.FC<IRelayHostCardProps> = ({
   host,
 }: IRelayHostCardProps) => {
-  let connections = useSelector((state: IInitialState) =>
-    selectHostConnectionStates(state)
-  );
-  const connectionState = connections.find(
-    (connection) => connection.connection_id === host.id
-  );
   const dispatch = useDispatch();
 
-  const canConnect = connectionState
-    ? connectionState.state !== "CONNECTED"
-    : true;
-  const canDisconnect = connectionState
-    ? connectionState.state === "CONNECTED"
-    : false;
+  const canConnect = host ? host.state !== "CONNECTED" : true;
+  const canDisconnect = host ? host.state === "CONNECTED" : false;
 
   // connect to the host node (again)
   const connect = useCallback(async () => {
@@ -68,9 +56,7 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
   };
   return (
     <div className="m-8 p-4 border-2 rounded-lg border-secondary text-white">
-      <div className="status-bar">
-        {translateConnectionState(connectionState?.state)}
-      </div>
+      <div className="status-bar">{translateConnectionState(host.state)}</div>
       <div className="host-card__info">
         <div className="host-card__general_info">
           <p>name: {host.name}</p>
@@ -80,7 +66,7 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
         <div className="host-card__statics_info">
           <p>protocol: {host.protocol}</p>
           <p>score: {host.score}</p>
-          <p>tta: {host.tta}</p>
+          <p>tta: {host.tta}ms</p>
         </div>
         <div className="host-card__actions">
           <ActionItem
