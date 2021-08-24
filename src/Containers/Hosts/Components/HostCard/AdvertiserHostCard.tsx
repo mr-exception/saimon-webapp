@@ -50,7 +50,7 @@ const AdvertiserHostCard: React.FC<IAdvertiserHostCardProps> = ({
         <div className="host-card__statics_info">
           <p>protocol: {host.protocol}</p>
           <p>score: {host.score}</p>
-          <p>advertise period: {host.getAdvertisePeriod()}</p>
+          <p>tta: {host.tta}</p>
         </div>
         <div className="host-card__actions">
           <ActionItem

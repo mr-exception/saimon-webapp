@@ -3,6 +3,7 @@ import DBModel from "Classes/DBModel/DBModel";
 import Key from "Classes/Key/Key";
 import store from "Redux/store";
 import { editHost } from "Redux/actions/hosts";
+import { ConnectionStatus } from "Classes/Connection/def";
 export default class Host extends DBModel<IHost> {
   public name: string;
   public address: string;
@@ -10,6 +11,8 @@ export default class Host extends DBModel<IHost> {
   public type: HostType;
   public protocol: HostProtocol;
   public advertise_period: number;
+  public state: ConnectionStatus = "NOT_FOUND";
+  public tta: number = 0;
   /**
    * disabled can be toggled by user interaction. for example when user disconnects
    * a host, it means this host must be offline and not be used in future connections.
@@ -27,6 +30,10 @@ export default class Host extends DBModel<IHost> {
     this.protocol = host_record.protocol;
     this.advertise_period = host_record.advertise_period;
     this.disabled = host_record.disabled;
+
+    if (host_record.protocol === "RESPONDER") {
+      this.state = "CONNECTED";
+    }
   }
   /**
    * returns the object of entity based on entity interface
@@ -94,6 +101,14 @@ export default class Host extends DBModel<IHost> {
       console.error(error);
       return false;
     }
+  }
+
+  public setTTA(value: number) {
+    this.tta = value;
+  }
+
+  public connected(): boolean {
+    return this.state === "CONNECTED";
   }
 }
 

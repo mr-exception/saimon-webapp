@@ -23,6 +23,7 @@ import { IInitialState } from "Redux/types/states";
 import { setConnectionStatus } from "Redux/actions/others";
 import { autoConnect } from "Classes/Connection/auto-connect";
 import handleWorkers from "WorkerHandlers";
+import HostBeats from "Queues/HostBeats";
 
 const Routes = () => {
   const worker = useSelector((state: IInitialState) => state.worker);
@@ -101,15 +102,6 @@ const Routes = () => {
   useEffect(() => {
     Notification.requestPermission(async (status) => {
       console.debug(`notification permission status: `, status);
-      // if (status === "granted") {
-      //   try {
-      //     const reg = await navigator.serviceWorker.getRegistration();
-      //     if (!reg) throw new Error("not registered");
-      //     reg.showNotification("some title", { body: "some body!" });
-      //   } catch (error) {
-      //     console.error(error);
-      //   }
-      // }
     });
   }, []);
 
@@ -123,6 +115,16 @@ const Routes = () => {
       dispatch(setConnectionStatus(false));
     });
   }, [dispatch, hosts]);
+
+  /**
+   * start heartbeat jobs
+   */
+  useEffect(() => {
+    HostBeats.start();
+    return () => {
+      HostBeats.finish();
+    };
+  }, [hosts]);
 
   if (!contacts_loaded || !hosts_loaded || !client_loaded)
     return <div>loading...</div>;
