@@ -10,7 +10,6 @@ const reducer = (state: IInitialState, action: ActionType): IInitialState => {
       state.contact_connections = [];
       state.selected_contact_id = undefined;
       state.selected_conversation_messages = [];
-      state.host_connections = [];
       return state;
     case Actions.SET_CONNECTION_STATUS:
       state.is_online = action.is_online === true;

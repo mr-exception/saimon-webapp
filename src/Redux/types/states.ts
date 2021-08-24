@@ -4,7 +4,6 @@ import Message from "Classes/Message/Message";
 import { IReportRequest } from "Classes/Queue/def";
 import Queue from "Classes/Queue/Queue";
 import Client from "Classes/Client/Client";
-import { ConnectionStatus } from "Classes/Connection/def";
 import Key from "Classes/Key/Key";
 import Storage from "Storage/Storage";
 import WorkerSubscriber from "Worker/WorkerSubscriber";
@@ -42,10 +41,6 @@ export interface IInitialState {
   hosts: Host[];
   contacts: Contact[];
 
-  host_connections: {
-    connection_id: number;
-    state: ConnectionStatus;
-  }[];
   contact_connections: {
     contact_id: number;
     online: boolean;

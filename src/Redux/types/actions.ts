@@ -37,7 +37,6 @@ export const CONNECT_HOST = "connect_host";
 export const DISCONNECT_HOST = "disconnect_host";
 // client
 export const STORE_CLIENT = "store_client";
-export const STORE_CONNECTION_STATE = "store_connection_state";
 export const STORE_APP_KEY = "store_app_key";
 export const UPDATE_INCOMING_MESSAGE = "update_imcoming_message";
 // conversations

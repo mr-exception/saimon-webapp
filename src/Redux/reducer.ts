@@ -33,7 +33,6 @@ export const initialState: IInitialState = {
   contacts: [],
   hosts: [],
 
-  host_connections: [],
   contact_connections: [],
 
   selected_conversation_messages: [],
