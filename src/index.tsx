@@ -5,7 +5,7 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./Redux/store";
-import serviceWorker from "./serviceworker";
+// import serviceWorker from "./serviceworker";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -20,4 +20,4 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-serviceWorker.unregister();
+// serviceWorker.unregister();
