@@ -1,5 +1,5 @@
 interface IMenuItemProps {
-  icon: string;
+  IconComponent: React.FC;
   onClick: () => void;
   caption: string;
 }

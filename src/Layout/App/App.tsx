@@ -1,44 +1,48 @@
 import React from "react";
 import MenuItem from "./Components/MenuItem/MenuItem";
-import "./styles.css";
+import Styles from "./styles.module.css";
 import { useHistory } from "react-router";
 import Modals from "Modals/Modals";
+import Contacts from "Images/Contacts";
+import Hosts from "Images/Hosts";
+import Profile from "Images/Profile";
+import Setting from "Images/Setting";
 const App: React.FC<IAppProps> = ({ children }: IAppProps) => {
   const history = useHistory();
   return (
-    <div className="app">
-      <div className="app__container">
-        <div className="app__container__toolbar">
+    <div className={Styles.app}>
+      <div className={Styles.container}>
+        <div className={Styles.toolbar}>
           <MenuItem
-            icon="/Images/contact.svg"
+            IconComponent={Contacts}
             caption="chats"
             onClick={() => {
               history.push("/");
             }}
           />
           <MenuItem
-            icon="Images/hosts.svg"
+            IconComponent={Hosts}
             caption="hosts"
             onClick={() => {
               history.push("/hosts");
             }}
           />
           <MenuItem
-            icon="Images/profile.svg"
+            IconComponent={Profile}
             caption="profile"
             onClick={() => {
               history.push("/profile");
             }}
           />
           <MenuItem
-            icon="/Images/setting.svg"
+            IconComponent={Setting}
             caption="setting"
             onClick={() => {
               history.push("/setting");
             }}
           />
         </div>
-        <div className="app__container__children">{children}</div>
+        <div className={Styles.children}>{children}</div>
       </div>
       <Modals />
     </div>

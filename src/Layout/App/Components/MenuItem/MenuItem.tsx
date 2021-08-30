@@ -1,14 +1,17 @@
 import React from "react";
-import "./styles.css";
+import Styles from "./styles.module.css";
 const MenuItem: React.FC<IMenuItemProps> = ({
-  icon,
+  IconComponent,
   caption,
   onClick,
 }: IMenuItemProps) => {
   return (
-    <div className="menu-item" onClick={onClick}>
-      <img src={icon} alt={caption} className="menu-item__icon" />
-      <div className="menu-item__caption">{caption}</div>
+    <div className={Styles.container} onClick={onClick}>
+      <div className={Styles.icon}>
+        <IconComponent />
+      </div>
+      {/* <img src={icon} alt={caption} className="menu-item__icon" /> */}
+      <div className={Styles.caption}>{caption}</div>
     </div>
   );
 };
