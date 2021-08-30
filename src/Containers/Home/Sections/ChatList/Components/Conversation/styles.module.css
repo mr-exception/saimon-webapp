@@ -23,22 +23,12 @@
 }
 
 .icon {
-  /* flex: 1;
-  @apply flex flex-col justify-center items-center w-1/4; */
+  @apply flex flex-col justify-center items-center w-1/4 overflow-hidden rounded-full px-2;
   display: -webkit-flex;
-  display: flex;
   -webkit-align-items: center;
-  align-items: center;
   height: 40px;
-  min-width: 40px;
-  max-width: 40px;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.iconImage {
-  max-height: 70%;
-  width: auto;
+  min-width: 45px;
+  max-width: 45px;
 }
 
 .content {

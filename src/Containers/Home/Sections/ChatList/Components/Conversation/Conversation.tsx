@@ -3,6 +3,7 @@ import Styles from "./styles.module.css";
 import { IConversationProps } from "./def";
 import { useDispatch } from "react-redux";
 import { showContactDetailsModal } from "Redux/actions/modals";
+import Profile from "Images/Profile";
 const Conversation: React.FC<IConversationProps> = ({
   last_message,
   selected = () => {},
@@ -16,11 +17,7 @@ const Conversation: React.FC<IConversationProps> = ({
       className={`${Styles.conversation} ${is_selected ? Styles.selected : ""}`}
     >
       <div className={Styles.icon}>
-        <img
-          src="/Images/avatar.svg"
-          className={Styles.iconImage}
-          alt="avatar"
-        />
+        <Profile />
       </div>
       <div className={Styles.content}>
         <div className={Styles.contentName}>
