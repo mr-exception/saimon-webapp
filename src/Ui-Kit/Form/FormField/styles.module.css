@@ -1,5 +1,5 @@
-.text_field {
-  @apply w-full px-4;
+.field {
+  @apply w-full px-4 flex flex-col mt-2;
 }
 .text_field__label {
   min-height: 30px;

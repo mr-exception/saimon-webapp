@@ -1,6 +1,6 @@
 import Key from "Classes/Key/Key";
 import React, { useState } from "react";
-import "./styles.css";
+import Styles from "./styles.module.css";
 const TextField: React.FC<ITextFieldProps> = ({
   label,
   placeHolder,
@@ -40,7 +40,7 @@ const TextField: React.FC<ITextFieldProps> = ({
   }
   if (max_lines === 1) {
     return (
-      <div className="text_field flex flex-col mt-2">
+      <div className={Styles.field}>
         <div className="text_field__label flex flex-col">{label}</div>
         <input
           type="text"

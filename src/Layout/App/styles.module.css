@@ -24,7 +24,7 @@
   padding-top: 20px;
 }
 .children {
-  @apply flex-1 overflow-auto;
+  @apply flex-1 overflow-auto rounded-tr-md rounded-br-md;
   background: #282a2d;
   max-width: 95%;
 }
