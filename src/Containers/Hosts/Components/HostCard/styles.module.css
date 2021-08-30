@@ -1,40 +1,31 @@
-.host-card {
-  min-height: 150px;
-  max-height: 150px;
-  flex: 1;
-  margin: 15px 40px;
-  border-radius: 15px;
-  border: 1px solid #2f988a;
-  padding: 15px;
-
-  display: flex;
-  flex-direction: column;
+.container {
+  @apply m-8 p-4 border-2 rounded-lg border-secondary text-white;
 }
-.status-bar {
+.statusBar {
   display: flex;
   flex-direction: row;
   flex: 1;
 }
-.host-card__info {
+.info {
   display: flex;
   flex-direction: row;
   flex: 4;
 }
-.host-card__general_info {
+.generalInfo {
   flex: 4;
   border-right: 1px solid #999;
 }
-.host-card__statics_info {
+.staticInfo {
   flex: 4;
   padding-left: 30px;
 }
-.host-card__actions {
+.actions {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.host-card__actions__item {
+.actionsItem {
   flex: 1;
   display: flex;
   flex-direction: column;

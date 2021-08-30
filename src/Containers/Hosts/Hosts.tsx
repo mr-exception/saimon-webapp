@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./styles.css";
+import Styles from "./styles.module.css";
 import { IInitialState } from "Redux/types/states";
 import { useDispatch, useSelector } from "react-redux";
 import { showAddHostModal } from "Redux/actions/modals";
@@ -9,27 +9,28 @@ import AdvertiserHost from "Classes/Host/AdvertiserHost";
 import AdvertiserHostCard from "./Components/HostCard/AdvertiserHostCard";
 import StorageHost from "Classes/Host/StorageHost";
 import StorageHostCard from "./Components/HostCard/StorageHostCard";
+import Add from "Images/Add";
 const Hosts = () => {
   const [search_term, set_search_term] = useState("");
 
   const hosts = useSelector((state: IInitialState) => state.hosts);
   const dispatch = useDispatch();
   return (
-    <div className="hosts">
-      <div className="search">
+    <div className={Styles.hosts}>
+      <div className={Styles.search}>
         <input
           value={search_term}
           onChange={(e) => set_search_term(e.target.value)}
-          className="search__input"
+          className={Styles.searchInput}
           placeholder="search in hosts..."
         />
         <button
-          className="search__add"
+          className={Styles.searchAdd}
           onClick={() => {
             dispatch(showAddHostModal());
           }}
         >
-          <img alt="add" className="search__add__icon" src="/Images/add.svg" />
+          <Add />
         </button>
       </div>
       {hosts

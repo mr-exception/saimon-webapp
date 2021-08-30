@@ -1,35 +1,14 @@
 import React, { useCallback } from "react";
-import "./styles.css";
+import Styles from "./styles.module.css";
 import { useDispatch } from "react-redux";
 import { showConfirmationModal } from "Redux/actions/modals";
 import { IRelayHostCardProps } from "./def";
 import { removeHost } from "Redux/actions/hosts";
-import { ConnectionStatus } from "Classes/Connection/def";
 import ActionItem from "../ActionItem/ActionItem";
-
-const translateConnectionState = (state?: ConnectionStatus): JSX.Element => {
-  if (!state) {
-    return <span>no connection</span>;
-  }
-  switch (state) {
-    case "CONNECTING":
-      return <span>connecting</span>;
-    case "CK":
-    case "HK":
-    case "VA":
-    case "VF":
-    case "VQ":
-      return <span>handshake</span>;
-    case "CONNECTED":
-      return <span>connected</span>;
-    case "DISCONNECTED":
-      return <span>disconnected</span>;
-    case "NETWORK_ERROR":
-      return <span>network error</span>;
-    default:
-      return <span>not connected</span>;
-  }
-};
+import HostCard from "./HostCard";
+import Delete from "Images/Delete";
+import Disconnect from "Images/Disconnect";
+import Connect from "Images/Connect";
 
 const RelayHostCard: React.FC<IRelayHostCardProps> = ({
   host,
@@ -55,53 +34,50 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
     host.close();
   };
   return (
-    <div className="m-8 p-4 border-2 rounded-lg border-secondary text-white">
-      <div className="status-bar">{translateConnectionState(host.state)}</div>
-      <div className="host-card__info">
-        <div className="host-card__general_info">
-          <p>name: {host.name}</p>
-          <p>address: {host.address}</p>
-          <p>type: {host.type}</p>
-        </div>
-        <div className="host-card__statics_info">
-          <p>protocol: {host.protocol}</p>
-          <p>score: {host.score}</p>
-          <p>tta: {host.tta}ms</p>
-        </div>
-        <div className="host-card__actions">
-          <ActionItem
-            caption="delete"
-            onClick={() => {
-              dispatch(
-                showConfirmationModal(
-                  "are you sure to delete this host?",
-                  (result) => {
-                    if (!result) return;
-                    host.delete();
-                    dispatch(removeHost(host));
-                  }
-                )
-              );
-            }}
-            icon="/Images/delete.svg"
-          />
-          {canDisconnect && (
-            <ActionItem
-              onClick={disconnect}
-              caption="disconnect"
-              icon="/Images/disconnect.svg"
-            />
-          )}
-          {canConnect && (
-            <ActionItem
-              onClick={connect}
-              caption="connect"
-              icon="/Images/connect.svg"
-            />
-          )}
-        </div>
+    <HostCard host={host}>
+      <div className={Styles.generalInfo}>
+        <p>name: {host.name}</p>
+        <p>address: {host.address}</p>
+        <p>type: {host.type}</p>
       </div>
-    </div>
+      <div className={Styles.staticInfo}>
+        <p>protocol: {host.protocol}</p>
+        <p>score: {host.score}</p>
+        <p>tta: {host.tta}ms</p>
+      </div>
+      <div className={Styles.actions}>
+        <ActionItem
+          caption="delete"
+          onClick={() => {
+            dispatch(
+              showConfirmationModal(
+                "are you sure to delete this host?",
+                (result) => {
+                  if (!result) return;
+                  host.delete();
+                  dispatch(removeHost(host));
+                }
+              )
+            );
+          }}
+          IconComponent={Delete}
+        />
+        {canDisconnect && (
+          <ActionItem
+            onClick={disconnect}
+            caption="disconnect"
+            IconComponent={Disconnect}
+          />
+        )}
+        {canConnect && (
+          <ActionItem
+            onClick={connect}
+            caption="connect"
+            IconComponent={Connect}
+          />
+        )}
+      </div>
+    </HostCard>
   );
 };
 

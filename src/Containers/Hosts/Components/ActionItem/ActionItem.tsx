@@ -1,13 +1,16 @@
 import React from "react";
 import { IActionItemProps } from "./def";
+import Styles from "./styles.module.css";
 const ActionItem: React.FC<IActionItemProps> = ({
   onClick,
-  icon,
+  IconComponent,
   caption,
 }: IActionItemProps) => {
   return (
-    <button className="flex flex-col m-2 p-2 items-center" onClick={onClick}>
-      <img src={icon} className="w-1/4" alt="delete" />
+    <button className={Styles.container} onClick={onClick}>
+      <div className={Styles.icon}>
+        <IconComponent />
+      </div>
       <div className="mt-2">{caption}</div>
     </button>
   );

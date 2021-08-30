@@ -1,0 +1,7 @@
+.icon {
+  width: 20px;
+  height: 20px;
+}
+.container {
+  @apply flex flex-col m-2 p-2 items-center;
+}
