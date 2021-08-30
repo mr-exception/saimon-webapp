@@ -1,5 +1,5 @@
 .container {
-  @apply flex flex-row;
+  @apply flex flex-row text-white;
   flex: 1;
   max-height: 80px;
   border-bottom: 1px solid #555;
@@ -7,7 +7,7 @@
 
 .avatar {
   @apply flex flex-col justify-center items-center;
-  width: 20%;
+  flex: 2;
 }
 
 .avatarImage {
@@ -17,7 +17,7 @@
 
 .content {
   @apply flex flex-col;
-  width: 60%;
+  flex: 5;
 }
 
 .name {
@@ -31,14 +31,11 @@
 }
 
 .headerInfo {
-  @apply flex flex-col justify-center items-end p-4;
-  width: 20%;
+  @apply flex flex-col justify-center items-end p-2 m-2 cursor-pointer rounded-md hover:bg-secondary;
+  max-width: 50px;
+  flex: 1;
 }
 
-.actions {
-  max-width: 25px;
-}
-
-.chat_info_icon{
-  width:85% !important;
+.chat_info_icon {
+  width: 85% !important;
 }

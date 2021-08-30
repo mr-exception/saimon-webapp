@@ -3,6 +3,7 @@ import Styles from "./styles.module.css";
 import { showContactDetailsModal } from "Redux/actions/modals";
 import { IHeaderProps } from "./def";
 import { useDispatch } from "react-redux";
+import Info from "Images/Info";
 const Header: React.FC<IHeaderProps> = ({ contact }: IHeaderProps) => {
   const dispatch = useDispatch();
   return (
@@ -30,17 +31,13 @@ const Header: React.FC<IHeaderProps> = ({ contact }: IHeaderProps) => {
           </label>
         </div>
       </div>
-      <div className={Styles.headerInfo}>
-        <button className={Styles.actions}>
-          <img
-            src="/Images/info.svg"
-            alt="actions"
-            className="w-full"
-            onClick={() => {
-              dispatch(showContactDetailsModal(contact));
-            }}
-          />
-        </button>
+      <div
+        className={Styles.headerInfo}
+        onClick={() => {
+          dispatch(showContactDetailsModal(contact));
+        }}
+      >
+        <Info />
       </div>
     </div>
   );
