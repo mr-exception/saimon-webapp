@@ -1,0 +1,10 @@
+.messageRow {
+  @apply flex flex-col justify-start items-start p-8;
+  word-wrap: break-word;
+  min-height: 80px;
+}
+
+.date {
+  @apply text-xs;
+  flex: 1;
+}

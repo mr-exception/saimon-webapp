@@ -1,6 +1,6 @@
 .container {
   min-height: 80px;
-  @apply flex flex-row justify-center items-center px-8 text-white;
+  @apply flex flex-row justify-center items-center px-8;
 }
 .item {
   @apply flex flex-col flex-1 mr-4 cursor-pointer hover:bg-secondary p-2 rounded-md;

@@ -4,4 +4,5 @@ export interface IButtonProps {
   size?: "sm" | "md" | "lg";
   variant?: "primary" | "secondary" | "warning" | "danger";
   className?: string;
+  minWidth?: number;
 }

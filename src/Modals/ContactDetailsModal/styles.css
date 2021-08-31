@@ -15,6 +15,6 @@
   min-height: 40px;
 }
 .remove-btn {
-  @apply border-2 border-warning rounded-md bg-warning hover:bg-danger hover:border-danger text-white mb-4 p-2 ml-2;
+  @apply border-2 border-warning rounded-md bg-warning hover:bg-danger hover:border-danger mb-4 p-2 ml-2;
   min-height: 40px;
 }

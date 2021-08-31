@@ -1,6 +1,7 @@
 .app {
-  @apply flex flex-row items-center content-center justify-center;
+  @apply flex flex-row items-center content-center justify-center text-white;
   height: 100vh;
+  background: #25272a;
 }
 .container {
   @apply flex flex-row border-gray-dark;

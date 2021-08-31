@@ -20,10 +20,12 @@ const Button: React.FC<IButtonProps> = ({
   variant = "secondary",
   size = "md",
   className = "",
+  minWidth,
 }: IButtonProps) => {
   return (
     <button
-      className={`${sizeClassNameMap[size]} ${variantClassNameMap[variant]} text-white ${className}`}
+      className={`${sizeClassNameMap[size]} ${variantClassNameMap[variant]} ${className}`}
+      style={minWidth ? { minWidth } : {}}
       onClick={onClick}
     >
       {caption}

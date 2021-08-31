@@ -1,24 +1,8 @@
-.messageRow {
-  @apply flex flex-col justify-start items-start p-8;
-  word-wrap: break-word;
-  min-height: 80px;
-}
-.messageContent {
-  @apply flex flex-row p-4 border-2 border-base rounded-xl rounded-tr-none bg-secondary text-white;
+.container {
+  @apply flex flex-row p-4 border-2 border-base rounded-xl rounded-tr-none bg-secondary;
   flex: 1;
   max-width: 500px;
 }
-.message-row__date {
-  @apply text-xs;
-  flex: 1;
-}
-
-.download {
-  @apply pr-4;
-  width: 40px;
-  cursor: pointer;
-}
-
 .name {
   flex: 1;
 }

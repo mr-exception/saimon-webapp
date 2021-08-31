@@ -1,5 +1,5 @@
 .container {
-  @apply flex flex-row text-white;
+  @apply flex flex-row;
   flex: 1;
   max-height: 80px;
   border-bottom: 1px solid #555;

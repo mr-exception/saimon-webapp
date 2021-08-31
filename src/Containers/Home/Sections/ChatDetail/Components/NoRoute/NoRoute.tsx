@@ -37,13 +37,35 @@ const NoRoute: React.FC<INoRouteProps> = ({ contact }: INoRouteProps) => {
   };
   return (
     <div className={Styles.container}>
-      <div className={Styles.content}>
-        you don't have any active route to this client. must check all possible
-        routes first
-        <Button
-          caption={checking ? "..." : "check routes"}
-          onClick={checkRoutes}
-        />
+      <div className={Styles.message}>
+        <div className={Styles.content}>
+          <p>
+            it seems we don't have any registered route to this client through
+            the network. it's because you've added this contact to your list by
+            just entering the address or all registered routes are cleared from
+            your storage somehow. you can search for routes now to solve this
+            issue!
+          </p>
+        </div>
+
+        <div className={Styles.actions}>
+          <Button
+            minWidth={120}
+            variant="primary"
+            size="sm"
+            caption={checking ? "..." : "check routes"}
+            onClick={checkRoutes}
+          />
+          <Button
+            minWidth={120}
+            variant="danger"
+            size="sm"
+            caption="remove contact"
+            onClick={() => {
+              console.log("remove!");
+            }}
+          />
+        </div>
       </div>
     </div>
   );

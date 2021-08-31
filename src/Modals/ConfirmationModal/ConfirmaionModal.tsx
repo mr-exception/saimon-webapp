@@ -22,7 +22,7 @@ const ConfirmationModal = () => {
       </div>
       <div className="confirmation__actions flex justify-center items-center content-center px-8 pb-8 mt-4">
         <button
-          className="action-button bg-danger p-2 border-2 rounded-lg border-danger text-white mr-2 hover:bg-warning hover:border-warning uppercase"
+          className="action-button bg-danger p-2 border-2 rounded-lg border-danger mr-2 hover:bg-warning hover:border-warning uppercase"
           onClick={() => {
             callback(true);
             dispatch(closeConfirmationModal());
@@ -31,7 +31,7 @@ const ConfirmationModal = () => {
           yes
         </button>
         <button
-          className="action-button bg-secondary p-2 border-2 rounded-lg border-secondary text-white mr-2 hover:bg-primary hover:border-primary uppercase"
+          className="action-button bg-secondary p-2 border-2 rounded-lg border-secondary mr-2 hover:bg-primary hover:border-primary uppercase"
           onClick={() => {
             callback(false);
             dispatch(closeConfirmationModal());

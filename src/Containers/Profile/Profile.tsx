@@ -54,7 +54,7 @@ const Profile = () => {
         <span className="w-full">{app_key.getAddress()}</span>
         <button
           onClick={copyAddress}
-          className="absolute bottom-2 right-2 b-2 border-secondary bg-secondary hover:bg-primary hover:border-primary rounded-md text-white p-2 "
+          className="absolute bottom-2 right-2 b-2 border-secondary bg-secondary hover:bg-primary hover:border-primary rounded-md p-2 "
         >
           <img
             className={Styles.copyIcon}
