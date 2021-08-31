@@ -7,6 +7,9 @@ import { addMessage } from "Redux/actions/conversations";
 import Message, { IMessageContent } from "Classes/Message/Message";
 import { v4 as uuidV4 } from "uuid";
 import { useRef } from "react";
+import Send from "Images/Send";
+import Attach from "Images/Attach";
+import Tooltip from "Ui-Kit/Tooltip/Tooltip";
 const SendBox: React.FC<ISendBoxProps> = () => {
   const selected_contact = useSelector(selectedContact);
   const [content, set_content] = useState("");
@@ -87,17 +90,15 @@ const SendBox: React.FC<ISendBoxProps> = () => {
         ></textarea>
       </div>
       <div className={Styles.send}>
+        <Tooltip />
         <button
+          data-tip="send file"
           className={Styles.sendButton}
           onClick={() => {
             fileInput.current?.click();
           }}
         >
-          <img
-            className={Styles.buttonIcon}
-            src="/Images/attach.svg"
-            alt="send"
-          />
+          <Attach />
           <input
             type="file"
             ref={fileInput}
@@ -109,12 +110,12 @@ const SendBox: React.FC<ISendBoxProps> = () => {
             }}
           />
         </button>
-        <button className={Styles.attachButton} onClick={send}>
-          <img
-            className={Styles.buttonIcon}
-            src="/Images/send.svg"
-            alt="send"
-          />
+        <button
+          data-tip="send text message"
+          className={Styles.sendButton}
+          onClick={send}
+        >
+          <Send />
         </button>
       </div>
     </div>

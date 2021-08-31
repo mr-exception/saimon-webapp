@@ -5,6 +5,6 @@
 }
 
 .date {
-  @apply text-xs;
+  @apply text-xs mt-2;
   flex: 1;
 }
