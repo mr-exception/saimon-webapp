@@ -4,6 +4,7 @@ import Disconnect from "Images/Disconnect";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { showAddContactModal } from "Redux/actions/modals";
+import Tooltip from "Ui-Kit/Tooltip/Tooltip";
 import Styles from "./styles.module.css";
 const ConversationActions = () => {
   const dispatch = useDispatch();
@@ -36,10 +37,15 @@ const ConversationActions = () => {
   );
 };
 
-const ActionItem: React.FC<IActionItemProps> = ({ IconComponent, onClick }) => {
+const ActionItem: React.FC<IActionItemProps> = ({
+  caption,
+  IconComponent,
+  onClick,
+}) => {
   return (
-    <div className={Styles.item} onClick={onClick}>
+    <div data-tip={caption} className={Styles.item} onClick={onClick}>
       <IconComponent />
+      <Tooltip />
     </div>
   );
 };

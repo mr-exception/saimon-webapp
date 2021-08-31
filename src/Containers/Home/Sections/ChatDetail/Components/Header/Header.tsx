@@ -4,31 +4,22 @@ import { showContactDetailsModal } from "Redux/actions/modals";
 import { IHeaderProps } from "./def";
 import { useDispatch } from "react-redux";
 import Info from "Images/Info";
+import Profile from "Images/Profile";
+import Tooltip from "Ui-Kit/Tooltip/Tooltip";
 const Header: React.FC<IHeaderProps> = ({ contact }: IHeaderProps) => {
   const dispatch = useDispatch();
   return (
     <div className={Styles.container}>
       <div className={Styles.avatar}>
-        <img
-          src="/Images/avatar.svg"
-          className={Styles.avatarImage}
-          alt="avatar"
-        />
+        <Profile />
       </div>
       <div className={Styles.content}>
         <div className={Styles.name}>
           <label>{`${contact.first_name} ${contact.last_name}`}</label>
         </div>
-        <div className={Styles.lastOnline}>
+        <Tooltip />
+        <div data-tip={contact.getRouteListStr()} className={Styles.lastOnline}>
           <label>{contact.getStatusStr()}</label>
-          <label className="text-xs mt-1 ml-4">
-            (
-            {contact
-              .getActiveRelays()
-              .map((record) => record.name)
-              .join(",")}
-            )
-          </label>
         </div>
       </div>
       <div

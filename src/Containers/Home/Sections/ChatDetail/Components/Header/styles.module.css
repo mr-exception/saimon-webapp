@@ -6,8 +6,9 @@
 }
 
 .avatar {
-  @apply flex flex-col justify-center items-center;
+  @apply flex flex-col justify-center items-center py-4;
   flex: 2;
+  max-width: 120px;
 }
 
 .avatarImage {

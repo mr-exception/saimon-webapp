@@ -59,7 +59,7 @@ export default class Contact extends DBModel<IContact> {
   }
 
   public getStatusStr(): string {
-    if (this.status_list.length === 0) return "no connection found";
+    if (this.status_list.length === 0) return "unknown";
     const has_active_connection = !!this.status_list.find(
       (record) => record.status === "CONNECTED"
     );
@@ -74,6 +74,17 @@ export default class Contact extends DBModel<IContact> {
       .getState()
       .hosts.filter((record) => ids.includes(record.id)) as RelayHost[];
     return hosts;
+  }
+
+  public getRouteListStr(): string {
+    const relays = this.getActiveRelays();
+    if (relays.length === 0) {
+      return "no route";
+    } else {
+      return this.getActiveRelays()
+        .map((record) => record.name)
+        .join(",");
+    }
   }
 
   public get name(): string {
