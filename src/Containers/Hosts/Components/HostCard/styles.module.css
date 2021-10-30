@@ -1,5 +1,5 @@
 .container {
-  @apply m-8 p-4 border-2 rounded-lg border-white;
+  @apply border-2 rounded-lg border-white p-2;
 }
 .statusBar {
   display: flex;

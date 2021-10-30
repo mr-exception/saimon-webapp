@@ -5,7 +5,6 @@ import { showConfirmationModal } from "Redux/actions/modals";
 import { IAdvertiserHostCardProps } from "./def";
 import { removeHost } from "Redux/actions/hosts";
 import ActionItem from "../ActionItem/ActionItem";
-import Delete from "Images/Delete";
 import HostCard from "./HostCard";
 
 const AdvertiserHostCard: React.FC<IAdvertiserHostCardProps> = ({
@@ -41,7 +40,7 @@ const AdvertiserHostCard: React.FC<IAdvertiserHostCardProps> = ({
               )
             );
           }}
-          IconComponent={Delete}
+          icon="/img/delete.svg"
         />
       </div>
     </HostCard>

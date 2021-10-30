@@ -35,7 +35,7 @@ const Conversation: React.FC<IConversationProps> = ({
           }}
           className="flex flex-1"
         >
-          <img src="/Images/menu.svg" alt="actions" />
+          <img src="/img/menu.svg" alt="actions" />
         </button>
       </div>
     </div>

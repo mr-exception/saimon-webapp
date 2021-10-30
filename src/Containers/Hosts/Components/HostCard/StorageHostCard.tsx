@@ -5,7 +5,6 @@ import { showConfirmationModal } from "Redux/actions/modals";
 import { IStorageHostCardProps } from "./def";
 import { removeHost } from "Redux/actions/hosts";
 import ActionItem from "../ActionItem/ActionItem";
-import Delete from "Images/Delete";
 import HostCard from "./HostCard";
 
 const StorageHostCard: React.FC<IStorageHostCardProps> = ({
@@ -39,7 +38,7 @@ const StorageHostCard: React.FC<IStorageHostCardProps> = ({
               )
             );
           }}
-          IconComponent={Delete}
+          icon="/img/delete.svg"
         />
       </div>
     </HostCard>

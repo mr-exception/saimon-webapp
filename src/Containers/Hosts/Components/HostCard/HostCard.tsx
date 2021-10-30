@@ -26,11 +26,11 @@ const HostCard: React.FC<IHostCardProps> = ({
   host,
 }: IHostCardProps) => {
   return (
-    <div className={Styles.container}>
-      <div className={Styles.statusBar}>
-        {translateConnectionState(host.state)}
+    <div className={Styles.container + " col-md-12"}>
+      <div className="row">
+        <div className="col-md-12">{translateConnectionState(host.state)}</div>
       </div>
-      <div className={Styles.info}>{children}</div>
+      <div className="row">{children}</div>
     </div>
   );
 };

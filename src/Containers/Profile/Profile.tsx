@@ -61,7 +61,7 @@ const Profile = () => {
               >
                 <img
                   className={Styles.copyIcon}
-                  src="/Images/copy.svg"
+                  src="/img/copy.svg"
                   alt="copy icon"
                 />
               </button>

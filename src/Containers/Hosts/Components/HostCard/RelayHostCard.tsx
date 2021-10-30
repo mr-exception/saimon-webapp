@@ -1,14 +1,10 @@
 import React, { useCallback } from "react";
-import Styles from "./styles.module.css";
 import { useDispatch } from "react-redux";
 import { showConfirmationModal } from "Redux/actions/modals";
 import { IRelayHostCardProps } from "./def";
 import { removeHost } from "Redux/actions/hosts";
 import ActionItem from "../ActionItem/ActionItem";
 import HostCard from "./HostCard";
-import Delete from "Images/Delete";
-import Disconnect from "Images/Disconnect";
-import Connect from "Images/Connect";
 
 const RelayHostCard: React.FC<IRelayHostCardProps> = ({
   host,
@@ -35,17 +31,17 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
   };
   return (
     <HostCard host={host}>
-      <div className={Styles.generalInfo}>
+      <div className="col-md-5">
         <p>name: {host.name}</p>
         <p>address: {host.address}</p>
         <p>type: {host.type}</p>
       </div>
-      <div className={Styles.staticInfo}>
+      <div className="col-md-5">
         <p>protocol: {host.protocol}</p>
         <p>score: {host.score}</p>
         <p>tta: {host.tta}ms</p>
       </div>
-      <div className={Styles.actions}>
+      <div className="col-md-2">
         <ActionItem
           caption="delete"
           onClick={() => {
@@ -60,20 +56,20 @@ const RelayHostCard: React.FC<IRelayHostCardProps> = ({
               )
             );
           }}
-          IconComponent={Delete}
+          icon="/img/delete.svg"
         />
         {canDisconnect && (
           <ActionItem
             onClick={disconnect}
             caption="disconnect"
-            IconComponent={Disconnect}
+            icon="/img/disconnect.svg"
           />
         )}
         {canConnect && (
           <ActionItem
             onClick={connect}
             caption="connect"
-            IconComponent={Connect}
+            icon="/img/connect.svg"
           />
         )}
       </div>
