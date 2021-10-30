@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addContact } from "Redux/actions/contacts";
 import { closeAddContactModal } from "Redux/actions/modals";
 import { IInitialState } from "Redux/types/states";
-import TextField from "Ui-Kit/Form/FormField/TextField";
+import TextField from "Ui-Kit/Form/TextField/TextField";
 import Modal from "Ui-Kit/Modal/Modal";
 import "./styles.css";
 const AddContactModal = () => {

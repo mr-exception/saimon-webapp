@@ -14,18 +14,17 @@
   border-radius: 10px;
 }
 .toolbar {
-  @apply flex flex-1 bg-gray-darker;
-  max-width: 5%;
+  @apply flex bg-gray-darker pt-4;
+  flex: 1;
   min-width: 70px;
+  max-width: 90px;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   display: flex;
   flex-direction: column;
-
-  padding-top: 20px;
 }
 .children {
-  @apply flex-1 overflow-auto rounded-tr-md rounded-br-md;
+  @apply overflow-auto rounded-tr-md rounded-br-md;
+  flex: 1;
   background: #282a2d;
-  max-width: 95%;
 }
