@@ -4,8 +4,7 @@ import ChatList from "./Sections/ChatList/ChatList";
 import "./styles.css";
 const Home = () => {
   return (
-    <div className="home">
-      {/* test */}
+    <div className="row">
       <ChatList />
       <ChatDetail />
     </div>

@@ -14,6 +14,11 @@ import NoMessage from "./Components/NoMessage/NoMessage";
 import NoRoute from "./Components/NoRoute/NoRoute";
 import SendBox from "./Components/SendBox/SendBox";
 import "./styles.css";
+
+const Container: React.FC<{ children: any }> = ({ children }) => {
+  return <div className="col-md-8">{children}</div>;
+};
+
 const ChatDetail = () => {
   const contacts = useSelector(selectContacts);
   const selected_contact_id = useSelector(selectedContactId);
@@ -31,19 +36,27 @@ const ChatDetail = () => {
   }, [messages]);
 
   if (!selected_contact) {
-    return <NoConversationSelected />;
+    return (
+      <Container>
+        <NoConversationSelected />
+      </Container>
+    );
   }
 
   if (selected_contact.relay_host_ids.length === 0) {
-    return <NoRoute contact={selected_contact} />;
+    return (
+      <Container>
+        <NoRoute contact={selected_contact} />
+      </Container>
+    );
   }
   return (
-    <div className="chat-detail">
+    <Container>
       <Header contact={selected_contact} />
       {messages.length === 0 && <NoMessage />}
       {messages.length > 0 && <MessageList messages={messages} />}
       <SendBox />
-    </div>
+    </Container>
   );
 };
 

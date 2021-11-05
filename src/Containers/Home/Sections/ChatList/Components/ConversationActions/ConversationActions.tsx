@@ -1,6 +1,3 @@
-import Add from "Images/Add";
-import Delete from "Images/Delete";
-import Disconnect from "Images/Disconnect";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { showAddContactModal } from "Redux/actions/modals";
@@ -9,51 +6,48 @@ import Styles from "./styles.module.css";
 const ConversationActions = () => {
   const dispatch = useDispatch();
   return (
-    <div className={Styles.container}>
-      <ActionItem
-        IconComponent={Disconnect}
-        caption="disconnect from network"
-        onClick={() => {
-          console.log("disconnect");
-          // dispatch(showAddContactModal());
-        }}
-      />
-      <ActionItem
-        IconComponent={Delete}
-        caption="delete conversation"
-        onClick={() => {
-          console.log("delete");
-          // dispatch(showAddContactModal());
-        }}
-      />
-      <ActionItem
-        IconComponent={Add}
-        caption="add new conversation"
-        onClick={() => {
-          dispatch(showAddContactModal());
-        }}
-      />
-    </div>
-  );
-};
-
-const ActionItem: React.FC<IActionItemProps> = ({
-  caption,
-  IconComponent,
-  onClick,
-}) => {
-  return (
-    <div data-tip={caption} className={Styles.item} onClick={onClick}>
-      <IconComponent />
-      <Tooltip />
+    <div className="row">
+      <div className="col-md-12 flex flex-row justify-center my-2">
+        <ActionItem
+          icon="/img/disconnect.svg"
+          caption="disconnect from network"
+          onClick={() => {
+            console.log("disconnect");
+            // dispatch(showAddContactModal());
+          }}
+        />
+        <ActionItem
+          icon="/img/delete.svg"
+          caption="delete conversation"
+          onClick={() => {
+            console.log("delete");
+            // dispatch(showAddContactModal());
+          }}
+        />
+        <ActionItem
+          icon="/img/add.svg"
+          caption="add new conversation"
+          onClick={() => {
+            dispatch(showAddContactModal());
+          }}
+        />
+      </div>
     </div>
   );
 };
 
 interface IActionItemProps {
-  IconComponent: React.FC;
+  icon: string;
   caption: string;
   onClick: () => void;
 }
+const ActionItem: React.FC<IActionItemProps> = ({ caption, icon, onClick }) => {
+  return (
+    <div data-tip={caption} className={Styles.action} onClick={onClick}>
+      <img src={icon} className={Styles.actionIcon} alt="icon" />
+      <Tooltip />
+    </div>
+  );
+};
 
 export default ConversationActions;

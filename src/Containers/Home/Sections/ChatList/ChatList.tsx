@@ -5,7 +5,7 @@ import { selectedContactId } from "Redux/types/selectors";
 import { IInitialState } from "Redux/types/states";
 import ConversationActions from "./Components/ConversationActions/ConversationActions";
 import Conversation from "./Components/Conversation/Conversation";
-import "./styles.css";
+import Styles from "./styles.module.css";
 const ChatList = () => {
   const contacts = useSelector((state: IInitialState) => state.contacts);
   const selected_contact_id = useSelector(selectedContactId);
@@ -22,7 +22,7 @@ const ChatList = () => {
   //   getClientConnectionsMaps();
   // }, [getClientConnectionsMaps]);
   return (
-    <div className="chat-list">
+    <div className={"col-md-4 " + Styles.container}>
       <ConversationActions />
       {contacts.map((contact, index) => (
         <Conversation

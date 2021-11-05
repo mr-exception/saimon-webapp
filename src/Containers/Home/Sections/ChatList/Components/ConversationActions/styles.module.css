@@ -1,8 +1,8 @@
-.container {
-  min-height: 80px;
-  @apply flex flex-row justify-center items-center px-8;
+.action {
+  @apply flex flex-col justify-center items-center;
+  flex: 1;
+  max-width: 50px;
 }
-.item {
-  @apply flex flex-col flex-1 mr-4 cursor-pointer hover:bg-secondary p-2 rounded-md;
-  max-width: 40px;
+.actionIcon {
+  max-width: 2rem;
 }

@@ -1,9 +1,0 @@
-.chat-list {
-  @apply flex bg-gray-dark;
-  flex: 1;
-  max-width: 30%;
-  flex-direction: column;
-  overflow-y: auto;
-  /* border-right: 1px solid #999; */
-  padding:20px 0;
-}
