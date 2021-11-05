@@ -16,7 +16,7 @@ import SendBox from "./Components/SendBox/SendBox";
 import "./styles.css";
 
 const Container: React.FC<{ children: any }> = ({ children }) => {
-  return <div className="col-md-8">{children}</div>;
+  return <div className="col-md-8 h-full">{children}</div>;
 };
 
 const ChatDetail = () => {
@@ -52,10 +52,12 @@ const ChatDetail = () => {
   }
   return (
     <Container>
-      <Header contact={selected_contact} />
-      {messages.length === 0 && <NoMessage />}
-      {messages.length > 0 && <MessageList messages={messages} />}
-      <SendBox />
+      <div className="col-md-12 flex flex-col h-full px-0">
+        <Header contact={selected_contact} />
+        {messages.length === 0 && <NoMessage />}
+        {messages.length > 0 && <MessageList messages={messages} />}
+        <SendBox />
+      </div>
     </Container>
   );
 };

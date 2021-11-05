@@ -9,11 +9,13 @@ import Tooltip from "Ui-Kit/Tooltip/Tooltip";
 const Header: React.FC<IHeaderProps> = ({ contact }: IHeaderProps) => {
   const dispatch = useDispatch();
   return (
-    <div className={Styles.container}>
-      <div className={Styles.avatar}>
-        <Profile />
+    <div className="row py-2">
+      <div className="col-md-2 flex justify-center items-center">
+        <div style={{ width: "50%" }}>
+          <Profile />
+        </div>
       </div>
-      <div className={Styles.content}>
+      <div className="col-md-9">
         <div className={Styles.name}>
           <label>{`${contact.first_name} ${contact.last_name}`}</label>
         </div>
@@ -23,12 +25,14 @@ const Header: React.FC<IHeaderProps> = ({ contact }: IHeaderProps) => {
         </div>
       </div>
       <div
-        className={Styles.headerInfo}
+        className="col-md-1 flex justify-center items-center"
         onClick={() => {
           dispatch(showContactDetailsModal(contact));
         }}
       >
-        <Info />
+        <div style={{ width: "50%" }}>
+          <Info />
+        </div>
       </div>
     </div>
   );

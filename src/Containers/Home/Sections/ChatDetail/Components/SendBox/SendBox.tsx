@@ -76,7 +76,7 @@ const SendBox: React.FC<ISendBoxProps> = () => {
     }
   };
   return (
-    <div className={Styles.container}>
+    <div className={Styles.container + " row"}>
       <div className={Styles.content}>
         <textarea
           onKeyUp={(event) => {
