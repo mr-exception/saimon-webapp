@@ -1,11 +1,5 @@
-.container {
-  @apply flex flex-1 flex-col justify-center items-center;
-}
 .message {
-  @apply flex-1 flex flex-col justify-center bg-secondary rounded-xl px-4 py-4 items-start text-justify;
-  max-height: 220px;
-  max-width: 70%;
-  min-width: 350px;
+  @apply flex-1 flex flex-col justify-center bg-secondary rounded-xl px-4 py-4 items-center text-justify w-full;
 }
 .content {
   @apply flex;
@@ -13,5 +7,4 @@
 }
 .actions {
   @apply flex flex-1 flex-row justify-around items-center w-full;
-  max-height: 50px;
 }

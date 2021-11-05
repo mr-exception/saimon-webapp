@@ -42,7 +42,7 @@ const App: React.FC<IAppProps> = ({ children }: IAppProps) => {
             }}
           />
         </div>
-        <div className={Styles.children + " row"}>{children}</div>
+        <div className={Styles.children}>{children}</div>
       </div>
       <Modals />
     </div>
