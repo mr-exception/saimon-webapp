@@ -1,4 +1,14 @@
-import { IButtonProps } from "./def";
+import { CSSProperties } from "react";
+
+interface IProps {
+  onClick: () => void;
+  caption: string;
+  size?: "sm" | "md" | "lg";
+  variant?: "primary" | "secondary" | "warning" | "danger";
+  className?: string;
+  style?: CSSProperties;
+  minWidth?: number;
+}
 
 const sizeClassNameMap = {
   sm: "border-2 p-2 rounded-md text-md",
@@ -14,14 +24,15 @@ const variantClassNameMap = {
   warning: "border-warning hover:border-danger bg-warning hover:bg-danger",
   danger: "border-danger hover:border-warning bg-danger hover:bg-warning",
 };
-const Button: React.FC<IButtonProps> = ({
+const Button: React.FC<IProps> = ({
   caption,
   onClick,
   variant = "secondary",
   size = "md",
   className = "",
   minWidth,
-}: IButtonProps) => {
+  style = {},
+}: IProps) => {
   return (
     <button
       className={`${sizeClassNameMap[size]} ${variantClassNameMap[variant]} ${className}`}

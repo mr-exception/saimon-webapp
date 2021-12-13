@@ -4,9 +4,13 @@ const MenuItem: React.FC<IMenuItemProps> = ({
   IconComponent,
   caption,
   onClick,
+  isActive,
 }: IMenuItemProps) => {
   return (
-    <div className={Styles.container} onClick={onClick}>
+    <div
+      className={Styles.container + (isActive ? " " + Styles.active : "")}
+      onClick={onClick}
+    >
       <div className={Styles.icon}>
         <IconComponent />
       </div>

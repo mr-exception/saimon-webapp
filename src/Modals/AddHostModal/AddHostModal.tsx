@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./styles.css";
 import Modal from "Ui-Kit/Modal/Modal";
 import { IInitialState } from "Redux/types/states";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +11,7 @@ import AdvertiserHost from "Classes/Host/AdvertiserHost";
 import { selectAppKey } from "Redux/types/selectors";
 import { addHosts } from "Redux/actions/hosts";
 import StorageHost from "Classes/Host/StorageHost";
+import Typography from "Ui-Kit/Typography/Typography";
 
 interface IHostRecord {
   address: string;
@@ -166,38 +166,44 @@ const AddHostModal = () => {
         dispatch(clsoeAddHostModal());
       }}
     >
-      <div className="flex w-full p-2">enter host addresses here:</div>
+      <div className="row">
+        <div className="col-md-12">
+          <Typography variant="body1"> enter host addresses here:</Typography>
+        </div>
+      </div>
       {records.map((record, index) => (
-        <div key={index} className="flex w-full p-2">
-          <input
-            style={{ flex: 1 }}
-            placeholder="https://relay.salimon.ir"
-            value={record.address}
-            onChange={(e) => {
-              set_records(
-                records.map((record, i) => {
-                  if (i === index) {
-                    record.address = e.target.value;
-                    record.status = "EMPTY";
-                  }
-                  return record;
-                })
-              );
-            }}
-            onBlur={() => {
-              set_records(
-                records.map((record, i) => {
-                  if (i === index) {
-                    record.status = "CHECKING";
-                    checkHeartBeat(i);
-                  }
-                  return record;
-                })
-              );
-            }}
-            className="border-2 rounded-md p-1 text-black"
-          />
-          {renderStatus(record)}
+        <div className="row" key={index}>
+          <div className="col-md-12">
+            <input
+              style={{ flex: 1 }}
+              placeholder="https://relay.salimon.ir"
+              value={record.address}
+              onChange={(e) => {
+                set_records(
+                  records.map((record, i) => {
+                    if (i === index) {
+                      record.address = e.target.value;
+                      record.status = "EMPTY";
+                    }
+                    return record;
+                  })
+                );
+              }}
+              onBlur={() => {
+                set_records(
+                  records.map((record, i) => {
+                    if (i === index) {
+                      record.status = "CHECKING";
+                      checkHeartBeat(i);
+                    }
+                    return record;
+                  })
+                );
+              }}
+              className="border-2 rounded-md p-1 text-black"
+            />
+            {renderStatus(record)}
+          </div>
         </div>
       ))}
 
