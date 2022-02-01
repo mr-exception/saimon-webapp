@@ -1,3 +1,0 @@
-interface IAppProps {
-  children: any;
-}

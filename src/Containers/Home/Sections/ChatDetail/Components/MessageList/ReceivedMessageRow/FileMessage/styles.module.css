@@ -1,8 +1,0 @@
-.container {
-  @apply flex flex-row p-4 border-2 border-base rounded-xl rounded-tr-none bg-secondary;
-  flex: 1;
-  max-width: 500px;
-}
-.name {
-  flex: 1;
-}

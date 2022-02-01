@@ -1,4 +1,4 @@
-import Key from "Classes/Key/Key";
+import Key from "Utils/Key";
 import React, { CSSProperties, useState } from "react";
 import Styles from "./styles.module.css";
 interface ITextFieldProps {
@@ -9,25 +9,12 @@ interface ITextFieldProps {
   onFocus?: () => void;
   onBlur?: () => void;
   error?: string;
-  validations?: (
-    | { type: "REQUIRED" }
-    | { type: "PUBLIC_KEY" }
-    | { type: "REGEX"; regex: RegExp }
-  )[];
+  validations?: ({ type: "REQUIRED" } | { type: "PUBLIC_KEY" } | { type: "REGEX"; regex: RegExp })[];
   max_lines?: number;
   styles?: CSSProperties;
 }
 
-const TextField: React.FC<ITextFieldProps> = ({
-  label,
-  placeHolder,
-  value,
-  onChange,
-  error,
-  validations = [],
-  max_lines = 1,
-  styles = {},
-}: ITextFieldProps) => {
+const TextField: React.FC<ITextFieldProps> = ({ label, placeHolder, value, onChange, error, validations = [], max_lines = 1, styles = {} }: ITextFieldProps) => {
   const [left, set_left] = useState(false);
   const [touched, set_touched] = useState(false);
   let error_text = error;

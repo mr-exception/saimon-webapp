@@ -1,5 +1,0 @@
-.content {
-  @apply p-4 border-2 bg-secondary border-secondary rounded-xl rounded-tl-none;
-  flex: 1;
-  max-width: 500px;
-}
