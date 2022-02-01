@@ -1,4 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import MenuItem from "./Components/MenuItem/MenuItem";
+import Contacts from "./Images/Contacts";
+import Hosts from "./Images/Hosts";
+import Profile from "./Images/Profile";
+import Setting from "./Images/Setting";
 import Styles from "./styles.module.css";
 // import Modals from "Modals/Modals";
 // import Contacts from "Images/Contacts";
@@ -10,13 +16,13 @@ interface IProps {
   children: any;
 }
 const App: React.FC<IProps> = ({ children }: IProps) => {
-  // const history = useHistory();
-  // const [activeSection, setActiveSection] = useState<"chats" | "hosts" | "profile" | "setting">("chats");
+  const history = useHistory();
+  const [activeSection, setActiveSection] = useState<"chats" | "hosts" | "profile" | "setting">("chats");
   return (
     <div className={Styles.app}>
       <div className={Styles.container}>
         <div className={Styles.toolbar}>
-          {/* <MenuItem
+          <MenuItem
             IconComponent={Contacts}
             caption="chats"
             onClick={() => {
@@ -51,7 +57,7 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
               setActiveSection("setting");
             }}
             isActive={activeSection === "setting"}
-          /> */}
+          />
         </div>
         <div className={Styles.children}>{children}</div>
       </div>
