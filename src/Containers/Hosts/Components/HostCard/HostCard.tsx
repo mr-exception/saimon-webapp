@@ -1,12 +1,12 @@
 import React from "react";
-import { INode } from "Structs/Node";
+import { IHost } from "Structs/Host";
 import Styles from "./styles.module.css";
 
 interface IProps {
-  node: INode;
+  node: IHost;
 }
 
-const NodeCard: React.FC<IProps> = ({ node }: IProps) => {
+const HostCard: React.FC<IProps> = ({ node }: IProps) => {
   return (
     <div className={Styles.container + " col-md-12"}>
       <div className="row">{node.name}</div>
@@ -14,4 +14,4 @@ const NodeCard: React.FC<IProps> = ({ node }: IProps) => {
   );
 };
 
-export default NodeCard;
+export default HostCard;

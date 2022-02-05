@@ -2,44 +2,32 @@ import { CSSProperties } from "react";
 
 interface IProps {
   onClick: () => void;
-  caption: string;
+  children: string;
   size?: "sm" | "md" | "lg";
   variant?: "primary" | "secondary" | "warning" | "danger";
   className?: string;
   style?: CSSProperties;
   minWidth?: number;
+  loading?: boolean;
+  disabled?: boolean;
 }
 
 const sizeClassNameMap = {
-  sm: "border-2 p-2 rounded-md text-md",
-  md: "border-2 p-4 rounded-lg text-lg",
-  lg: "border-2 p-8 rounded-lg text-xl",
+  sm: "border-2 px-2 py-1 rounded-md text-sm",
+  md: "border-2 px-4 py-2 rounded-lg text-lg",
+  lg: "border-2 px-8 py-4 rounded-lg text-xl",
 };
 
 const variantClassNameMap = {
-  primary:
-    "border-primary bg-primary hover:border-secondary hover:bg-secondary",
-  secondary:
-    "border-secondary bg-secondary hover:border-primary hover:bg-primary",
-  warning: "border-warning hover:border-danger bg-warning hover:bg-danger",
-  danger: "border-danger hover:border-warning bg-danger hover:bg-warning",
+  primary: "border-primary bg-primary  transition-all",
+  secondary: "border-secondary bg-secondary  transition-all",
+  warning: "border-warning bg-warning  transition-all",
+  danger: "border-danger bg-danger  transition-all",
 };
-const Button: React.FC<IProps> = ({
-  caption,
-  onClick,
-  variant = "secondary",
-  size = "md",
-  className = "",
-  minWidth,
-  style = {},
-}: IProps) => {
+const Button: React.FC<IProps> = ({ children, onClick, variant = "secondary", size = "md", className = "", minWidth, style = {}, loading = false, disabled = false }: IProps) => {
   return (
-    <button
-      className={`${sizeClassNameMap[size]} ${variantClassNameMap[variant]} ${className}`}
-      style={minWidth ? { minWidth } : {}}
-      onClick={onClick}
-    >
-      {caption}
+    <button disabled={disabled} className={`${sizeClassNameMap[size]} ${variantClassNameMap[variant]} ${className} ${disabled && "opacity-60"}`} style={minWidth ? { minWidth, ...style } : style} onClick={onClick}>
+      {loading ? "..." : children}
     </button>
   );
 };

@@ -1,4 +1,4 @@
-import { INode } from "Structs/Node";
+import { IHeartBeat } from "Structs/Host";
 import axios from "axios";
 
 /**
@@ -6,6 +6,6 @@ import axios from "axios";
  * @param url
  * @returns
  */
-export async function heartBeat(url: string): Promise<INode> {
-  return axios.get<INode>(url).then((response) => response.data);
+export async function heartBeat(url: string): Promise<IHeartBeat> {
+  return axios.get<IHeartBeat>(url + "/api/heart-beat").then((response) => response.data);
 }
