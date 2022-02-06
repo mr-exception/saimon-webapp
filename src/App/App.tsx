@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import React from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import MenuItem from "./Components/MenuItem/MenuItem";
 import Contacts from "./Images/Contacts";
 import Hosts from "./Images/Hosts";
@@ -17,7 +17,22 @@ interface IProps {
 }
 const App: React.FC<IProps> = ({ children }: IProps) => {
   const history = useHistory();
-  const [activeSection, setActiveSection] = useState<"chats" | "hosts" | "profile" | "setting">("chats");
+  const href = useLocation().pathname;
+  let activeSection: "chats" | "hosts" | "profile" | "setting" = "chats";
+  switch (href) {
+    case "/":
+      activeSection = "chats";
+      break;
+    case "/hosts":
+      activeSection = "hosts";
+      break;
+    case "/profile":
+      activeSection = "profile";
+      break;
+    case "/setting":
+      activeSection = "setting";
+      break;
+  }
   return (
     <div className={Styles.app}>
       <div className={Styles.container}>
@@ -27,7 +42,6 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
             caption="chats"
             onClick={() => {
               history.push("/");
-              setActiveSection("chats");
             }}
             isActive={activeSection === "chats"}
           />
@@ -36,7 +50,6 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
             caption="hosts"
             onClick={() => {
               history.push("/hosts");
-              setActiveSection("hosts");
             }}
             isActive={activeSection === "hosts"}
           />
@@ -45,7 +58,6 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
             caption="profile"
             onClick={() => {
               history.push("/profile");
-              setActiveSection("profile");
             }}
             isActive={activeSection === "profile"}
           />
@@ -54,7 +66,6 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
             caption="setting"
             onClick={() => {
               history.push("/setting");
-              setActiveSection("setting");
             }}
             isActive={activeSection === "setting"}
           />
