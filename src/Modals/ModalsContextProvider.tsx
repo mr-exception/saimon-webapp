@@ -4,7 +4,7 @@ type ModalSize = "sm" | "md" | "lg";
 
 export interface IModalContext {
   show: boolean;
-  showModal: (modal: any, size: ModalSize) => void;
+  showModal: (modal: any, size?: ModalSize) => void;
   closeModal: () => void;
 
   size: ModalSize;
@@ -33,5 +33,9 @@ export const ModalsContextProvider: React.FC<{ children: any }> = ({ children })
     setShow(false);
     setSize("md");
   }
-  return <ModalsContext.Provider value={{ show, showModal, closeModal, children: modalComponent, size }}>{children}</ModalsContext.Provider>;
+  return (
+    <ModalsContext.Provider value={{ show, showModal, closeModal, children: modalComponent, size }}>
+      {children}
+    </ModalsContext.Provider>
+  );
 };

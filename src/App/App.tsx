@@ -69,7 +69,7 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
       <ToastContainer
         bodyStyle={{ maxWidth: "90%", wordBreak: "break-all" }}
         position="top-center"
-        autoClose={0}
+        autoClose={3500}
         limit={3}
         newestOnTop={true}
         theme="colored"

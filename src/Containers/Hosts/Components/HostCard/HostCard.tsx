@@ -5,8 +5,9 @@ import Button from "Ui-Kit/Button/Button";
 import { weiToPweiFixed } from "Utils/currency";
 import { MdSecurity } from "react-icons/md";
 import { FaLink, FaTrash } from "react-icons/fa";
-import { HostsContext } from "Hosts/HostsContextProvider";
 import { IndexableType } from "dexie";
+import { ModalsContext } from "Modals/ModalsContextProvider";
+import RemoveHostModal from "./Components/RemoveHostModal/RemoveHostModal";
 
 interface IProps {
   host: IHost;
@@ -14,7 +15,7 @@ interface IProps {
 }
 
 const HostCard: React.FC<IProps> = ({ host, id }: IProps) => {
-  const { removeHost } = useContext(HostsContext);
+  const { showModal, closeModal } = useContext(ModalsContext);
   return (
     <div className="col-xs-12 col-lg-6">
       <div className="row border-2 border-solid rounded-md border-base mx-1 p-2">
@@ -51,8 +52,7 @@ const HostCard: React.FC<IProps> = ({ host, id }: IProps) => {
             style={{ marginLeft: 5 }}
             variant="warning"
             onClick={() => {
-              removeHost(id);
-              toast.error("host removed");
+              showModal(<RemoveHostModal host={host} hostId={id} close={closeModal} />);
             }}
           >
             <FaTrash />
