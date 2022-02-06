@@ -14,16 +14,16 @@ export function getHostsTable(): Table<IHost, IndexableType> {
   return db.table<IHost>("hosts");
 }
 
-export async function getHostsFromDB(): Promise<IHost[]> {
+export async function getHostsFromDB(): Promise<{ value: IHost; id: IndexableType }[]> {
   const table = getHostsTable();
   const keys = await table.toCollection().primaryKeys();
   return await Promise.all(
     keys.map(
       (key) =>
-        new Promise<IHost>(async (resolve, reject) => {
+        new Promise<{ value: IHost; id: IndexableType }>(async (resolve, reject) => {
           const record = await table.get(key);
           if (!record) return reject(`host with key ${key} not found`);
-          resolve(record);
+          resolve({ value: record, id: key });
         })
     )
   );
@@ -31,7 +31,12 @@ export async function getHostsFromDB(): Promise<IHost[]> {
 
 export async function insertHostInDB(value: IHost) {
   const table = getHostsTable();
-  table.add(value);
+  return table.add(value);
+}
+
+export async function deleteHostFromDB(id: IndexableType) {
+  const table = getHostsTable();
+  return table.delete(id);
 }
 
 // export default class Storage {

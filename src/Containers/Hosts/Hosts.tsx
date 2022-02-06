@@ -6,13 +6,17 @@ import { HostsContext } from "Hosts/HostsContextProvider";
 import HostCard from "./Components/HostCard/HostCard";
 const Hosts = () => {
   const modalsContext = useContext(ModalsContext);
-  const hosts = useContext(HostsContext).hosts;
-  console.log(hosts);
+  const { hosts } = useContext(HostsContext);
   const [search_term, set_search_term] = useState("");
   return (
     <div className="col-md-12">
       <div className="row flex flex-row p-2 justify-center items-center">
-        <input value={search_term} onChange={(e) => set_search_term(e.target.value)} className={Styles.searchInput} placeholder="search in hosts..." />
+        <input
+          value={search_term}
+          onChange={(e) => set_search_term(e.target.value)}
+          className={Styles.searchInput}
+          placeholder="search in hosts..."
+        />
         <button
           className={Styles.searchAdd}
           onClick={() => {
@@ -23,8 +27,8 @@ const Hosts = () => {
         </button>
       </div>
       <div className="row p-4">
-        {hosts.map((host, key) => (
-          <HostCard host={host} key={key} />
+        {hosts.map((host) => (
+          <HostCard host={host.value} key={host.id.toString()} id={host.id} />
         ))}
       </div>
     </div>

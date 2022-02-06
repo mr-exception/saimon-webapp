@@ -1,19 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import { IHost, subscriptionFee } from "Structs/Host";
 import Button from "Ui-Kit/Button/Button";
 import { weiToPweiFixed } from "Utils/currency";
 import { MdSecurity } from "react-icons/md";
-import { FaLink } from "react-icons/fa";
+import { FaLink, FaTrash } from "react-icons/fa";
+import { HostsContext } from "Hosts/HostsContextProvider";
+import { IndexableType } from "dexie";
 
 interface IProps {
   host: IHost;
+  id: IndexableType;
 }
 
-const HostCard: React.FC<IProps> = ({ host }: IProps) => {
+const HostCard: React.FC<IProps> = ({ host, id }: IProps) => {
+  const { removeHost } = useContext(HostsContext);
   return (
-    <div className="col-xs-12 col-lg-6 border-2 border-solid rounded-md border-base py-2 px-4">
-      <div className="row">
+    <div className="col-xs-12 col-lg-6">
+      <div className="row border-2 border-solid rounded-md border-base mx-1 p-2">
         <div className="col-xs-6 py-1">Name: {host.name}</div>
         <div className="col-xs-6 py-1">Subscription fee: {subscriptionFee(host)}</div>
         <div className="col-xs-6 py-1 flex">
@@ -41,6 +45,17 @@ const HostCard: React.FC<IProps> = ({ host }: IProps) => {
             }}
           >
             <MdSecurity />
+          </Button>
+          <Button
+            size="sm"
+            style={{ marginLeft: 5 }}
+            variant="warning"
+            onClick={() => {
+              removeHost(id);
+              toast.error("host removed");
+            }}
+          >
+            <FaTrash />
           </Button>
         </div>
       </div>
