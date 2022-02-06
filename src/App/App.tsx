@@ -8,11 +8,9 @@ import Setting from "./Images/Setting";
 import Styles from "./styles.module.css";
 import { ModalsContextProvider } from "Modals/ModalsContextProvider";
 import ModalContainer from "Modals/ModalContainer";
-// import Modals from "Modals/Modals";
-// import Contacts from "Images/Contacts";
-// import Hosts from "Images/Hosts";
-// import Profile from "Images/Profile";
-// import Setting from "Images/Setting";
+import { HostsContextProvider } from "Hosts/HostsContextProvider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface IProps {
   children: any;
@@ -61,12 +59,23 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
             isActive={activeSection === "setting"}
           />
         </div>
-        <ModalsContextProvider>
-          <div className={Styles.children}>{children}</div>
-          <ModalContainer />
-        </ModalsContextProvider>
+        <HostsContextProvider>
+          <ModalsContextProvider>
+            <div className={Styles.children}>{children}</div>
+            <ModalContainer />
+          </ModalsContextProvider>
+        </HostsContextProvider>
       </div>
-      {/* <Modals /> */}
+      <ToastContainer
+        bodyStyle={{ maxWidth: "90%", wordBreak: "break-all" }}
+        position="top-center"
+        autoClose={0}
+        limit={3}
+        newestOnTop={true}
+        theme="colored"
+        draggable={false}
+        closeOnClick={false}
+      />
     </div>
   );
 };

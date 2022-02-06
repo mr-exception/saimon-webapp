@@ -1,13 +1,11 @@
-import { createAxios, IAxiosConfigs } from "./axios-inital";
+import axios from "axios";
 
 interface ICreateSecretParam {
   secret: string;
   address: string;
 }
-export async function createSecret(params: ICreateSecretParam, configs: IAxiosConfigs): Promise<boolean> {
-  return createAxios(configs)
-    .post("/secrets/create", params, {})
-    .then(() => true);
+export async function createSecret(baseURL: string, params: ICreateSecretParam): Promise<boolean> {
+  return axios.post("/api/secrets/create", params, { baseURL }).then(() => true);
 }
 
 interface IUpdateSecretParam {
@@ -15,8 +13,6 @@ interface IUpdateSecretParam {
   new_secret: string;
   address: string;
 }
-export async function fetchPackets(params: IUpdateSecretParam, configs: IAxiosConfigs): Promise<boolean> {
-  return createAxios(configs)
-    .post("/secrets/update", params, {})
-    .then(() => true);
+export async function fetchPackets(baseURL: string, params: IUpdateSecretParam): Promise<boolean> {
+  return axios.post("/api/secrets/update", params, { baseURL }).then(() => true);
 }

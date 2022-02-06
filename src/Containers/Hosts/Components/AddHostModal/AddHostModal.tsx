@@ -1,16 +1,19 @@
 import { heartBeat } from "API/ACK";
+import { createSecret } from "API/Secrets";
 import { AxiosError } from "axios";
-import React, { useState } from "react";
+import { HostsContext } from "Hosts/HostsContextProvider";
+import React, { useContext, useState } from "react";
 import { IHeartBeat, IHost } from "Structs/Host";
 import Button from "Ui-Kit/Button/Button";
 import TextInput from "Ui-Kit/Inputs/TextInput/TextInput";
+import { randomString } from "Utils/string";
 import HeartBeatInfo from "./Components/HeartBeatInfo";
 
 interface IProps {
-  onCancel: () => void;
-  onFinish: (value: IHost) => void;
+  close: () => void;
 }
-const AddHostModal: React.FC<IProps> = ({ onCancel, onFinish }: IProps) => {
+const AddHostModal: React.FC<IProps> = ({ close }: IProps) => {
+  const hostsContext = useContext(HostsContext);
   const [address, setAddress] = useState<string>();
   const [heartBeatResult, setHeartBeatResult] = useState<IHeartBeat>();
   const [responseTime, setResponseTime] = useState(0);
@@ -32,17 +35,32 @@ const AddHostModal: React.FC<IProps> = ({ onCancel, onFinish }: IProps) => {
       setFetching(false);
     }
   }
+
+  const [submitting, setSubmitting] = useState(false);
   async function submitHost() {
     if (!heartBeatResult || !address) return;
-    const host: IHost = {
-      url: address,
-      name: heartBeatResult.name,
-      commission_fee: heartBeatResult.commission_fee,
-      subscription_fee: heartBeatResult.subscription_fee,
-      paid_subscription: heartBeatResult.paid_subscription,
-      rt: responseTime,
-    };
-    console.log(host);
+    setSubmitting(true);
+    const secret = randomString(32);
+    try {
+      await createSecret(address, { secret, address: "0x7bd62f48846cd9E370F2AdE8e45bF7Ca9971c1f7" });
+      const host: IHost = {
+        url: address,
+        name: heartBeatResult.name,
+        commission_fee: heartBeatResult.commission_fee,
+        subscription_fee: heartBeatResult.subscription_fee,
+        paid_subscription: heartBeatResult.paid_subscription,
+        rt: responseTime,
+        secret,
+      };
+      hostsContext.addHost(host);
+      setTimeout(() => {
+        close();
+      });
+    } catch (err) {
+      setError((err as AxiosError).message);
+    } finally {
+      setSubmitting(false);
+    }
   }
   return (
     <div className="row">
@@ -55,7 +73,7 @@ const AddHostModal: React.FC<IProps> = ({ onCancel, onFinish }: IProps) => {
           Fetch
         </Button>
       </div>
-      <div className="col-xs-12" style={{ minHeight: 140 }}>
+      <div className="col-xs-12" style={{ minHeight: 150 }}>
         <div className="row">
           {heartBeatResult && <HeartBeatInfo data={heartBeatResult} responseTime={responseTime} />}
           {!!error && (
@@ -66,10 +84,10 @@ const AddHostModal: React.FC<IProps> = ({ onCancel, onFinish }: IProps) => {
         </div>
       </div>
       <div className="col-xs-12 text-right">
-        <Button onClick={submitHost} variant="primary" size="sm" style={{ marginRight: 10, minWidth: 80 }} disabled={!heartBeatResult}>
+        <Button onClick={submitHost} variant="primary" size="sm" style={{ marginRight: 10, minWidth: 80 }} loading={submitting} disabled={!heartBeatResult && false}>
           Save
         </Button>
-        <Button onClick={onCancel} variant="warning" size="sm" style={{ minWidth: 80 }}>
+        <Button onClick={close} variant="warning" size="sm" style={{ minWidth: 80 }}>
           Cancel
         </Button>
       </div>
