@@ -84,7 +84,14 @@ const AddHostModal: React.FC<IProps> = ({ close }: IProps) => {
         </div>
       </div>
       <div className="col-xs-12 text-right">
-        <Button onClick={submitHost} variant="primary" size="sm" style={{ marginRight: 10, minWidth: 80 }} loading={submitting} disabled={!heartBeatResult && false}>
+        <Button
+          onClick={submitHost}
+          variant="primary"
+          size="sm"
+          style={{ marginRight: 10, minWidth: 80 }}
+          loading={submitting}
+          disabled={!heartBeatResult}
+        >
           Save
         </Button>
         <Button onClick={close} variant="warning" size="sm" style={{ minWidth: 80 }}>
