@@ -9,7 +9,7 @@ const Hosts = () => {
   const { hosts } = useContext(HostsContext);
   const [search_term, set_search_term] = useState("");
   return (
-    <div className="col-md-12">
+    <div className="col-xs-12">
       <div className="row flex flex-row p-2 justify-center items-center">
         <input
           value={search_term}
