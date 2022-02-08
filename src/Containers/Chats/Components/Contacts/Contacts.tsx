@@ -1,5 +1,6 @@
+import { ContactsContext } from "DataContext/ContactsContextProvider";
 import { ModalsContext } from "Modals/ModalsContextProvider";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { FaPlus } from "react-icons/fa";
 import Button from "Ui-Kit/Button/Button";
 import ContactCard from "./Components/ContactCard/ContactCard";
@@ -7,6 +8,7 @@ import CreateContactModal from "./Components/CreateContactModal/CreateContactMod
 import Styles from "./styles.module.css";
 const Contacts = () => {
   const { showModal, closeModal } = useContext(ModalsContext);
+  const { contacts } = useContext(ContactsContext);
   return (
     <div className={"row block " + Styles.fixHeight}>
       <div className="col-xs-12 flex justify-end items-center p-2">
@@ -20,8 +22,9 @@ const Contacts = () => {
           <FaPlus />
         </Button>
       </div>
-      <ContactCard />
-      <ContactCard />
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
     </div>
   );
 };

@@ -3,9 +3,10 @@ import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { IHost } from "Structs/Host";
 import { deleteHostFromDB, getHostsFromDB, insertHostInDB } from "Utils/storage";
+import { IRecord } from "./def";
 
 export interface IHostsContext {
-  hosts: { value: IHost; id: IndexableType }[];
+  hosts: IRecord<IHost>[];
   addHost: (value: IHost) => void;
   removeHost: (id: IndexableType) => void;
 }
@@ -17,7 +18,7 @@ export const HostsContext = createContext<IHostsContext>({
 });
 
 export const HostsContextProvider: React.FC<{ children: any }> = ({ children }) => {
-  const [hosts, setHosts] = useState<{ value: IHost; id: IndexableType }[]>([]);
+  const [hosts, setHosts] = useState<IRecord<IHost>[]>([]);
   async function addHost(value: IHost): Promise<void> {
     const id = await insertHostInDB(value);
     setHosts([...hosts, { value, id }]);

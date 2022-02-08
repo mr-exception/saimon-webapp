@@ -1,7 +1,8 @@
 import { heartBeat } from "API/ACK";
-import { createSecret } from "API/Secrets";
+import { createSignature } from "API/Signatures";
+import { AuthContext } from "AuthContext/AuthContextProvider";
 import { AxiosError } from "axios";
-import { HostsContext } from "Hosts/HostsContextProvider";
+import { HostsContext } from "DataContext/HostsContextProvider";
 import React, { useContext, useState } from "react";
 import { IHeartBeat, IHost } from "Structs/Host";
 import Button from "Ui-Kit/Button/Button";
@@ -13,6 +14,7 @@ interface IProps {
   close: () => void;
 }
 const AddHostModal: React.FC<IProps> = ({ close }: IProps) => {
+  const authContext = useContext(AuthContext);
   const hostsContext = useContext(HostsContext);
   const [address, setAddress] = useState<string>();
   const [heartBeatResult, setHeartBeatResult] = useState<IHeartBeat>();
@@ -42,7 +44,11 @@ const AddHostModal: React.FC<IProps> = ({ close }: IProps) => {
     setSubmitting(true);
     const secret = randomString(32);
     try {
-      await createSecret(address, { secret, address: "0x7bd62f48846cd9E370F2AdE8e45bF7Ca9971c1f7" });
+      await createSignature(address, {
+        secret,
+        address: authContext.address,
+        public_key: authContext.key.getPublicKey(),
+      });
       const host: IHost = {
         url: address,
         name: heartBeatResult.name,

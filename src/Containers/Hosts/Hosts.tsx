@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import Styles from "./styles.module.css";
 import { ModalsContext } from "Modals/ModalsContextProvider";
 import AddHostModal from "./Components/AddHostModal/AddHostModal";
-import { HostsContext } from "Hosts/HostsContextProvider";
+import { HostsContext } from "DataContext/HostsContextProvider";
 import HostCard from "./Components/HostCard/HostCard";
 const Hosts = () => {
   const modalsContext = useContext(ModalsContext);

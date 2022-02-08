@@ -8,12 +8,13 @@ import Setting from "./Images/Setting";
 import Styles from "./styles.module.css";
 import { ModalsContextProvider } from "Modals/ModalsContextProvider";
 import ModalContainer from "Modals/ModalContainer";
-import { HostsContextProvider } from "Hosts/HostsContextProvider";
+import { HostsContextProvider } from "DataContext/HostsContextProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "AuthContext/AuthContextProvider";
 import InitForm from "./Components/InitForm/InitForm";
 import AuthStep from "./Components/AuthStep/AuthStep";
+import { ContactsContextProvider } from "DataContext/ContactsContextProvider";
 
 interface IProps {
   children: any;
@@ -48,7 +49,7 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
       </div>
     );
   }
-  if (!!password && !passedAuth) {
+  if (password !== "N/A" && !passedAuth) {
     return (
       <div className={Styles.app}>
         <div className={Styles.container + " bg-secondary"}>
@@ -96,10 +97,12 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
           />
         </div>
         <HostsContextProvider>
-          <ModalsContextProvider>
-            <div className={Styles.children}>{children}</div>
-            <ModalContainer />
-          </ModalsContextProvider>
+          <ContactsContextProvider>
+            <ModalsContextProvider>
+              <div className={Styles.children}>{children}</div>
+              <ModalContainer />
+            </ModalsContextProvider>
+          </ContactsContextProvider>
         </HostsContextProvider>
       </div>
       <ToastContainer

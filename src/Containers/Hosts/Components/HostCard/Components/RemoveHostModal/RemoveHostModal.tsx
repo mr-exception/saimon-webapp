@@ -1,6 +1,6 @@
-import { destroySecret } from "API/Secrets";
+import { destroySecret } from "API/Signatures";
 import { IndexableType } from "dexie";
-import { HostsContext } from "Hosts/HostsContextProvider";
+import { HostsContext } from "DataContext/HostsContextProvider";
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { IHost } from "Structs/Host";

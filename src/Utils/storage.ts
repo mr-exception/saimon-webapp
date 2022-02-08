@@ -1,10 +1,12 @@
 import Dexie, { IndexableType, Table } from "dexie";
+import { IContact } from "Structs/Contact";
 import { IHost } from "Structs/Host";
 
 export function initDB(): Dexie {
   const db = new Dexie("salimon");
   db.version(1).stores({
     hosts: "++id,url,name,commission_fee,subscription_fee,paid_subscription,rt,secret",
+    contacts: "++id,name,address,public_key,hosts",
   });
   return db;
 }
@@ -36,6 +38,36 @@ export async function insertHostInDB(value: IHost) {
 
 export async function deleteHostFromDB(id: IndexableType) {
   const table = getHostsTable();
+  return table.delete(id);
+}
+
+export function getContactsTable(): Table<IContact, IndexableType> {
+  const db = initDB();
+  return db.table<IContact>("contacts");
+}
+
+export async function getContactsFromDB(): Promise<{ value: IContact; id: IndexableType }[]> {
+  const table = getContactsTable();
+  const keys = await table.toCollection().primaryKeys();
+  return await Promise.all(
+    keys.map(
+      (key) =>
+        new Promise<{ value: IContact; id: IndexableType }>(async (resolve, reject) => {
+          const record = await table.get(key);
+          if (!record) return reject(`host with key ${key} not found`);
+          resolve({ value: record, id: key });
+        })
+    )
+  );
+}
+
+export async function insertContactInDB(value: IContact) {
+  const table = getContactsTable();
+  return table.add(value);
+}
+
+export async function deleteContactFromDB(id: IndexableType) {
+  const table = getContactsTable();
   return table.delete(id);
 }
 

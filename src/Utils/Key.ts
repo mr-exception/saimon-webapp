@@ -38,21 +38,21 @@ export default class Key {
   // key generation methods
 
   public static generateFreshKey(): Key {
-    const nodeKey = new NodeRSA({ b: 512 });
+    const nodeKey = new NodeRSA({ b: 1024 });
     return new Key(nodeKey);
   }
   public static generateKeyByPublicKey(public_key: string): Key {
-    const nodeKey = new NodeRSA({ b: 512 });
+    const nodeKey = new NodeRSA({ b: 1024 });
     nodeKey.importKey(public_key, "pkcs8-public");
     return new Key(nodeKey);
   }
   public static generateKeyByPrivateKey(private_key: string): Key {
-    const nodeKey = new NodeRSA({ b: 512 });
+    const nodeKey = new NodeRSA({ b: 1024 });
     nodeKey.importKey(private_key, "pkcs8-private");
     return new Key(nodeKey);
   }
   public static generateFullKey(public_key: string, private_key: string): Key {
-    const nodeKey = new NodeRSA({ b: 512 });
+    const nodeKey = new NodeRSA({ b: 1024 });
     nodeKey.importKey(private_key, "pkcs8-private");
     nodeKey.importKey(public_key, "pkcs8-public");
     return new Key(nodeKey);
