@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import MenuItem from "./Components/MenuItem/MenuItem";
 import Contacts from "./Images/Contacts";
@@ -11,11 +11,16 @@ import ModalContainer from "Modals/ModalContainer";
 import { HostsContextProvider } from "Hosts/HostsContextProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthContext } from "AuthContext/AuthContextProvider";
+import InitForm from "./Components/InitForm/InitForm";
+import AuthStep from "./Components/AuthStep/AuthStep";
 
 interface IProps {
   children: any;
 }
 const App: React.FC<IProps> = ({ children }: IProps) => {
+  const { address, password } = useContext(AuthContext);
+  const [passedAuth, setPassedAuth] = useState(false);
   const history = useHistory();
   const href = useLocation().pathname;
   let activeSection: "chats" | "hosts" | "profile" | "setting" = "chats";
@@ -33,6 +38,26 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
       activeSection = "setting";
       break;
   }
+
+  if (address === "N/A") {
+    return (
+      <div className={Styles.app}>
+        <div className={Styles.container + " bg-secondary"}>
+          <InitForm />
+        </div>
+      </div>
+    );
+  }
+  if (!!password && !passedAuth) {
+    return (
+      <div className={Styles.app}>
+        <div className={Styles.container + " bg-secondary"}>
+          <AuthStep passed={() => setPassedAuth(true)} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={Styles.app}>
       <div className={Styles.container}>

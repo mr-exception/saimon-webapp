@@ -5,27 +5,30 @@ import Hosts from "Containers/Hosts/Hosts";
 import Profile from "Containers/Profile/Profile";
 import Setting from "Containers/Setting/Setting";
 import Chats from "Containers/Chats/Chats";
+import { AuthContextProvider } from "AuthContext/AuthContextProvider";
 
 const Routes = () => {
   return (
-    <Router>
-      <Switch>
-        <App>
-          <Route exact path="/hosts">
-            <Hosts />
-          </Route>
-          <Route exact path="/profile">
-            <Profile />
-          </Route>
-          <Route exact path="/setting">
-            <Setting />
-          </Route>
-          <Route exact path="/">
-            <Chats />
-          </Route>
-        </App>
-      </Switch>
-    </Router>
+    <AuthContextProvider>
+      <Router>
+        <Switch>
+          <App>
+            <Route exact path="/hosts">
+              <Hosts />
+            </Route>
+            <Route exact path="/profile">
+              <Profile />
+            </Route>
+            <Route exact path="/setting">
+              <Setting />
+            </Route>
+            <Route exact path="/">
+              <Chats />
+            </Route>
+          </App>
+        </Switch>
+      </Router>
+    </AuthContextProvider>
   );
 };
 export default Routes;

@@ -9,8 +9,7 @@ export default class Key {
 
   // encryption using private key
   public encryptPrivate(data: Buffer | string): string {
-    if (typeof data === "string")
-      return this.key.encryptPrivate(Buffer.from(data), "base64");
+    if (typeof data === "string") return this.key.encryptPrivate(Buffer.from(data), "base64");
     else return this.key.encryptPrivate(data, "base64");
   }
   public decryptPrivate(data: string): Buffer {
@@ -20,8 +19,7 @@ export default class Key {
   // encryption using public key
 
   public encryptPublic(data: Buffer | string): string {
-    if (typeof data === "string")
-      return this.key.encrypt(Buffer.from(data), "base64");
+    if (typeof data === "string") return this.key.encrypt(Buffer.from(data), "base64");
     else return this.key.encrypt(data, "base64");
   }
   public decryptPublic(data: string): Buffer {
