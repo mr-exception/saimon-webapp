@@ -15,7 +15,8 @@ const ContactCard: React.FC<IProps> = ({ contact, id }) => {
   return (
     <div
       className={
-        "col-xs-12 cursor-pointer hover:bg-secondary transition-all " + (activeContact?.id === id && "bg-secondary")
+        "col-xs-12 cursor-pointer rounded-md hover:bg-secondary transition-all " +
+        (activeContact?.id === id && "bg-secondary")
       }
       onClick={() => {
         setActiveContact({ value: contact, id });

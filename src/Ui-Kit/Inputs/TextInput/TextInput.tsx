@@ -6,7 +6,7 @@ interface IProps {
   placeholder?: string;
   onChange?: (value: string) => void;
   type?: string;
-  label: string;
+  label?: string;
   error?: string;
 }
 const TextInput: React.FC<IProps> = ({
@@ -22,9 +22,11 @@ const TextInput: React.FC<IProps> = ({
 }: IProps) => {
   return (
     <div className="row" style={style}>
-      <div className="col-xs-12">
-        <Typography variant="body1">{label}</Typography>
-      </div>
+      {label && (
+        <div className="col-xs-12">
+          <Typography variant="body1">{label}</Typography>
+        </div>
+      )}
       <div className="col-xs-12">
         <input
           className="rounded-sm my-2 w-full bg-base text-black p-1"

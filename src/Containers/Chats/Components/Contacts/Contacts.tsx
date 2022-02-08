@@ -25,45 +25,6 @@ const Contacts = () => {
       {contacts.map((contact) => (
         <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
       ))}
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
-      ))}
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
-      ))}
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
-      ))}
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
-      ))}
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
-      ))}
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
-      ))}
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
-      ))}
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
-      ))}
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
-      ))}
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
-      ))}
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
-      ))}
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
-      ))}
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
-      ))}
     </div>
   );
 };

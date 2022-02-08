@@ -10,7 +10,7 @@ const Thread = () => {
     return <NoThread />;
   }
   return (
-    <div className="w-full flex-1 flex flex-col">
+    <div className="w-full flex-1 flex flex-col bg-gray">
       <Header />
       <MessageList />
       <SendBox />

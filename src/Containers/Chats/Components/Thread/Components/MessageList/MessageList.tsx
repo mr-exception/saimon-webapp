@@ -3,33 +3,6 @@ const MessageList = () => {
   return (
     <div className={Styles.messageList}>
       <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
-      <div style={{ flex: 1, height: 40 }}>test</div>
     </div>
   );
 };
