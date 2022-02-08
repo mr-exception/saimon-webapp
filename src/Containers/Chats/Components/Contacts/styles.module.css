@@ -1,5 +1,4 @@
-.fixHeight {
-  @apply overflow-y-auto;
-  max-height: 850px;
-  height: calc(100vh - 4px);
+.contactList {
+  @apply overflow-y-auto block;
+  max-height: 100vh;
 }

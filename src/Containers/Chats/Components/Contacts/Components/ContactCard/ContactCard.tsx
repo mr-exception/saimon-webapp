@@ -1,3 +1,4 @@
+import { ContactsContext } from "DataContext/ContactsContextProvider";
 import { IndexableType } from "dexie";
 import { ModalsContext } from "Modals/ModalsContextProvider";
 import React, { useContext } from "react";
@@ -10,8 +11,16 @@ interface IProps {
 }
 const ContactCard: React.FC<IProps> = ({ contact, id }) => {
   const { showModal, closeModal } = useContext(ModalsContext);
+  const { setActiveContact, activeContact } = useContext(ContactsContext);
   return (
-    <div className="col-xs-12 cursor-pointer hover:bg-secondary transition-all">
+    <div
+      className={
+        "col-xs-12 cursor-pointer hover:bg-secondary transition-all " + (activeContact?.id === id && "bg-secondary")
+      }
+      onClick={() => {
+        setActiveContact({ value: contact, id });
+      }}
+    >
       <div className="row">
         <div className="col-xs-10">
           <div className="row">

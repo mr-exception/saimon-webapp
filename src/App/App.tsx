@@ -60,51 +60,49 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
   }
 
   return (
-    <div className={Styles.app}>
-      <div className={Styles.container}>
-        <div className={Styles.toolbar}>
-          <MenuItem
-            IconComponent={Contacts}
-            caption="chats"
-            onClick={() => {
-              history.push("/");
-            }}
-            isActive={activeSection === "chats"}
-          />
-          <MenuItem
-            IconComponent={Hosts}
-            caption="hosts"
-            onClick={() => {
-              history.push("/hosts");
-            }}
-            isActive={activeSection === "hosts"}
-          />
-          <MenuItem
-            IconComponent={Profile}
-            caption="profile"
-            onClick={() => {
-              history.push("/profile");
-            }}
-            isActive={activeSection === "profile"}
-          />
-          <MenuItem
-            IconComponent={Setting}
-            caption="setting"
-            onClick={() => {
-              history.push("/setting");
-            }}
-            isActive={activeSection === "setting"}
-          />
-        </div>
-        <HostsContextProvider>
-          <ContactsContextProvider>
-            <ModalsContextProvider>
-              <div className={Styles.children}>{children}</div>
-              <ModalContainer />
-            </ModalsContextProvider>
-          </ContactsContextProvider>
-        </HostsContextProvider>
+    <div className={Styles.container}>
+      <div className={Styles.toolbar}>
+        <MenuItem
+          IconComponent={Contacts}
+          caption="chats"
+          onClick={() => {
+            history.push("/");
+          }}
+          isActive={activeSection === "chats"}
+        />
+        <MenuItem
+          IconComponent={Hosts}
+          caption="hosts"
+          onClick={() => {
+            history.push("/hosts");
+          }}
+          isActive={activeSection === "hosts"}
+        />
+        <MenuItem
+          IconComponent={Profile}
+          caption="profile"
+          onClick={() => {
+            history.push("/profile");
+          }}
+          isActive={activeSection === "profile"}
+        />
+        <MenuItem
+          IconComponent={Setting}
+          caption="setting"
+          onClick={() => {
+            history.push("/setting");
+          }}
+          isActive={activeSection === "setting"}
+        />
       </div>
+      <HostsContextProvider>
+        <ContactsContextProvider>
+          <ModalsContextProvider>
+            <div className={Styles.children}>{children}</div>
+            <ModalContainer />
+          </ModalsContextProvider>
+        </ContactsContextProvider>
+      </HostsContextProvider>
       <ToastContainer
         bodyStyle={{ maxWidth: "90%", wordBreak: "break-all" }}
         position="top-center"

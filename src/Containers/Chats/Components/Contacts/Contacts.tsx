@@ -10,7 +10,7 @@ const Contacts = () => {
   const { showModal, closeModal } = useContext(ModalsContext);
   const { contacts } = useContext(ContactsContext);
   return (
-    <div className={"row block " + Styles.fixHeight}>
+    <div className={Styles.contactList}>
       <div className="col-xs-12 flex justify-end items-center p-2">
         <Button
           className="w-full flex justify-center items-center"
@@ -22,6 +22,45 @@ const Contacts = () => {
           <FaPlus />
         </Button>
       </div>
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
+      {contacts.map((contact) => (
+        <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
+      ))}
       {contacts.map((contact) => (
         <ContactCard key={contact.id.toString()} contact={contact.value} id={contact.id} />
       ))}
