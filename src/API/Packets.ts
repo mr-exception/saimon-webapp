@@ -10,11 +10,12 @@ interface ISendPacketParams {
 }
 export async function sendPacket(params: ISendPacketParams, configs: IAxiosConfigs): Promise<IPacket> {
   return createAxios(configs)
-    .post<IPacket>("/packets/send", params, {})
+    .post<IPacket>("/packets/send", { params })
     .then((response) => response.data);
 }
 
 interface IFetchPacketsParam {
+  thread?: string;
   dst?: string;
   src?: string;
   position?: number;
@@ -27,6 +28,6 @@ interface IFetchPacketsParam {
 }
 export async function fetchPackets(params: IFetchPacketsParam, configs: IAxiosConfigs): Promise<IPacket[]> {
   return createAxios(configs)
-    .get<{ data: IPacket[] }>("/packets/send", { params })
+    .get<{ data: IPacket[] }>("/packets/fetch", { params })
     .then((response) => response.data.data);
 }

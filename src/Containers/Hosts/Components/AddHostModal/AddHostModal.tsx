@@ -51,6 +51,7 @@ const AddHostModal: React.FC<IProps> = ({ close }: IProps) => {
       });
       const host: IHost = {
         url: address,
+        address: heartBeatResult.address,
         name: heartBeatResult.name,
         commission_fee: heartBeatResult.commission_fee,
         subscription_fee: heartBeatResult.subscription_fee,

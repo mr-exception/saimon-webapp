@@ -4,12 +4,10 @@ import { ContactsContext } from "DataContext/ContactsContextProvider";
 import { IndexableType } from "dexie";
 import { HostsContext } from "DataContext/HostsContextProvider";
 import React, { useContext, useState } from "react";
-import { toast } from "react-toastify";
 import { IContact } from "Structs/Contact";
 import { IHost } from "Structs/Host";
 import Button from "Ui-Kit/Button/Button";
 import TextInput from "Ui-Kit/Inputs/TextInput/TextInput";
-import { insertContactInDB } from "Utils/storage";
 
 interface ICheckResult {
   result: boolean;

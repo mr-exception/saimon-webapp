@@ -2,6 +2,7 @@ import { weiToPweiFixed } from "Utils/currency";
 
 export interface IHost {
   url: string;
+  address: string;
   name: string;
   commission_fee: number;
   subscription_fee: number;
@@ -12,6 +13,7 @@ export interface IHost {
 
 export interface IHeartBeat {
   name: string;
+  address: string;
   commission_fee: number;
   subscription_fee: number;
   time: number;
