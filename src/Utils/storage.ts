@@ -38,12 +38,18 @@ export async function getHostsFromDB(): Promise<IRecord<IHost>[]> {
 
 export async function updateHostsIfExists(records: IRecord<IHost>[]): Promise<void> {
   const table = getHostsTable();
-  records.forEach(async (record) => {
-    const host = table.get(record.id);
-    if (!!host) {
-      table.update(record.id, record.value);
-    }
-  });
+  Promise.all(
+    records.map(
+      (record) =>
+        new Promise<void>(async (resolve, reject) => {
+          const host = await table.get(record.id);
+          if (!!host) {
+            await table.update(record.id, record.value);
+          }
+          resolve();
+        })
+    )
+  );
 }
 
 export async function insertHostInDB(value: IHost) {

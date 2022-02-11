@@ -39,12 +39,13 @@ export const HostsContextProvider: React.FC<{ children: any }> = ({ children }) 
     });
   }, [hostsWorker]);
 
-  hostsWorker.onmessage = (ev: MessageEvent<{ event: string; payload: IRecord<IHost>[] }>) => {
+  hostsWorker.onmessage = async (ev: MessageEvent<{ event: string; payload: IRecord<IHost>[] }>) => {
     const { event, payload } = ev.data;
     switch (event) {
       case "hosts":
-        setHosts(payload);
-        updateHostsIfExists(payload);
+        await updateHostsIfExists(payload);
+        const newHosts = await getHostsFromDB();
+        setHosts(newHosts);
         break;
     }
   };
