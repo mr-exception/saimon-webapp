@@ -2,6 +2,11 @@ import Dexie, { IndexableType, Table } from "dexie";
 import { IContact } from "Structs/Contact";
 import { IHost } from "Structs/Host";
 
+export interface IRecord<T> {
+  value: T;
+  id: IndexableType;
+}
+
 export function initDB(): Dexie {
   const db = new Dexie("salimon");
   db.version(1).stores({
@@ -16,19 +21,29 @@ export function getHostsTable(): Table<IHost, IndexableType> {
   return db.table<IHost>("hosts");
 }
 
-export async function getHostsFromDB(): Promise<{ value: IHost; id: IndexableType }[]> {
+export async function getHostsFromDB(): Promise<IRecord<IHost>[]> {
   const table = getHostsTable();
   const keys = await table.toCollection().primaryKeys();
   return await Promise.all(
     keys.map(
       (key) =>
-        new Promise<{ value: IHost; id: IndexableType }>(async (resolve, reject) => {
+        new Promise<IRecord<IHost>>(async (resolve, reject) => {
           const record = await table.get(key);
           if (!record) return reject(`host with key ${key} not found`);
           resolve({ value: record, id: key });
         })
     )
   );
+}
+
+export async function updateHostsIfExists(records: IRecord<IHost>[]): Promise<void> {
+  const table = getHostsTable();
+  records.forEach(async (record) => {
+    const host = table.get(record.id);
+    if (!!host) {
+      table.update(record.id, record.value);
+    }
+  });
 }
 
 export async function insertHostInDB(value: IHost) {

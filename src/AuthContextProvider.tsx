@@ -1,5 +1,6 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import Key from "Utils/Key";
+import { WorkersContext } from "WorkersContextProvider";
 
 export interface IModalContext {
   address: string;
@@ -22,6 +23,7 @@ export const AuthContext = createContext<IModalContext>({
 });
 
 export const AuthContextProvider: React.FC<{ children: any }> = ({ children }) => {
+  const { hostsWorker } = useContext(WorkersContext);
   const [address, setAddress] = useState<string>("N/A");
   const [key, setKey] = useState<Key>(Key.generateFreshKey());
   const [password, setPassword] = useState<string>("N/A");
@@ -29,6 +31,7 @@ export const AuthContextProvider: React.FC<{ children: any }> = ({ children }) =
   function updateAddress(value: string) {
     localStorage.setItem("address", value);
     setAddress(value);
+    hostsWorker.postMessage({ action: "update_address", payload: value });
   }
   function updateKey(value: Key) {
     localStorage.setItem("public_key", value.getPublicKey());
@@ -48,7 +51,8 @@ export const AuthContextProvider: React.FC<{ children: any }> = ({ children }) =
       setKey(Key.generateFullKey(public_key, private_key));
     }
     setPassword(localStorage.getItem("password") || "N/A");
-  }, []);
+    hostsWorker.postMessage({ action: "update_address", payload: localStorage.getItem("address") || "N/A" });
+  }, [hostsWorker]);
   return (
     <AuthContext.Provider
       value={{

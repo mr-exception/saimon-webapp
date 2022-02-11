@@ -2,8 +2,7 @@ import { IndexableType } from "dexie";
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { IContact } from "Structs/Contact";
-import { deleteContactFromDB, getContactsFromDB, insertContactInDB } from "Utils/storage";
-import { IRecord } from "./def";
+import { deleteContactFromDB, getContactsFromDB, insertContactInDB, IRecord } from "Utils/storage";
 
 export interface IContactsContext {
   activeContact?: IRecord<IContact>;

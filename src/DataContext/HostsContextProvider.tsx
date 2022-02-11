@@ -1,9 +1,9 @@
 import { IndexableType } from "dexie";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { IHost } from "Structs/Host";
-import { deleteHostFromDB, getHostsFromDB, insertHostInDB } from "Utils/storage";
-import { IRecord } from "./def";
+import { deleteHostFromDB, getHostsFromDB, insertHostInDB, IRecord, updateHostsIfExists } from "Utils/storage";
+import { WorkersContext } from "WorkersContextProvider";
 
 export interface IHostsContext {
   hosts: IRecord<IHost>[];
@@ -18,20 +18,35 @@ export const HostsContext = createContext<IHostsContext>({
 });
 
 export const HostsContextProvider: React.FC<{ children: any }> = ({ children }) => {
+  const { hostsWorker } = useContext(WorkersContext);
   const [hosts, setHosts] = useState<IRecord<IHost>[]>([]);
   async function addHost(value: IHost): Promise<void> {
     const id = await insertHostInDB(value);
+    hostsWorker.postMessage({ action: "update_hosts", payload: [...hosts, { value, id }] });
     setHosts([...hosts, { value, id }]);
     toast.success("registered to host successfully!");
   }
   async function removeHost(id: IndexableType) {
     await deleteHostFromDB(id);
-    setHosts(await getHostsFromDB());
+    const values = await getHostsFromDB();
+    hostsWorker.postMessage({ action: "update_hosts", payload: values });
+    setHosts(values);
   }
   useEffect(() => {
     getHostsFromDB().then((value) => {
       setHosts(value);
+      hostsWorker.postMessage({ action: "update_hosts", payload: value });
     });
-  }, []);
+  }, [hostsWorker]);
+
+  hostsWorker.onmessage = (ev: MessageEvent<{ event: string; payload: IRecord<IHost>[] }>) => {
+    const { event, payload } = ev.data;
+    switch (event) {
+      case "hosts":
+        setHosts(payload);
+        updateHostsIfExists(payload);
+        break;
+    }
+  };
   return <HostsContext.Provider value={{ hosts, addHost, removeHost }}>{children}</HostsContext.Provider>;
 };

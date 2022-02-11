@@ -1,6 +1,6 @@
 import { heartBeat } from "API/ACK";
 import { createSignature } from "API/Signatures";
-import { AuthContext } from "AuthContext/AuthContextProvider";
+import { AuthContext } from "AuthContextProvider";
 import { AxiosError } from "axios";
 import { HostsContext } from "DataContext/HostsContextProvider";
 import React, { useContext, useState } from "react";

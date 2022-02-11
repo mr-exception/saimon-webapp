@@ -1,5 +1,5 @@
 import { fetchPackets } from "API/Packets";
-import { AuthContext } from "AuthContext/AuthContextProvider";
+import { AuthContext } from "AuthContextProvider";
 import { ContactsContext } from "DataContext/ContactsContextProvider";
 import { HostsContext } from "DataContext/HostsContextProvider";
 import { useContext, useEffect, useState } from "react";

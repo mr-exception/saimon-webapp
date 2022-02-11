@@ -1,4 +1,4 @@
-import { AuthContext } from "AuthContext/AuthContextProvider";
+import { AuthContext } from "AuthContextProvider";
 import React, { useContext, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "Ui-Kit/Button/Button";

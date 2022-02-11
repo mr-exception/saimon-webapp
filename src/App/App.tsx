@@ -11,7 +11,7 @@ import ModalContainer from "Modals/ModalContainer";
 import { HostsContextProvider } from "DataContext/HostsContextProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthContext } from "AuthContext/AuthContextProvider";
+import { AuthContext } from "AuthContextProvider";
 import InitForm from "./Components/InitForm/InitForm";
 import AuthStep from "./Components/AuthStep/AuthStep";
 import { ContactsContextProvider } from "DataContext/ContactsContextProvider";

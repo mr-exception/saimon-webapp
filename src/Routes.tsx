@@ -5,30 +5,33 @@ import Hosts from "Containers/Hosts/Hosts";
 import Profile from "Containers/Profile/Profile";
 import Setting from "Containers/Setting/Setting";
 import Chats from "Containers/Chats/Chats";
-import { AuthContextProvider } from "AuthContext/AuthContextProvider";
+import { AuthContextProvider } from "AuthContextProvider";
+import { WorkersContextProvider } from "WorkersContextProvider";
 
 const Routes = () => {
   return (
-    <AuthContextProvider>
-      <Router>
-        <Switch>
-          <App>
-            <Route exact path="/hosts">
-              <Hosts />
-            </Route>
-            <Route exact path="/profile">
-              <Profile />
-            </Route>
-            <Route exact path="/setting">
-              <Setting />
-            </Route>
-            <Route exact path="/">
-              <Chats />
-            </Route>
-          </App>
-        </Switch>
-      </Router>
-    </AuthContextProvider>
+    <WorkersContextProvider hostsWorker={new Worker("/workers/hosts.js")}>
+      <AuthContextProvider>
+        <Router>
+          <Switch>
+            <App>
+              <Route exact path="/hosts">
+                <Hosts />
+              </Route>
+              <Route exact path="/profile">
+                <Profile />
+              </Route>
+              <Route exact path="/setting">
+                <Setting />
+              </Route>
+              <Route exact path="/">
+                <Chats />
+              </Route>
+            </App>
+          </Switch>
+        </Router>
+      </AuthContextProvider>
+    </WorkersContextProvider>
   );
 };
 export default Routes;

@@ -4,7 +4,7 @@ import { MdSend } from "react-icons/md";
 import { sendPacket } from "API/Packets";
 import { HostsContext } from "DataContext/HostsContextProvider";
 import { ContactsContext } from "DataContext/ContactsContextProvider";
-import { AuthContext } from "AuthContext/AuthContextProvider";
+import { AuthContext } from "AuthContextProvider";
 
 const SendBox = () => {
   const [text, setText] = useState<string>();
