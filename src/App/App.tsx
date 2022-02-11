@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import MenuItem from "./Components/MenuItem/MenuItem";
 import Contacts from "./Images/Contacts";
@@ -15,6 +15,7 @@ import { AuthContext } from "AuthContext/AuthContextProvider";
 import InitForm from "./Components/InitForm/InitForm";
 import AuthStep from "./Components/AuthStep/AuthStep";
 import { ContactsContextProvider } from "DataContext/ContactsContextProvider";
+import Splash from "./Components/Splash/Splash";
 
 interface IProps {
   children: any;
@@ -22,6 +23,7 @@ interface IProps {
 const App: React.FC<IProps> = ({ children }: IProps) => {
   const { address, password } = useContext(AuthContext);
   const [passedAuth, setPassedAuth] = useState(false);
+  const [splashing, setSplashing] = useState<boolean>(true);
   const history = useHistory();
   const href = useLocation().pathname;
   let activeSection: "chats" | "hosts" | "profile" | "setting" = "chats";
@@ -40,21 +42,31 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
       break;
   }
 
+  useEffect(() => {
+    setTimeout(() => {
+      setSplashing(false);
+    }, 2500);
+  }, []);
+
+  if (splashing) {
+    return (
+      <div className={Styles.container + " bg-secondary"}>
+        <Splash />
+      </div>
+    );
+  }
+
   if (address === "N/A") {
     return (
-      <div className={Styles.app}>
-        <div className={Styles.container + " bg-secondary"}>
-          <InitForm />
-        </div>
+      <div className={Styles.container + " bg-secondary"}>
+        <InitForm />
       </div>
     );
   }
   if (password !== "N/A" && !passedAuth) {
     return (
-      <div className={Styles.app}>
-        <div className={Styles.container + " bg-secondary"}>
-          <AuthStep passed={() => setPassedAuth(true)} />
-        </div>
+      <div className={Styles.container + " bg-secondary"}>
+        <AuthStep passed={() => setPassedAuth(true)} />
       </div>
     );
   }

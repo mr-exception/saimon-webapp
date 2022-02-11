@@ -1,5 +1,5 @@
 .container {
-  @apply flex flex-row border-gray-dark;
+  @apply flex flex-row border-gray-dark text-white;
   min-height: 500px;
   width: "100%";
   height: calc(100vh);
