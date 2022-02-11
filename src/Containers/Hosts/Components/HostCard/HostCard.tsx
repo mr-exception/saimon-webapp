@@ -34,6 +34,8 @@ const HostCard: React.FC<IProps> = ({ host, id }: IProps) => {
         </div>
         <div className="col-xs-6 py-1">Response time: {host.rt}ms</div>
         <div className="col-xs-6 py-1">Commission fee: {weiToPweiFixed(host.commission_fee)}</div>
+        <div className="col-xs-6 py-1">Your balance: {weiToPweiFixed(host.balance)}</div>
+        <div className="col-xs-6 py-1">Your Subscription: {host.subscription} packets</div>
         <div className="col-xs-6 py-1 text-right">
           <Button
             size="sm"
