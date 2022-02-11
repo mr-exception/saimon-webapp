@@ -28,7 +28,7 @@ const AddHostModal: React.FC<IProps> = ({ close }: IProps) => {
     setError(undefined);
     const rt = Date.now();
     try {
-      const result = await heartBeat(address || "");
+      const result = await heartBeat(address || "", authContext.address);
       setHeartBeatResult(result);
       setResponseTime(Date.now() - rt);
     } catch (err) {
@@ -58,6 +58,8 @@ const AddHostModal: React.FC<IProps> = ({ close }: IProps) => {
         paid_subscription: heartBeatResult.paid_subscription,
         rt: responseTime,
         secret,
+        balance: heartBeatResult.balance,
+        subscription: heartBeatResult.subscription,
       };
       hostsContext.addHost(host);
       setTimeout(() => {
@@ -69,6 +71,7 @@ const AddHostModal: React.FC<IProps> = ({ close }: IProps) => {
       setSubmitting(false);
     }
   }
+  // 0xf37dfafe1a8447395fef43b5ed67901aa4a14c4a
   return (
     <div className="row">
       <div className="col-xs-12 font-bold text-lg">Add new host</div>

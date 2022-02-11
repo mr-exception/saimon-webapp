@@ -5,7 +5,7 @@ import { IHost } from "Structs/Host";
 export function initDB(): Dexie {
   const db = new Dexie("salimon");
   db.version(1).stores({
-    hosts: "++id,url,name,commission_fee,subscription_fee,paid_subscription,rt,secret",
+    hosts: "++id,url,name,commission_fee,subscription_fee,paid_subscription,rt,secret,balance,address,subscription",
     contacts: "++id,name,address,public_key,hosts",
   });
   return db;

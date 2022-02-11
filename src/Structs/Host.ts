@@ -9,6 +9,8 @@ export interface IHost {
   paid_subscription: boolean;
   rt: number;
   secret: string;
+  balance: number;
+  subscription: number;
 }
 
 export interface IHeartBeat {
@@ -18,6 +20,8 @@ export interface IHeartBeat {
   subscription_fee: number;
   time: number;
   paid_subscription: boolean;
+  balance: number;
+  subscription: number;
 }
 
 export function subscriptionFee(host: IHost | IHeartBeat): string {

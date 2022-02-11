@@ -17,9 +17,13 @@ const HeartBeatInfo: React.FC<IProps> = ({ data, responseTime }: IProps) => {
       <div className="row">
         <div className="col-md-12 font-bold">Host node successfully found!</div>
         <div className="col-md-11 col-md-offset-1 text-sm italic">Host name: {data.name}</div>
-        <div className="col-md-11 col-md-offset-1 text-sm italic">Contract commission fee: {weiToPweiFixed(data.commission_fee)}</div>
+        <div className="col-md-11 col-md-offset-1 text-sm italic">
+          Contract commission fee: {weiToPweiFixed(data.commission_fee)}
+        </div>
         <div className="col-md-11 col-md-offset-1 text-sm italic">Subscription fee: {subscriptionFee(data)}</div>
         <div className="col-md-11 col-md-offset-1 text-sm italic">Service time: {serviceTime()}</div>
+        <div className="col-md-11 col-md-offset-1 text-sm italic">Balance: {weiToPweiFixed(data.balance)}</div>
+        <div className="col-md-11 col-md-offset-1 text-sm italic">Subscription: {data.subscription} packets</div>
         <div className="col-md-11 col-md-offset-1 text-sm italic">Response time: {responseTime}ms</div>
       </div>
     </div>
