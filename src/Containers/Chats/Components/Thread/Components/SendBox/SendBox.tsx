@@ -1,19 +1,15 @@
 import { useContext, useState } from "react";
 import TextInput from "Ui-Kit/Inputs/TextInput/TextInput";
 import { MdSend } from "react-icons/md";
-import { sendPacket } from "API/Packets";
-import { HostsContext } from "DataContext/HostsContextProvider";
 import { ContactsContext } from "DataContext/ContactsContextProvider";
 import { AuthContext } from "AuthContextProvider";
-import { sendMessage } from "API/Message";
 import Key from "Utils/Key";
 
 const SendBox = () => {
   const [text, setText] = useState<string>();
 
-  const { address, key } = useContext(AuthContext);
+  const { key } = useContext(AuthContext);
   const { activeContact } = useContext(ContactsContext);
-  const { hosts } = useContext(HostsContext);
   async function send() {
     if (!activeContact) return;
     if (!text) return;
