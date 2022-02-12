@@ -3,7 +3,7 @@ export interface IPacket {
   dst: string;
   data: string;
   msg_id: string;
-  msg_count: string;
+  msg_count: number;
   position: number;
   created_at: string;
 }

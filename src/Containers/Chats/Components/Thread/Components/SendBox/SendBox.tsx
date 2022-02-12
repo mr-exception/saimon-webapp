@@ -5,27 +5,23 @@ import { sendPacket } from "API/Packets";
 import { HostsContext } from "DataContext/HostsContextProvider";
 import { ContactsContext } from "DataContext/ContactsContextProvider";
 import { AuthContext } from "AuthContextProvider";
+import { sendMessage } from "API/Message";
+import Key from "Utils/Key";
 
 const SendBox = () => {
   const [text, setText] = useState<string>();
 
-  const { address } = useContext(AuthContext);
+  const { address, key } = useContext(AuthContext);
   const { activeContact } = useContext(ContactsContext);
   const { hosts } = useContext(HostsContext);
   async function send() {
     if (!activeContact) return;
     if (!text) return;
     try {
-      await sendPacket(
-        {
-          dst: activeContact.value.address,
-          data: text,
-          position: 0,
-          msg_count: 1,
-          msg_id: "e05ffde0-cb9b-48e5-b9c9-f9cb81bae8d9",
-        },
-        { address, baseUrl: hosts[0].value.url + "/api", secret: hosts[0].value.secret }
-      );
+      const dst_key = Key.generateKeyByPublicKey(activeContact.value.hosts[0].public_key);
+      const encrypted = dst_key.encryptPublic(key.encryptPrivate(text));
+      const plain = key.decryptPublic(key.decryptPrivate(encrypted).toString()).toString();
+      console.log(plain);
     } catch (error) {
       console.log(error);
     }

@@ -11,6 +11,7 @@ export interface IHost {
   secret: string;
   balance: number;
   subscription: number;
+  last_fetched: number;
 }
 
 export interface IHeartBeat {

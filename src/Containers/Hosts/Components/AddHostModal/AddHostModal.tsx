@@ -60,6 +60,7 @@ const AddHostModal: React.FC<IProps> = ({ close }: IProps) => {
         secret,
         balance: heartBeatResult.balance,
         subscription: heartBeatResult.subscription,
+        last_fetched: 0,
       };
       hostsContext.addHost(host);
       setTimeout(() => {

@@ -20,8 +20,10 @@ const MessageList = () => {
   }, [activeContact, address, hosts]);
   return (
     <div className={Styles.messageList}>
-      {messages.map((message) => (
-        <div style={{ flex: 1, height: 40 }}>{message}</div>
+      {messages.map((message, index) => (
+        <div key={index} style={{ flex: 1, height: 40 }}>
+          {message}
+        </div>
       ))}
     </div>
   );
