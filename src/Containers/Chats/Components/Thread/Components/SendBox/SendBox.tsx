@@ -18,7 +18,7 @@ const SendBox = () => {
     if (!activeContact) return;
     if (!text) return;
     try {
-      const dst_key = Key.generateKeyByPublicKey(activeContact.value.hosts[0].public_key);
+      const dst_key = Key.generateKeyByPublicKey(activeContact.value.public_key);
       const encrypted = dst_key.encryptPublic(key.encryptPrivate(text));
       const plain = key.decryptPublic(key.decryptPrivate(encrypted).toString()).toString();
       console.log(plain);

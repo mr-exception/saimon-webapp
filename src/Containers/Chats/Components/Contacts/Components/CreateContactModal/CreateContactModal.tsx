@@ -8,10 +8,12 @@ import { IContact } from "Structs/Contact";
 import { IHost } from "Structs/Host";
 import Button from "Ui-Kit/Button/Button";
 import TextInput from "Ui-Kit/Inputs/TextInput/TextInput";
+import { timestampToDateTime } from "Utils/string";
 
 interface ICheckResult {
   result: boolean;
   public_key: string;
+  active_at: number;
   host: { value: IHost; id: IndexableType };
   ts: number;
 }
@@ -42,12 +44,14 @@ const CreateContactModal: React.FC<IProps> = ({ close }: IProps) => {
           if (!address) return false;
           try {
             const checkResult = await checkAddressList(host.value.url, { addresses: [address] });
+            console.log(checkResult);
             if (!!checkResult[address]) {
               return {
                 result: true,
                 host,
                 ts: Date.now() - ts,
                 public_key: (checkResult[address] || {}).public_key,
+                active_at: (checkResult[address] || {}).active_at,
               };
             } else {
               return {
@@ -60,7 +64,13 @@ const CreateContactModal: React.FC<IProps> = ({ close }: IProps) => {
             currentErrors.push(`${host.value.url}: ${(err as AxiosError).message}`);
           }
         })
-      )) as { result: boolean; public_key?: string; host: { value: IHost; id: IndexableType }; ts: number }[];
+      )) as {
+        result: boolean;
+        public_key?: string;
+        active_at?: number;
+        host: { value: IHost; id: IndexableType };
+        ts: number;
+      }[];
       setNotFound(!result.reduce<boolean>((cursor, current) => current.result || cursor, false));
       setFetchResult(result.filter((record) => !!record.result) as ICheckResult[]);
     } catch (err) {
@@ -71,11 +81,19 @@ const CreateContactModal: React.FC<IProps> = ({ close }: IProps) => {
     }
   }
   async function saveContact() {
-    if (!name || !address) return;
+    if (!name || !address || notFound || !fetchResult) return;
+    let public_key = "none";
+    let active_at: number = Number.MIN_VALUE;
+    for (let i = 0; i < fetchResult.length; i++) {
+      if (active_at < fetchResult[i].active_at) {
+        public_key = fetchResult[i].public_key;
+      }
+    }
     const contact: IContact = {
       name,
       address,
-      hosts: (fetchResult || []).map((record) => ({ hostId: record.host.id, public_key: record.public_key })),
+      public_key,
+      hosts: (fetchResult || []).map((record) => ({ hostId: record.host.id, active_at: record.active_at })),
     };
     addContact(contact);
     setTimeout(() => {
@@ -105,7 +123,8 @@ const CreateContactModal: React.FC<IProps> = ({ close }: IProps) => {
               if (result.result) {
                 return (
                   <div key={index} className="col-xs-12">
-                    is registered in {result.host.value.name} ({result.host.value.url})!
+                    is registered in {result.host.value.name} ({result.host.value.url}), last activity:
+                    {" " + timestampToDateTime(result.active_at)}!
                   </div>
                 );
               } else {
@@ -142,11 +161,6 @@ const CreateContactModal: React.FC<IProps> = ({ close }: IProps) => {
         >
           Fetch Routes
         </Button>
-        {notFound && fetching === "fetched" && (
-          <Button onClick={saveContact} variant="primary" size="sm" style={{ marginRight: 10, minWidth: 130 }}>
-            Save anyway
-          </Button>
-        )}
         {!notFound && fetching === "fetched" && (
           <Button onClick={saveContact} variant="primary" size="sm" style={{ marginRight: 10, minWidth: 130 }}>
             Save
