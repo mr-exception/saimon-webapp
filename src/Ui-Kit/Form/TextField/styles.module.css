@@ -5,5 +5,5 @@
   min-height: 30px;
 }
 .input {
-  @apply px-2 py-1 rounded-sm w-full;
+  @apply px-2 py-1 rounded-sm w-full text-black;
 }
