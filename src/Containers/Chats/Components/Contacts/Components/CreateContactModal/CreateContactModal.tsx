@@ -44,7 +44,6 @@ const CreateContactModal: React.FC<IProps> = ({ close }: IProps) => {
           if (!address) return false;
           try {
             const checkResult = await checkAddressList(host.value.url, { addresses: [address] });
-            console.log(checkResult);
             if (!!checkResult[address]) {
               return {
                 result: true,
@@ -83,16 +82,18 @@ const CreateContactModal: React.FC<IProps> = ({ close }: IProps) => {
   async function saveContact() {
     if (!name || !address || notFound || !fetchResult) return;
     let public_key = "none";
-    let active_at: number = Number.MIN_VALUE;
+    let active_at: number = -1;
     for (let i = 0; i < fetchResult.length; i++) {
       if (active_at < fetchResult[i].active_at) {
         public_key = fetchResult[i].public_key;
+        active_at = fetchResult[i].active_at;
       }
     }
     const contact: IContact = {
       name,
       address,
       public_key,
+      shared_private_key: "N/A",
       hosts: (fetchResult || []).map((record) => ({ hostId: record.host.id, active_at: record.active_at })),
     };
     addContact(contact);

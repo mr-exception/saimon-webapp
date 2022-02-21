@@ -2,7 +2,7 @@ import { IndexableType } from "dexie";
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { IContact } from "Structs/Contact";
-import { deleteContactFromDB, getContactsFromDB, insertContactInDB, IRecord } from "Utils/storage";
+import { deleteContactFromDB, getContactsFromDB, insertContactInDB, IRecord, updateContactInDB } from "Utils/storage";
 
 export interface IContactsContext {
   activeContact?: IRecord<IContact>;
@@ -10,6 +10,7 @@ export interface IContactsContext {
   contacts: IRecord<IContact>[];
   addContact: (value: IContact) => void;
   removeContact: (id: IndexableType) => void;
+  updateContact: (value: IRecord<IContact>) => void;
 }
 
 export const ContactsContext = createContext<IContactsContext>({
@@ -17,6 +18,7 @@ export const ContactsContext = createContext<IContactsContext>({
   contacts: [],
   addContact: (value: IContact) => {},
   removeContact: (id: IndexableType) => {},
+  updateContact: (value: IRecord<IContact>) => {},
 });
 
 export const ContactsContextProvider: React.FC<{ children: any }> = ({ children }) => {
@@ -31,13 +33,21 @@ export const ContactsContextProvider: React.FC<{ children: any }> = ({ children 
     await deleteContactFromDB(id);
     setContacts(await getContactsFromDB());
   }
+  async function updateContact(value: IRecord<IContact>) {
+    await updateContactInDB(value.id, value.value);
+    const result = await getContactsFromDB();
+    setContacts(result);
+    setActiveContact(result.find((record) => record.id === value.id));
+  }
   useEffect(() => {
     getContactsFromDB().then((value) => {
       setContacts(value);
     });
   }, []);
   return (
-    <ContactsContext.Provider value={{ contacts, addContact, removeContact, activeContact, setActiveContact }}>
+    <ContactsContext.Provider
+      value={{ contacts, addContact, removeContact, activeContact, setActiveContact, updateContact }}
+    >
       {children}
     </ContactsContext.Provider>
   );

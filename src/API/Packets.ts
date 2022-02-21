@@ -10,7 +10,7 @@ interface ISendPacketParams {
 }
 export async function sendPacket(params: ISendPacketParams, configs: IAxiosConfigs): Promise<IPacket> {
   return createAxios(configs)
-    .post<IPacket>("/packets/send", { params })
+    .post<IPacket>("api/packets/send", params)
     .then((response) => response.data);
 }
 

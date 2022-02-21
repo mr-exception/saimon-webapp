@@ -3,21 +3,32 @@ import TextInput from "Ui-Kit/Inputs/TextInput/TextInput";
 import { MdSend } from "react-icons/md";
 import { ContactsContext } from "DataContext/ContactsContextProvider";
 import { AuthContext } from "AuthContextProvider";
-import Key from "Utils/Key";
+import { sendMessage } from "Utils/message";
+import { HostsContext } from "DataContext/HostsContextProvider";
 
 const SendBox = () => {
   const [text, setText] = useState<string>();
 
-  const { key } = useContext(AuthContext);
+  const { key, address } = useContext(AuthContext);
   const { activeContact } = useContext(ContactsContext);
+  const { hosts } = useContext(HostsContext);
   async function send() {
     if (!activeContact) return;
     if (!text) return;
     try {
-      const dst_key = Key.generateKeyByPublicKey(activeContact.value.public_key);
-      const encrypted = dst_key.encryptPublic(key.encryptPrivate(text));
-      const plain = key.decryptPublic(key.decryptPrivate(encrypted).toString()).toString();
-      console.log(plain);
+      const relatedHosts = hosts.filter((host) =>
+        activeContact.value.hosts.map((record) => record.hostId).includes(host.id)
+      );
+      console.log("sending");
+      await sendMessage(
+        activeContact.value,
+        key,
+        address,
+        text,
+        relatedHosts.map((record) => record.value),
+        "text"
+      );
+      console.log("sent");
     } catch (error) {
       console.log(error);
     }

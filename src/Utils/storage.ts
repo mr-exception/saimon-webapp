@@ -12,7 +12,7 @@ export function initDB(): Dexie {
   db.version(1).stores({
     hosts:
       "++id,url,name,commission_fee,subscription_fee,paid_subscription,rt,secret,balance,address,subscription,last_fetched",
-    contacts: "++id,name,address,public_key,hosts",
+    contacts: "++id,name,address,public_key,shared_private_key,hosts",
   });
   return db;
 }
@@ -91,6 +91,11 @@ export async function insertContactInDB(value: IContact) {
 export async function deleteContactFromDB(id: IndexableType) {
   const table = getContactsTable();
   return table.delete(id);
+}
+
+export async function updateContactInDB(id: IndexableType, contact: IContact) {
+  const table = getContactsTable();
+  return table.update(id, contact);
 }
 
 // export default class Storage {

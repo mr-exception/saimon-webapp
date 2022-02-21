@@ -1,6 +1,7 @@
 import { IndexableType } from "dexie";
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { IContact } from "Structs/Contact";
 import { IHost } from "Structs/Host";
 import { deleteHostFromDB, getHostsFromDB, insertHostInDB, IRecord, updateHostsIfExists } from "Utils/storage";
 import { WorkersContext } from "WorkersContextProvider";
@@ -51,3 +52,12 @@ export const HostsContextProvider: React.FC<{ children: any }> = ({ children }) 
   };
   return <HostsContext.Provider value={{ hosts, addHost, removeHost }}>{children}</HostsContext.Provider>;
 };
+
+// custom hooks
+export function useRelatedHosts(contact?: IContact): IHost[] {
+  const { hosts } = useContext(HostsContext);
+  if (!contact) return [];
+  const activeHostIds = contact.hosts.map((record) => record.hostId);
+  const relatedHosts = hosts.filter((record) => activeHostIds.includes(record.id));
+  return relatedHosts.map((record) => record.value);
+}

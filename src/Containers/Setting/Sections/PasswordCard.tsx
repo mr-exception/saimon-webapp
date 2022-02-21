@@ -17,14 +17,14 @@ const PasswordCard: React.FC<IProps> = ({ updatePassword }: IProps) => {
               label="password"
               placeHolder="use a secure new password"
               value={password}
-              onChange={setPasswordConfirmation}
+              onChange={setPassword}
             />
           </div>
           <div className="col-xs-12">
             <TextField
               label="password confirmation"
               placeHolder="confirm your entered password"
-              value={password}
+              value={passwordConfirmation}
               onChange={setPasswordConfirmation}
             />
           </div>
