@@ -1,18 +1,26 @@
 import React from "react";
+import { IconType } from "react-icons/lib";
 import Styles from "./styles.module.css";
-const MenuItem: React.FC<IMenuItemProps> = ({
+interface IProps {
+  IconComponent: IconType;
+  onClick: () => void;
+  caption: string;
+  isActive: boolean;
+}
+
+const MenuItem: React.FC<IProps> = ({
   IconComponent,
   caption,
   onClick,
   isActive,
-}: IMenuItemProps) => {
+}: IProps) => {
   return (
     <div
       className={Styles.container + (isActive ? " " + Styles.active : "")}
       onClick={onClick}
     >
       <div className={Styles.icon}>
-        <IconComponent />
+        <IconComponent size={45} />
       </div>
       <div className={Styles.caption}>{caption}</div>
     </div>

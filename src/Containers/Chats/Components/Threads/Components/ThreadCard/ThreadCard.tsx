@@ -1,16 +1,15 @@
 import { ContactsContext } from "DataContext/ContactsContextProvider";
 import { IndexableType } from "dexie";
-import { ModalsContext } from "Modals/ModalsContextProvider";
+// import { ModalsContext } from "Modals/ModalsContextProvider";
 import React, { useContext } from "react";
 import { FaTrash } from "react-icons/fa";
 import { IContact } from "Structs/Contact";
-import RemoveContactModal from "./Components/RemoveContactModal/RemoveContactModal";
 interface IProps {
   contact: IContact;
   id: IndexableType;
 }
-const ContactCard: React.FC<IProps> = ({ contact, id }) => {
-  const { showModal, closeModal } = useContext(ModalsContext);
+const ThreadCard: React.FC<IProps> = ({ contact, id }) => {
+  // const { showModal, closeModal } = useContext(ModalsContext);
   const { setActiveContact, activeContact } = useContext(ContactsContext);
   return (
     <div
@@ -35,7 +34,7 @@ const ContactCard: React.FC<IProps> = ({ contact, id }) => {
               <FaTrash
                 className="text-warning cursor-pointer"
                 onClick={() => {
-                  showModal(<RemoveContactModal id={id} close={closeModal} />, "sm");
+                  // showModal(<RemoveContactModal id={id} close={closeModal} />, "sm");
                 }}
               />
             </div>
@@ -47,4 +46,4 @@ const ContactCard: React.FC<IProps> = ({ contact, id }) => {
   );
 };
 
-export default ContactCard;
+export default ThreadCard;

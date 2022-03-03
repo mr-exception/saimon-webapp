@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import MenuItem from "./Components/MenuItem/MenuItem";
-import Contacts from "./Images/Contacts";
-import Hosts from "./Images/Hosts";
-import Profile from "./Images/Profile";
-import Setting from "./Images/Setting";
+import { FaUsers, FaUser, FaGlobe } from "react-icons/fa";
+import { IoMdSettings, IoMdChatboxes } from "react-icons/io";
 import Styles from "./styles.module.css";
 import { ModalsContextProvider } from "Modals/ModalsContextProvider";
 import ModalContainer from "Modals/ModalContainer";
@@ -26,20 +24,11 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
   const [splashing, setSplashing] = useState<boolean>(true);
   const history = useHistory();
   const href = useLocation().pathname;
-  let activeSection: "chats" | "hosts" | "profile" | "setting" = "chats";
-  switch (href) {
-    case "/":
-      activeSection = "chats";
-      break;
-    case "/hosts":
-      activeSection = "hosts";
-      break;
-    case "/profile":
-      activeSection = "profile";
-      break;
-    case "/setting":
-      activeSection = "setting";
-      break;
+  let activeSection: string = "chats";
+  if (href === "/") {
+    activeSection = "chats";
+  } else {
+    activeSection = href.replaceAll("/", "");
   }
 
   useEffect(() => {
@@ -75,7 +64,7 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
     <div className={Styles.container}>
       <div className={Styles.toolbar}>
         <MenuItem
-          IconComponent={Contacts}
+          IconComponent={IoMdChatboxes}
           caption="chats"
           onClick={() => {
             history.push("/");
@@ -83,7 +72,15 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
           isActive={activeSection === "chats"}
         />
         <MenuItem
-          IconComponent={Hosts}
+          IconComponent={FaUsers}
+          caption="contacts"
+          onClick={() => {
+            history.push("/contacts");
+          }}
+          isActive={activeSection === "contacts"}
+        />
+        <MenuItem
+          IconComponent={FaGlobe}
           caption="hosts"
           onClick={() => {
             history.push("/hosts");
@@ -91,7 +88,7 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
           isActive={activeSection === "hosts"}
         />
         <MenuItem
-          IconComponent={Profile}
+          IconComponent={FaUser}
           caption="profile"
           onClick={() => {
             history.push("/profile");
@@ -99,7 +96,7 @@ const App: React.FC<IProps> = ({ children }: IProps) => {
           isActive={activeSection === "profile"}
         />
         <MenuItem
-          IconComponent={Setting}
+          IconComponent={IoMdSettings}
           caption="setting"
           onClick={() => {
             history.push("/setting");

@@ -4,6 +4,7 @@ import App from "App/App";
 import Hosts from "Containers/Hosts/Hosts";
 import Profile from "Containers/Profile/Profile";
 import Setting from "Containers/Setting/Setting";
+import Contacts from "Containers/Contacts/Contacts";
 import Chats from "Containers/Chats/Chats";
 import { AuthContextProvider } from "AuthContextProvider";
 import { WorkersContextProvider } from "WorkersContextProvider";
@@ -23,6 +24,9 @@ const Routes = () => {
               </Route>
               <Route exact path="/setting">
                 <Setting />
+              </Route>
+              <Route exact path="/contacts">
+                <Contacts />
               </Route>
               <Route exact path="/">
                 <Chats />

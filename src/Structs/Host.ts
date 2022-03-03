@@ -1,3 +1,4 @@
+import { IAxiosConfigs } from "API/axios-inital";
 import { weiToPweiFixed } from "Utils/currency";
 
 export interface IHost {
@@ -31,4 +32,12 @@ export function subscriptionFee(host: IHost | IHeartBeat): string {
   } else {
     return weiToPweiFixed(host.subscription_fee);
   }
+}
+
+export function createAxiosConfig(address: string, host: IHost): IAxiosConfigs {
+  return {
+    baseUrl: host.url,
+    secret: host.secret,
+    address,
+  };
 }

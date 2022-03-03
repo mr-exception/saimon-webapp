@@ -1,6 +1,6 @@
 .container {
-  @apply flex flex-1 flex-col justify-center items-center select-none cursor-pointer mb-2;
-  max-height: 90px;
+  @apply flex flex-1 flex-col justify-center items-center select-none cursor-pointer mb-2 py-2;
+  max-height: 80px;
   transition: all 200ms;
 }
 

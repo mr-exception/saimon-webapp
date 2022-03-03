@@ -93,7 +93,6 @@ const CreateContactModal: React.FC<IProps> = ({ close }: IProps) => {
       name,
       address,
       public_key,
-      shared_private_key: "N/A",
       hosts: (fetchResult || []).map((record) => ({ hostId: record.host.id, active_at: record.active_at })),
     };
     addContact(contact);

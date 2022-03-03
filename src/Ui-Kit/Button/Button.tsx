@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 
 interface IProps {
-  onClick: () => void;
+  onClick?: () => void;
   children: any;
   size?: "sm" | "md" | "lg";
   variant?: "primary" | "secondary" | "warning" | "danger";
@@ -26,7 +26,7 @@ const variantClassNameMap = {
 };
 const Button: React.FC<IProps> = ({
   children,
-  onClick,
+  onClick = () => {},
   variant = "secondary",
   size = "md",
   className = "",
@@ -38,7 +38,9 @@ const Button: React.FC<IProps> = ({
   return (
     <button
       disabled={disabled}
-      className={`${sizeClassNameMap[size]} ${variantClassNameMap[variant]} ${className} ${disabled && "opacity-60"}`}
+      className={`${sizeClassNameMap[size]} ${
+        variantClassNameMap[variant]
+      } ${className} ${disabled && "opacity-60"}`}
       style={minWidth ? { minWidth, ...style } : style}
       onClick={onClick}
     >
