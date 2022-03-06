@@ -13,7 +13,7 @@ import {
 export interface IThreadsContext {
   activeThread?: IRecord<IThread>;
   setActiveThread: (value: IRecord<IThread>) => void;
-  channels: IRecord<IThread>[];
+  threads: IRecord<IThread>[];
   addThread: (value: IThread) => void;
   removeThread: (id: IndexableType) => void;
   updateThread: (value: IRecord<IThread>) => void;
@@ -21,7 +21,7 @@ export interface IThreadsContext {
 
 export const ThreadsContext = createContext<IThreadsContext>({
   setActiveThread: () => {},
-  channels: [],
+  threads: [],
   addThread: (value: IThread) => {},
   removeThread: (id: IndexableType) => {},
   updateThread: (value: IRecord<IThread>) => {},
@@ -31,10 +31,10 @@ export const ThreadsContextProvider: React.FC<{ children: any }> = ({
   children,
 }) => {
   const [activeThread, setActiveThread] = useState<IRecord<IThread>>();
-  const [channels, setThreads] = useState<IRecord<IThread>[]>([]);
+  const [threads, setThreads] = useState<IRecord<IThread>[]>([]);
   async function addThread(value: IThread): Promise<void> {
     const id = await insertThreadInDB(value);
-    setThreads([...channels, { value, id }]);
+    setThreads([...threads, { value, id }]);
     toast.success("channel created!");
   }
   async function removeThread(id: IndexableType) {
@@ -55,7 +55,7 @@ export const ThreadsContextProvider: React.FC<{ children: any }> = ({
   return (
     <ThreadsContext.Provider
       value={{
-        channels,
+        threads,
         addThread,
         removeThread,
         activeThread,

@@ -1,7 +1,13 @@
-import { ContactsContext } from "DataContext/ContactsContextProvider";
+import { AuthContext } from "AuthContextProvider";
+import {
+  ContactsContext,
+  useGetContact,
+} from "DataContext/ContactsContextProvider";
+import { ThreadsContext } from "DataContext/ThreadsContextProvider";
 import { useContext } from "react";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import { IContact } from "Structs/Contact";
+import { IRecord } from "Utils/storage";
 import { timestampToDateTime } from "Utils/string";
 
 function onlineStatusString(contact: IContact): string {
@@ -22,14 +28,30 @@ function onlineStatusString(contact: IContact): string {
 }
 
 const Header = () => {
-  const { activeContact } = useContext(ContactsContext);
-  if (!activeContact) return null;
+  const { address } = useContext(AuthContext);
+  const { activeThread } = useContext(ThreadsContext);
+  const { contacts } = useContext(ContactsContext);
+
+  if (!activeThread) return null;
+
+  const activeContacts = activeThread.value.members
+    .filter((record) => record !== address)
+    .map((record) => contacts.find((cnt) => cnt.value.address === record))
+    .filter((record) => !!record) as IRecord<IContact>[];
+
+  if (activeContacts.length === 0) return null;
   return (
-    <div className="w-full border-b-2 border-gray-lighter border-solid" style={{ minHeight: 50 }}>
+    <div
+      className="w-full border-b-2 border-gray-lighter border-solid"
+      style={{ minHeight: 50 }}
+    >
       <div className="col-xs-12">
         <div className="row">
           <div className="col-xs-8 mt-1 text-2xl">
-            {activeContact.value.name} <span className="text-sm">{onlineStatusString(activeContact.value)}</span>
+            {activeContacts[0].value.name + " "}
+            <span className="text-sm">
+              {onlineStatusString(activeContacts[0].value)}
+            </span>
           </div>
           <div className="col-xs-4 mt-1 flex flex-row justify-end">
             <FaTrash size={20} className="m-2 text-warning cursor-pointer" />

@@ -1,12 +1,12 @@
-import { ContactsContext } from "DataContext/ContactsContextProvider";
+import { ThreadsContext } from "DataContext/ThreadsContextProvider";
 import { useContext } from "react";
 import Header from "./Components/Header/Header";
 import MessageList from "./Components/MessageList/MessageList";
 import NoThread from "./Components/NoThread/NoThread";
 import SendBox from "./Components/SendBox/SendBox";
 const Thread = () => {
-  const { activeContact } = useContext(ContactsContext);
-  if (!activeContact) {
+  const { activeThread } = useContext(ThreadsContext);
+  if (!activeThread) {
     return <NoThread />;
   }
   return (

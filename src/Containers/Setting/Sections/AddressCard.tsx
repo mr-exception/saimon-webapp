@@ -8,7 +8,6 @@ interface IProps {
 }
 const AddressCard: React.FC<IProps> = ({ address, setAddress }: IProps) => {
   const [value, setValue] = useState<string>(address);
-  console.log(value);
   return (
     <div className="row justify-center">
       <div className="col-xs-6 bg-secondary mt-4 rounded-md">

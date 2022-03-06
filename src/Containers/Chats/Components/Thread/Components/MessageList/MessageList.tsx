@@ -1,23 +1,27 @@
 import { fetchPackets } from "API/Packets";
 import { AuthContext } from "AuthContextProvider";
-import { ContactsContext } from "DataContext/ContactsContextProvider";
 import { HostsContext } from "DataContext/HostsContextProvider";
+import { ThreadsContext } from "DataContext/ThreadsContextProvider";
 import { useContext, useEffect, useState } from "react";
 import Styles from "./styles.module.css";
 const MessageList = () => {
-  const { activeContact } = useContext(ContactsContext);
+  const { activeThread } = useContext(ThreadsContext);
   const { address } = useContext(AuthContext);
   const { hosts } = useContext(HostsContext);
   const [messages, setMessages] = useState<string[]>([]);
   useEffect(() => {
-    if (!activeContact) return;
+    if (!activeThread) return;
     fetchPackets(
-      { thread: activeContact.value.address },
-      { address, secret: hosts[0].value.secret, baseUrl: hosts[0].value.url + "/api" }
+      { thread: activeThread.value.universal_id },
+      {
+        address,
+        secret: hosts[0].value.secret,
+        baseUrl: hosts[0].value.url + "/api",
+      }
     ).then((data) => {
       setMessages(data.map((record) => record.data));
     });
-  }, [activeContact, address, hosts]);
+  }, [activeThread, address, hosts]);
   return (
     <div className={Styles.messageList}>
       {messages.map((message, index) => (

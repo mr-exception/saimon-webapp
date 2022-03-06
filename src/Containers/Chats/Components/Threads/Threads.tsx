@@ -1,14 +1,14 @@
-import { ContactsContext } from "DataContext/ContactsContextProvider";
-// import { ModalsContext } from "Modals/ModalsContextProvider";
+import { ThreadsContext } from "DataContext/ThreadsContextProvider";
+import { ModalsContext } from "Modals/ModalsContextProvider";
 import { useContext } from "react";
 import { FaPlus } from "react-icons/fa";
 import Button from "Ui-Kit/Button/Button";
-// import CreateContactModal from "../../../Contacts/Components/CreateContactModal/CreateContactModal";
+import CreateThreadModal from "./Components/CreateThreadModal/CreateThreadModal";
 import ThreadCard from "./Components/ThreadCard/ThreadCard";
 import Styles from "./styles.module.css";
 const Threads = () => {
-  // const { showModal, closeModal } = useContext(ModalsContext);
-  const { contacts } = useContext(ContactsContext);
+  const { showModal, closeModal } = useContext(ModalsContext);
+  const { threads, setActiveThread } = useContext(ThreadsContext);
   return (
     <div className={Styles.contactList}>
       <div className="col-xs-12 flex justify-end items-center p-2">
@@ -16,17 +16,19 @@ const Threads = () => {
           className="w-full flex justify-center items-center"
           size="md"
           onClick={() => {
-            // showModal(<CreateContactModal close={closeModal} />);
+            showModal(<CreateThreadModal close={closeModal} />, "sm");
           }}
         >
           <FaPlus />
         </Button>
       </div>
-      {contacts.map((contact) => (
+      {threads.map((thread) => (
         <ThreadCard
-          key={contact.id.toString()}
-          contact={contact.value}
-          id={contact.id}
+          key={thread.id.toString()}
+          thread={thread}
+          onSelected={() => {
+            setActiveThread(thread);
+          }}
         />
       ))}
     </div>

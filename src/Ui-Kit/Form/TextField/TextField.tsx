@@ -19,7 +19,6 @@ const TextField: React.FC<ITextFieldProps> = ({
   max_lines = 1,
   styles = {},
 }: ITextFieldProps) => {
-  console.log(value);
   if (max_lines === 1) {
     return (
       <div className="row" style={styles}>
