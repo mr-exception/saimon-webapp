@@ -5,7 +5,7 @@ import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { IContact } from "Structs/Contact";
 import Button from "Ui-Kit/Button/Button";
-import Key from "Utils/Key";
+import Key, { encryptWithPublic } from "Utils/Key";
 import { IRecord } from "Utils/storage";
 import ContactCard from "./Component/ContactCard/ContactCard";
 import { v4 as uuidV4 } from "uuid";
@@ -18,7 +18,7 @@ interface IProps {
 }
 const CreateThreadModal: React.FC<IProps> = ({ close }: IProps) => {
   const { contacts } = useContext(ContactsContext);
-  const { address } = useContext(AuthContext);
+  const { address, key } = useContext(AuthContext);
   const { addThread } = useContext(ThreadsContext);
   const [selectedContact, setSelectedContact] = useState<IRecord<IContact>>();
   const relatedHosts = useRelatedHosts(selectedContact?.value);
@@ -34,23 +34,33 @@ const CreateThreadModal: React.FC<IProps> = ({ close }: IProps) => {
     }
     setCreating(true);
     const channelKey = Key.generateFreshKey();
+    const channelPrivateKey = channelKey.getPrivateKey();
     const universal_id = uuidV4();
     const promises = relatedHosts.map(
       (host) =>
         new Promise<void>(async (resolve, reject) => {
-          await registerChannel(
-            universal_id,
-            channelKey.getPrivateKey(),
-            selectedContact.value.address,
-            createAxiosConfig(address, host)
-          );
-          await registerChannel(
-            universal_id,
-            channelKey.getPrivateKey(),
-            address,
-            createAxiosConfig(address, host)
-          );
-          resolve();
+          try {
+            const keyCipherForContact = encryptWithPublic(
+              channelPrivateKey,
+              selectedContact.value.public_key
+            );
+            await registerChannel(
+              universal_id,
+              keyCipherForContact,
+              selectedContact.value.address,
+              createAxiosConfig(address, host)
+            );
+            const keyCipherForMe = key.encryptPublic(channelPrivateKey);
+            await registerChannel(
+              universal_id,
+              keyCipherForMe,
+              address,
+              createAxiosConfig(address, host)
+            );
+            resolve();
+          } catch (error) {
+            reject(error);
+          }
         })
     );
     await Promise.allSettled(promises);
