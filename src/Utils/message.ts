@@ -1,4 +1,3 @@
-import { IContact } from "Structs/Contact";
 import { IMessageData, MessageType } from "Structs/Message";
 import { IPacket } from "Structs/Packet";
 import { v4 as uuidV4 } from "uuid";
@@ -6,31 +5,57 @@ import Key from "Utils/Key";
 import { sendPacket } from "API/Packets";
 import { IHost } from "Structs/Host";
 
-export function createMessageData(data: string, type: MessageType = "text"): IMessageData {
+export function createMessageData(
+  data: string,
+  type: MessageType = "text"
+): IMessageData {
   return {
     data,
     type,
   };
 }
 
-export function encryptMessage(data: IMessageData, src_key: Key, dst_key: Key): string {
-  const encrypted = dst_key.encryptPublic(src_key.encryptPrivate(JSON.stringify(data)));
+export function encryptMessage(
+  data: IMessageData,
+  src_key: Key,
+  dst_key: Key
+): string {
+  const encrypted = dst_key.encryptPublic(
+    src_key.encryptPrivate(JSON.stringify(data))
+  );
   return encrypted;
 }
 
-export function decryptMessage(data: string, firstKey: Key, secondKey: Key): Buffer {
+export function decryptMessage(
+  data: string,
+  firstKey: Key,
+  secondKey: Key
+): Buffer {
   return secondKey.decryptPublic(firstKey.decryptPrivate(data).toString());
 }
 
-export function decryptRecvMessage(data: string, srcKey: Key, dstKey: Key): IMessageData {
+export function decryptRecvMessage(
+  data: string,
+  srcKey: Key,
+  dstKey: Key
+): IMessageData {
   return JSON.parse(decryptMessage(data, srcKey, dstKey).toString());
 }
-export function decryptSentMessage(data: string, srcKey: Key, dstKey: Key): IMessageData {
+export function decryptSentMessage(
+  data: string,
+  srcKey: Key,
+  dstKey: Key
+): IMessageData {
   return JSON.parse(decryptMessage(data, dstKey, srcKey).toString());
 }
 
 const packetDataLenght = 2048;
-export function messageToPackets(cipher: string, src: string, dst: string, msg_id: string): IPacket[] {
+export function messageToPackets(
+  cipher: string,
+  src: string,
+  dst: string,
+  msg_id: string
+): IPacket[] {
   const result: IPacket[] = [];
   let offset = 0;
   let position = 0;
@@ -53,17 +78,16 @@ export function messageToPackets(cipher: string, src: string, dst: string, msg_i
 }
 
 export async function sendMessage(
-  contact: IContact,
+  src: string,
+  dst: string,
   key: Key,
-  address: string,
   data: string,
   relatedHosts: IHost[],
   type: MessageType = "text"
 ): Promise<void> {
-  const dst_key = Key.generateKeyByPublicKey(contact.public_key);
   const messageData = createMessageData(data, type);
-  const cipher = encryptMessage(messageData, key, dst_key);
-  const packets = messageToPackets(cipher, address, contact.address, uuidV4());
+  const cipher = key.encryptPublic(JSON.stringify(messageData));
+  const packets = messageToPackets(cipher, src, dst, uuidV4());
   await Promise.allSettled(
     packets.map((packet) => {
       return new Promise((resolve, reject) => {
@@ -75,7 +99,11 @@ export async function sendMessage(
             data: packet.data,
             position: packet.position,
           },
-          { baseUrl: relatedHosts[0].url, address, secret: relatedHosts[0].secret }
+          {
+            baseUrl: relatedHosts[0].url,
+            address: src,
+            secret: relatedHosts[0].secret,
+          }
         )
           .then(resolve)
           .catch(reject);
@@ -83,5 +111,3 @@ export async function sendMessage(
     })
   );
 }
-
-export async function sendSharedKey(contact: IContact, relatedHosts: IHost[]): Promise<void> {}

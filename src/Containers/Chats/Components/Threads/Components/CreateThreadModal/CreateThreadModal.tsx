@@ -69,6 +69,7 @@ const CreateThreadModal: React.FC<IProps> = ({ close }: IProps) => {
       members: [address, selectedContact.value.address],
       universal_id,
       key: channelKey.getPrivateKey(),
+      hosts: selectedContact.value.hosts.map((record) => record.hostId),
     });
     setCreating(false);
     setTimeout(() => {

@@ -25,7 +25,9 @@ const AuthStep: React.FC<IProps> = ({ passed }) => {
     <div className="flex items-center w-full justify-center">
       <div className="col-xs-6 col-md-4 col-lg-4">
         <div className="row">
-          <div className="col-xs-12 text-center text-2xl my-2">Welcome to Salimon!</div>
+          <div className="col-xs-12 text-center text-2xl my-2">
+            Welcome to Salimon!
+          </div>
           <div className="col-xs-12 text-center text-md my-2">
             please enter your security password to use the application
           </div>
@@ -38,11 +40,14 @@ const AuthStep: React.FC<IProps> = ({ passed }) => {
               onChange={setPassword}
             />
           </div>
-          <div className="col-xs-12 text-left text-warning" style={{ minHeight: 30 }}>
+          <div
+            className="col-xs-12 text-left text-warning"
+            style={{ minHeight: 30 }}
+          >
             {error}
           </div>
           <div className="col-xs-12 text-center mt-2">
-            <Button variant="primary" size="sm" onClick={submit}>
+            <Button variant="primary" size="md" onClick={submit}>
               Login
             </Button>
           </div>

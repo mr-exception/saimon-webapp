@@ -11,9 +11,9 @@ const Thread = () => {
   }
   return (
     <div className="w-full flex-1 flex flex-col bg-gray">
-      <Header />
+      <Header activeThread={activeThread} />
       <MessageList />
-      <SendBox />
+      <SendBox activeThread={activeThread} />
     </div>
   );
 };

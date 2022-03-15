@@ -1,12 +1,9 @@
 import { AuthContext } from "AuthContextProvider";
-import {
-  ContactsContext,
-  useGetContact,
-} from "DataContext/ContactsContextProvider";
-import { ThreadsContext } from "DataContext/ThreadsContextProvider";
-import { useContext } from "react";
+import { ContactsContext } from "DataContext/ContactsContextProvider";
+import React, { useContext } from "react";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import { IContact } from "Structs/Contact";
+import { IThread } from "Structs/Thread";
 import { IRecord } from "Utils/storage";
 import { timestampToDateTime } from "Utils/string";
 
@@ -27,12 +24,13 @@ function onlineStatusString(contact: IContact): string {
   return `offline (last activity: ${timestampToDateTime(active_at)})`;
 }
 
-const Header = () => {
-  const { address } = useContext(AuthContext);
-  const { activeThread } = useContext(ThreadsContext);
-  const { contacts } = useContext(ContactsContext);
+interface IProps {
+  activeThread: IRecord<IThread>;
+}
 
-  if (!activeThread) return null;
+const Header: React.FC<IProps> = ({ activeThread }) => {
+  const { address } = useContext(AuthContext);
+  const { contacts } = useContext(ContactsContext);
 
   const activeContacts = activeThread.value.members
     .filter((record) => record !== address)

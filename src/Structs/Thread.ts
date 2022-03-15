@@ -1,3 +1,4 @@
+import { IndexableType } from "dexie";
 import Key from "Utils/Key";
 
 export interface IChannel {
@@ -17,4 +18,5 @@ export interface IThread {
   members: string[];
   universal_id: string;
   key: string;
+  hosts: IndexableType[];
 }

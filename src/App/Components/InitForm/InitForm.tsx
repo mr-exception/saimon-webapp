@@ -33,17 +33,21 @@ const InitForm: React.FC = () => {
     <div className="flex items-center w-full justify-center">
       <div className="col-xs-10 col-md-8 col-lg-6">
         <div className="row">
-          <div className="col-xs-12 text-center text-2xl my-2">Welcome to Salimon!</div>
-          <div className="col-xs-12 text-justify text-md my-2">
-            to start using salimon, you need a valid ethereum wallet address to link your account. we recommend using
-            metamask browser extention. everyone in salimon network will know you just by your wallet address, no extra
-            identication required.
+          <div className="col-xs-12 text-center text-2xl my-2">
+            Welcome to Salimon!
           </div>
           <div className="col-xs-12 text-justify text-md my-2">
-            salimon application doesn't need any secret passphrase from your ETH wallet. your wallet does not need to
-            have any balance, we don't have access to your wallet. just make sure you own the entered wallet address,
-            because you have to pay or receive your activity shares with this address. you can't change your wallet
-            address in future.
+            to start using salimon, you need a valid ethereum wallet address to
+            link your account. we recommend using metamask browser extention.
+            everyone in salimon network will know you just by your wallet
+            address, no extra identication required.
+          </div>
+          <div className="col-xs-12 text-justify text-md my-2">
+            salimon application doesn't need any secret passphrase from your ETH
+            wallet. your wallet does not need to have any balance, we don't have
+            access to your wallet. just make sure you own the entered wallet
+            address, because you have to pay or receive your activity shares
+            with this address. you can't change your wallet address in future.
           </div>
           <div className="col-xs-12 my-2">
             <TextInput
@@ -56,9 +60,10 @@ const InitForm: React.FC = () => {
             />
           </div>
           <div className="col-xs-12 text-justify text-md my-2">
-            you can set an offline password to secure your profile, pay attention to security warnings in application to
-            keep your profile safe. salimon will ask your password each time you open this page. just leave them blank
-            if you are sure that your device is safe.
+            you can set an offline password to secure your profile, pay
+            attention to security warnings in application to keep your profile
+            safe. salimon will ask your password each time you open this page.
+            just leave them blank if you are sure that your device is safe.
           </div>
           <div className="col-xs-12 my-2">
             <div className="row">
@@ -82,11 +87,14 @@ const InitForm: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="col-xs-12 text-left text-warning" style={{ minHeight: 30 }}>
+          <div
+            className="col-xs-12 text-left text-warning"
+            style={{ minHeight: 30 }}
+          >
             {error}
           </div>
           <div className="col-xs-12 text-right mt-2">
-            <Button variant="primary" size="sm" onClick={submit}>
+            <Button variant="primary" size="md" onClick={submit}>
               Save
             </Button>
           </div>

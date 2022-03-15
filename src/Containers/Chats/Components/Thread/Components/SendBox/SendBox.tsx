@@ -1,39 +1,41 @@
-import { useContext, useState } from "react";
+import { FC, useContext, useState } from "react";
 import TextInput from "Ui-Kit/Inputs/TextInput/TextInput";
 import { MdSend } from "react-icons/md";
 import { ContactsContext } from "DataContext/ContactsContextProvider";
 import { AuthContext } from "AuthContextProvider";
 import { sendMessage } from "Utils/message";
 import { HostsContext } from "DataContext/HostsContextProvider";
-import { ThreadsContext } from "DataContext/ThreadsContextProvider";
+import { IRecord } from "Utils/storage";
+import { IThread } from "Structs/Thread";
+import Key from "Utils/Key";
 
-const SendBox = () => {
+interface IProps {
+  activeThread: IRecord<IThread>;
+}
+const SendBox: FC<IProps> = ({ activeThread }) => {
   const [text, setText] = useState<string>();
 
-  const { key, address } = useContext(AuthContext);
-  const { activeThread } = useContext(ThreadsContext);
+  const { address } = useContext(AuthContext);
   const { hosts } = useContext(HostsContext);
-  // async function send() {
-  //   if (!activeThread) return;
-  //   if (!text) return;
-  //   try {
-  //     const relatedHosts = hosts.filter((host) =>
-  //       activeContact.value.hosts.map((record) => record.hostId).includes(host.id)
-  //     );
-  //     console.log("sending");
-  //     await sendMessage(
-  //       activeContact.value,
-  //       key,
-  //       address,
-  //       text,
-  //       relatedHosts.map((record) => record.value),
-  //       "text"
-  //     );
-  //     console.log("sent");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  async function send() {
+    if (!text) return;
+    try {
+      const relatedHosts = hosts.filter((host) =>
+        activeThread.value.hosts.includes(host.id)
+      );
+      const channelKey = Key.generateKeyByPrivateKey(activeThread.value.key);
+      await sendMessage(
+        address,
+        activeThread.value.universal_id,
+        channelKey,
+        text,
+        relatedHosts.map((record) => record.value),
+        "text"
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <div
       className="w-full border-t-2 border-gray-lighter border-solid flex"
@@ -49,7 +51,7 @@ const SendBox = () => {
         <MdSend
           size={35}
           className="cursor-pointer hover:text-base"
-          // onClick={send}
+          onClick={send}
         />
       </div>
     </div>

@@ -14,7 +14,7 @@ export function initDB(): Dexie {
     hosts:
       "++id,url,name,commission_fee,subscription_fee,paid_subscription,rt,secret,balance,address,subscription,last_fetched",
     contacts: "++id,name,address,public_key,hosts",
-    threads: "++id,universal_id,creator,members,key",
+    threads: "++id,universal_id,creator,members,key,hosts",
   });
   return db;
 }
