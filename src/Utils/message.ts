@@ -1,4 +1,9 @@
-import { IMessageData, MessageType } from "Structs/Message";
+import {
+  IMessage,
+  IMessageData,
+  IPacketGroup,
+  MessageType,
+} from "Structs/Message";
 import { IPacket } from "Structs/Packet";
 import { v4 as uuidV4 } from "uuid";
 import Key from "Utils/Key";
@@ -60,7 +65,6 @@ export function messageToPackets(
   let offset = 0;
   let position = 0;
   const msg_count = Math.ceil(cipher.length / packetDataLenght);
-  const created_at = new Date().toDateString();
   while (offset < cipher.length) {
     result.push({
       src,
@@ -69,7 +73,7 @@ export function messageToPackets(
       position,
       data: cipher.substring(offset, offset + packetDataLenght),
       msg_id,
-      created_at,
+      created_at: Date.now() / 1000,
     });
     offset += packetDataLenght;
     position += 1;
@@ -110,4 +114,57 @@ export async function sendMessage(
       });
     })
   );
+}
+
+export function groupPacketsByMessage(packets: IPacket[]): IPacketGroup[] {
+  const result: IPacketGroup[] = [];
+  for (let i = 0; i < packets.length; i++) {
+    let found = false;
+    for (let j = 0; j < result.length; j++) {
+      // console.log(result[i]);
+      if (packets[i].msg_id === result[j].id) {
+        result[j].packets.push(packets[i]);
+        if (result[j].date > packets[i].created_at) {
+          result[j].date = packets[i].created_at;
+        }
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      result.push({
+        packets: [packets[i]],
+        src: packets[i].src,
+        dst: packets[i].dst,
+        id: packets[i].msg_id,
+        count: packets[i].msg_count,
+        date: packets[i].created_at,
+      });
+    }
+  }
+  return result;
+}
+
+export function packetsToMessages(packets: IPacket[], key: Key): IMessage[] {
+  const packetGroups = groupPacketsByMessage(packets);
+  return packetGroups
+    .map((group) => {
+      if (group.packets.length < group.count) return undefined;
+      const cipher = group.packets
+        .sort((a, b) => a.position - b.position)
+        .map((packet) => packet.data)
+        .join("");
+      const plain = JSON.parse(
+        key.decryptPrivate(cipher).toString()
+      ) as IMessageData;
+      return {
+        src: group.src,
+        dst: group.dst,
+        id: group.id,
+        type: plain.type,
+        data: plain.data,
+        date: group.date,
+      };
+    })
+    .filter((record) => !!record) as IMessage[];
 }

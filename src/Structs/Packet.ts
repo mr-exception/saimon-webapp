@@ -5,5 +5,5 @@ export interface IPacket {
   msg_id: string;
   msg_count: number;
   position: number;
-  created_at: string;
+  created_at: number;
 }

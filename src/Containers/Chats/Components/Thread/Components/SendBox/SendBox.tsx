@@ -1,7 +1,6 @@
 import { FC, useContext, useState } from "react";
 import TextInput from "Ui-Kit/Inputs/TextInput/TextInput";
 import { MdSend } from "react-icons/md";
-import { ContactsContext } from "DataContext/ContactsContextProvider";
 import { AuthContext } from "AuthContextProvider";
 import { sendMessage } from "Utils/message";
 import { HostsContext } from "DataContext/HostsContextProvider";
@@ -38,15 +37,15 @@ const SendBox: FC<IProps> = ({ activeThread }) => {
   }
   return (
     <div
-      className="w-full border-t-2 border-gray-lighter border-solid flex"
+      className="flex w-full border-t-2 border-solid border-gray-lighter"
       style={{ minHeight: 50 }}
     >
-      <div style={{ flex: 11 }} className="flex justify-center items-center">
+      <div style={{ flex: 11 }} className="flex items-center justify-center">
         <TextInput value={text} onChange={setText} style={{ width: "100%" }} />
       </div>
       <div
         style={{ flex: 1, minWidth: 50 }}
-        className="flex justify-center items-center"
+        className="flex items-center justify-center"
       >
         <MdSend
           size={35}
