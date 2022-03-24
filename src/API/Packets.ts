@@ -8,7 +8,10 @@ interface ISendPacketParams {
   msg_count: number;
   msg_id: string;
 }
-export async function sendPacket(params: ISendPacketParams, configs: IAxiosConfigs): Promise<IPacket> {
+export async function sendPacket(
+  params: ISendPacketParams,
+  configs: IAxiosConfigs
+): Promise<IPacket> {
   return createAxios(configs)
     .post<IPacket>("api/packets/send", params)
     .then((response) => response.data);
@@ -26,7 +29,10 @@ interface IFetchPacketsParam {
   page?: number;
   pageSize?: number;
 }
-export async function fetchPackets(params: IFetchPacketsParam, configs: IAxiosConfigs): Promise<IPacket[]> {
+export async function fetchPackets(
+  params: IFetchPacketsParam,
+  configs: IAxiosConfigs
+): Promise<IPacket[]> {
   return createAxios(configs)
     .get<{ data: IPacket[] }>("/packets/fetch", { params })
     .then((response) => response.data.data);

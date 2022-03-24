@@ -3,6 +3,8 @@ import { AuthContext } from "AuthContextProvider";
 import { HostsContext } from "DataContext/HostsContextProvider";
 import { ThreadsContext } from "DataContext/ThreadsContextProvider";
 import { useContext, useEffect, useState } from "react";
+import { packetsToMessages } from "Structs/Message";
+import Key from "Utils/Key";
 import Styles from "./styles.module.css";
 const MessageList = () => {
   const { activeThread } = useContext(ThreadsContext);
@@ -11,6 +13,7 @@ const MessageList = () => {
   const [messages, setMessages] = useState<string[]>([]);
   useEffect(() => {
     if (!activeThread) return;
+    const key = Key.generateKeyByPrivateKey(activeThread.value.key);
     fetchPackets(
       { thread: activeThread.value.universal_id },
       {
@@ -18,8 +21,9 @@ const MessageList = () => {
         secret: hosts[0].value.secret,
         baseUrl: hosts[0].value.url + "/api",
       }
-    ).then((data) => {
-      setMessages(data.map((record) => record.data));
+    ).then(async (packets) => {
+      const result = packetsToMessages(packets, key);
+      setMessages(result.map((record) => record.data));
     });
   }, [activeThread, address, hosts]);
   return (
