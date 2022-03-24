@@ -12,20 +12,20 @@ interface IProps {
 const ContactCard: React.FC<IProps> = ({ contact: { value: contact, id } }) => {
   const { showModal, closeModal } = useContext(ModalsContext);
   return (
-    <div className="col-xs-12 col-md-6 col-lg-4 flex mb-4">
+    <div className="flex mb-4 col-xs-12 col-md-6 col-lg-4">
       <div className={Styles.container}>
-        <div className="row relative">
+        <div className="relative row">
           <div
-            className="absolute flex flex-row justify-center items-center"
+            className="absolute flex flex-row items-center justify-center"
             style={{ right: 0, top: -10 }}
           >
             <FaEye
               size={35}
-              className="hover:bg-primary rounded-md p-2 cursor-pointer"
+              className="p-2 rounded-md cursor-pointer hover:bg-primary"
             />
             <FaTrash
               size={35}
-              className="hover:bg-primary rounded-md p-2 cursor-pointer"
+              className="p-2 rounded-md cursor-pointer hover:bg-primary"
               onClick={() => {
                 showModal(
                   <RemoveContactModal close={closeModal} id={id} />,
@@ -34,8 +34,10 @@ const ContactCard: React.FC<IProps> = ({ contact: { value: contact, id } }) => {
               }}
             />
           </div>
-          <div className="col-xs-8 text-xl">{contact.name}</div>
-          <div className="col-xs-12 overflow-ellipsis overflow-hidden whitespace-nowrap break-words">
+          <div className="overflow-hidden text-xl col-xs-8 overflow-ellipsis flex-nowrap">
+            {contact.name}
+          </div>
+          <div className="overflow-hidden break-words col-xs-12 overflow-ellipsis whitespace-nowrap">
             {contact.address}
           </div>
         </div>

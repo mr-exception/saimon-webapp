@@ -37,7 +37,7 @@ const ThreadCard: React.FC<IProps> = ({ thread, onSelected }) => {
       <div className="row">
         <div className="col-xs-10">
           <div className="row">
-            <div className="col-xs-12 text-lg font-bold">
+            <div className="overflow-hidden text-lg font-bold col-xs-12 overflow-ellipsis whitespace-nowrap">
               {contact.value.name}
             </div>
             <div className="col-xs-12">Hey! how you doin?</div>
@@ -45,9 +45,9 @@ const ThreadCard: React.FC<IProps> = ({ thread, onSelected }) => {
         </div>
         <div className="col-xs-2">
           <div className="row">
-            <div className="col-xs-12 flex justify-center mt-2">
+            <div className="flex justify-center mt-2 col-xs-12">
               <FaTrash
-                className="text-warning cursor-pointer"
+                className="cursor-pointer text-warning"
                 onClick={() => {
                   // showModal(<RemoveContactModal id={id} close={closeModal} />, "sm");
                 }}
@@ -56,7 +56,7 @@ const ThreadCard: React.FC<IProps> = ({ thread, onSelected }) => {
           </div>
         </div>
       </div>
-      <div className="bg-secondary w-full my-2 h-1 opacity-30" />
+      <div className="w-full h-1 my-2 bg-secondary opacity-30" />
     </div>
   );
 };

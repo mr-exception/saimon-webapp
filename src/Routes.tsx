@@ -11,7 +11,10 @@ import { WorkersContextProvider } from "WorkersContextProvider";
 
 const Routes = () => {
   return (
-    <WorkersContextProvider hostsWorker={new Worker("/workers/hosts.js")}>
+    <WorkersContextProvider
+      hostsWorker={new Worker("/workers/hosts.js")}
+      threadsWorker={new Worker("/workers/threads.js")}
+    >
       <AuthContextProvider>
         <Router>
           <Switch>

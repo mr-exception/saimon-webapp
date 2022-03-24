@@ -22,8 +22,10 @@ export const AuthContext = createContext<IModalContext>({
   setPassword: () => {},
 });
 
-export const AuthContextProvider: React.FC<{ children: any }> = ({ children }) => {
-  const { hostsWorker } = useContext(WorkersContext);
+export const AuthContextProvider: React.FC<{ children: any }> = ({
+  children,
+}) => {
+  const { hostsWorker, threadsWorker } = useContext(WorkersContext);
   const [address, setAddress] = useState<string>("N/A");
   const [key, setKey] = useState<Key>(Key.generateFreshKey());
   const [password, setPassword] = useState<string>("N/A");
@@ -32,6 +34,7 @@ export const AuthContextProvider: React.FC<{ children: any }> = ({ children }) =
     localStorage.setItem("address", value);
     setAddress(value);
     hostsWorker.postMessage({ action: "update_address", payload: value });
+    threadsWorker.postMessage({ action: "update_address", payload: value });
   }
   function updateKey(value: Key) {
     localStorage.setItem("public_key", value.getPublicKey());
@@ -51,8 +54,15 @@ export const AuthContextProvider: React.FC<{ children: any }> = ({ children }) =
       setKey(Key.generateFullKey(public_key, private_key));
     }
     setPassword(localStorage.getItem("password") || "N/A");
-    hostsWorker.postMessage({ action: "update_address", payload: localStorage.getItem("address") || "N/A" });
-  }, [hostsWorker]);
+    hostsWorker.postMessage({
+      action: "update_address",
+      payload: localStorage.getItem("address") || "N/A",
+    });
+    threadsWorker.postMessage({
+      action: "update_address",
+      payload: localStorage.getItem("address") || "N/A",
+    });
+  }, [hostsWorker, threadsWorker]);
   return (
     <AuthContext.Provider
       value={{

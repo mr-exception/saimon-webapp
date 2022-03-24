@@ -3,7 +3,13 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { IContact } from "Structs/Contact";
 import { IHost } from "Structs/Host";
-import { deleteHostFromDB, getHostsFromDB, insertHostInDB, IRecord, updateHostsIfExists } from "Utils/storage";
+import {
+  deleteHostFromDB,
+  getHostsFromDB,
+  insertHostInDB,
+  IRecord,
+  updateHostsIfExists,
+} from "Utils/storage";
 import { WorkersContext } from "WorkersContextProvider";
 
 export interface IHostsContext {
@@ -18,12 +24,21 @@ export const HostsContext = createContext<IHostsContext>({
   removeHost: (id: IndexableType) => {},
 });
 
-export const HostsContextProvider: React.FC<{ children: any }> = ({ children }) => {
-  const { hostsWorker } = useContext(WorkersContext);
+export const HostsContextProvider: React.FC<{ children: any }> = ({
+  children,
+}) => {
+  const { hostsWorker, threadsWorker } = useContext(WorkersContext);
   const [hosts, setHosts] = useState<IRecord<IHost>[]>([]);
   async function addHost(value: IHost): Promise<void> {
     const id = await insertHostInDB(value);
-    hostsWorker.postMessage({ action: "update_hosts", payload: [...hosts, { value, id }] });
+    hostsWorker.postMessage({
+      action: "update_hosts",
+      payload: [...hosts, { value, id }],
+    });
+    threadsWorker.postMessage({
+      action: "update_hosts",
+      payload: [...hosts, { value, id }],
+    });
     setHosts([...hosts, { value, id }]);
     toast.success("registered to host successfully!");
   }
@@ -31,16 +46,20 @@ export const HostsContextProvider: React.FC<{ children: any }> = ({ children }) 
     await deleteHostFromDB(id);
     const values = await getHostsFromDB();
     hostsWorker.postMessage({ action: "update_hosts", payload: values });
+    threadsWorker.postMessage({ action: "update_hosts", payload: values });
     setHosts(values);
   }
   useEffect(() => {
     getHostsFromDB().then((value) => {
       setHosts(value);
       hostsWorker.postMessage({ action: "update_hosts", payload: value });
+      threadsWorker.postMessage({ action: "update_hosts", payload: value });
     });
-  }, [hostsWorker]);
+  }, [hostsWorker, threadsWorker]);
 
-  hostsWorker.onmessage = async (ev: MessageEvent<{ event: string; payload: IRecord<IHost>[] }>) => {
+  hostsWorker.onmessage = async (
+    ev: MessageEvent<{ event: string; payload: IRecord<IHost>[] }>
+  ) => {
     const { event, payload } = ev.data;
     switch (event) {
       case "hosts":
@@ -50,7 +69,11 @@ export const HostsContextProvider: React.FC<{ children: any }> = ({ children }) 
         break;
     }
   };
-  return <HostsContext.Provider value={{ hosts, addHost, removeHost }}>{children}</HostsContext.Provider>;
+  return (
+    <HostsContext.Provider value={{ hosts, addHost, removeHost }}>
+      {children}
+    </HostsContext.Provider>
+  );
 };
 
 // custom hooks
@@ -58,6 +81,8 @@ export function useRelatedHosts(contact?: IContact): IHost[] {
   const { hosts } = useContext(HostsContext);
   if (!contact) return [];
   const activeHostIds = contact.hosts.map((record) => record.hostId);
-  const relatedHosts = hosts.filter((record) => activeHostIds.includes(record.id));
+  const relatedHosts = hosts.filter((record) =>
+    activeHostIds.includes(record.id)
+  );
   return relatedHosts.map((record) => record.value);
 }

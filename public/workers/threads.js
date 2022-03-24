@@ -1,6 +1,7 @@
 let hosts = [];
+let threads = [];
 let address = "N/A";
-const fetchInterval = 60 * 1000; // one minute
+const fetchInterval = 5000; // every 5 seconds
 
 let currentInterval = null;
 function initInterval() {
@@ -14,7 +15,7 @@ function initInterval() {
         (host) =>
           new Promise((resolve, reject) => {
             const ts = Date.now();
-            fetch(host.value.url + "/api/heart-beat/" + address, {
+            fetch(host.value.url + "/api/channels/list?member=" + address, {
               method: "GET",
             })
               .then(async (response) => {
@@ -30,25 +31,35 @@ function initInterval() {
           })
       )
     ).then(async (data) => {
-      const payload = data.map(({ response, host, ts }) => {
-        host.value.address = response.address;
-        host.value.balance = response.balance;
-        host.value.commission_fee = response.commission_fee;
-        host.value.name = response.name;
-        host.value.paid_subscription = response.paid_subscription;
-        host.value.subscription = response.subscription;
-        host.value.subscription_fee = response.subscription_fee;
-        host.value.rt = ts;
-        return host;
+      const contacts = [];
+      const results = data
+        .map((record) => {
+          return record.response.data.map((item) => {
+            item.members = item.members.map((member) => {
+              const found = !!contacts.find(
+                (cnt) => cnt.address === member.address
+              );
+              if (!found) {
+                contacts.push(member);
+              }
+              return member.address;
+            });
+            return { ...item, hosts: [record.host.id] };
+          });
+        })
+        .reduce((prev, curr) => [...prev, ...curr])
+        .filter((record) => !threads.includes(record.universal_id));
+      postMessage({
+        event: "new_threads",
+        payload: { threads: results, contacts },
       });
-      postMessage({ event: "hosts", payload });
     });
   }, fetchInterval);
 }
 
 /**
  * e.data = {
- *   action: 'update_hosts' | 'update_address'
+ *   action: 'update_hosts' | 'update_address | update_threads'
  *   payload: hosts[] | string as address
  * }
  */
@@ -61,6 +72,10 @@ onmessage = ({ data }) => {
       break;
     case "update_hosts":
       hosts = payload;
+      initInterval();
+      break;
+    case "update_threads":
+      threads = payload;
       initInterval();
       break;
     default:
