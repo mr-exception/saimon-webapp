@@ -10,23 +10,24 @@ interface IProps {
 }
 const ThreadCard: React.FC<IProps> = ({ thread, onSelected }) => {
   const { address } = useContext(AuthContext);
-  const contactsAddress = thread.value.members.find(
-    (record) => record !== address
-  );
-  const contact = useGetContact(contactsAddress);
+  // console.log(thread.value);
+  // const contactsAddress = thread.value.members.find(
+  //   (record) => record !== address
+  // );
+  // const contact = useGetContact(contactsAddress);
 
-  if (!contact) {
-    return (
-      <div
-        className={
-          "col-xs-12 cursor-pointer rounded-md hover:bg-secondary transition-all"
-        }
-        onClick={() => {}}
-      >
-        test
-      </div>
-    );
-  }
+  // if (!contact) {
+  //   return (
+  //     <div
+  //       className={
+  //         "col-xs-12 cursor-pointer rounded-md hover:bg-secondary transition-all"
+  //       }
+  //       onClick={() => {}}
+  //     >
+  //       test
+  //     </div>
+  //   );
+  // }
   return (
     <div
       className={
@@ -38,7 +39,7 @@ const ThreadCard: React.FC<IProps> = ({ thread, onSelected }) => {
         <div className="col-xs-10">
           <div className="row">
             <div className="overflow-hidden text-lg font-bold col-xs-12 overflow-ellipsis whitespace-nowrap">
-              {contact.value.name}
+              {thread.value.universal_id}
             </div>
             <div className="col-xs-12">Hey! how you doin?</div>
           </div>

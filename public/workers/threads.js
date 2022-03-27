@@ -47,7 +47,8 @@ function initInterval() {
             return { ...item, hosts: [record.host.id] };
           });
         })
-        .reduce((prev, curr) => [...prev, ...curr])
+        .reduce((prev, 
+          ) => [...prev, ...curr])
         .filter((record) => !threads.includes(record.universal_id));
       postMessage({
         event: "new_threads",

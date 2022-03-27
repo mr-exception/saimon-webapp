@@ -11,7 +11,7 @@ import {
   updateThreadInDB,
 } from "Utils/storage";
 import { WorkersContext } from "WorkersContextProvider";
-import { ContactsContext, useAppendContact } from "./ContactsContextProvider";
+import { useAppendContact } from "./ContactsContextProvider";
 
 export interface IThreadsContext {
   activeThread?: IRecord<IThread>;
